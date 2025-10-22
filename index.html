@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-gray-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTRL F1 25 League</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* For the custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e5e7eb; /* gray-200 */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #9ca3af; /* gray-400 */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280; /* gray-500 */
+        }
+        
+        .view-hidden {
+            display: none;
+        }
+        /* Fix for aspect ratio with Tailwind */
+        @media (min-width: 640px) {
+            .aspect-w-16 { position: relative; padding-bottom: 56.25%; }
+            .aspect-h-9 { position: relative; padding-bottom: 0; }
+            .aspect-w-16 > *, .aspect-h-9 > * { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Top Navigation Bar -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <!-- Logo/Title -->
+                <div class="flex-shrink-0 flex items-center">
+                    <h1 class="text-2xl font-bold text-red-600">TURBO TRIBE</h1>
+                </div>
+                
+                <!-- Desktop Nav Links -->
+                <div class="hidden md:flex md:items-center md:space-x-2">
+                    <!-- Nav Links -->
+                    <a href="#home" class="nav-link-desktop text-white bg-red-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                    <a href="#register" class="nav-link-desktop text-gray-600 hover:bg-gray-200 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Register</a>
+                    <a href="#standings" class="nav-link-desktop text-gray-600 hover:bg-gray-200 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Standings</a>
+                    <a href="#schedule" class="nav-link-desktop text-gray-600 hover:bg-gray-200 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Schedule & Live</a>
+                    <a href="#contact" class="nav-link-desktop text-gray-600 hover:bg-gray-200 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <div class="-mr-2 flex items-center md:hidden">
+                    <button type="button" id="open-mobile-menu-btn" class="bg-white inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu, show/hide based on menu state. -->
+        <div class="md:hidden hidden bg-white" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" class="nav-link-mobile text-white bg-red-600 block px-3 py-2 rounded-md text-base font-medium">Home</a>
+                <a href="#register" class="nav-link-mobile text-gray-600 hover:bg-gray-200 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Register</a>
+                <a href="#standings" class="nav-link-mobile text-gray-600 hover:bg-gray-200 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Standings</a>
+                <a href="#schedule" class="nav-link-mobile text-gray-600 hover:bg-gray-200 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Schedule & Live</a>
+                <a href="#contact" class="nav-link-mobile text-gray-600 hover:bg-gray-200 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Contact</a>
+            </div>
+            <div class="border-t border-gray-200 pt-4 pb-3">
+                 <a href="https://discord.gg/EuyPTXqbg6" target="_blank" class="flex-shrink-0 w-full group block px-5">
+                    <div class="flex items-center">
+                        <div>
+                            <img class="inline-block h-10 w-10 rounded-full" src="https://placehold.co/40x40/ef4444/ffffff?text=D" alt="">
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-base font-medium text-gray-800">Join Discord</p>
+                            <p class="text-sm font-medium text-gray-500 group-hover:text-gray-700">TTRL Community</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-1">
+        <div class="py-6">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+                
+                <!-- Page: Home -->
+                <div id="view-home" class="page-view">
+                    <h1 class="text-4xl font-bold text-gray-900 mb-6">Welcome to the Turbo Tribe Racing League</h1>
+                    <p class="text-lg text-gray-600 mb-8">
+                        The home of competitive and clean F1 25 league racing. Season 1 is starting soon.
+                        Check the schedule, register to race, and join our community on Discord to get started.
+                    </p>
+                    <div class="bg-white rounded-lg shadow-xl overflow-hidden">
+                        <img src="https://placehold.co/1200x500/ef4444/ffffff?text=TTRL+F1+25+Action" alt="F1 25 League Racing" class="w-full h-auto">
+                        <div class="p-6">
+                            <h2 class="text-2xl font-semibold text-gray-900 mb-4">Get in the Race!</h2>
+                            <p class="text-gray-600 mb-6">
+                                All driver levels are welcome. We focus on fun, fair, and competitive racing. All races are streamed live with commentary.
+                                Join our Discord server to meet the community, find a team, and sign up for the season.
+                            </p>
+                            <a href="https://discord.gg/EuyPTXqbg6" target="_blank" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                Join our Discord Server
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Page: Register -->
+                <div id="view-register" class="page-view view-hidden">
+                    <h1 class="text-4xl font-bold text-gray-900 mb-6">Driver Registration</h1>
+                    <div class="bg-white rounded-lg shadow-xl p-6 md:p-8">
+                        <h2 class="text-2xl font-semibold text-gray-900 mb-4">Sign Up for Season 1</h2>
+                        <p class="text-gray-600 mb-6">
+                            To register for the league, please fill out our official Google Form. This helps us keep all driver information organized.
+                            Make sure you have also joined our Discord server, as all communication happens there.
+                        </p>
+                        <a href="YOUR_GOOGLE_FORM_LINK_HERE" target="_blank" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                            Open Registration Form
+                        </a>
+                        <p class="text-sm text-gray-500 mt-4">
+                            Note: After submitting, your details will be reviewed by an admin. Your name will appear in the Standings/Driver List once confirmed.
+                        </p>
+                    </div>
+                </div>
+
+
+                <!-- Page: Standings -->
+                <div id="view-standings" class="page-view view-hidden">
+                    <h1 class="text-4xl font-bold text-gray-900 mb-6">Driver Standings</h1>
+                    
+                    <!-- Loading Spinner -->
+                    <div id="standings-loading" class="text-center py-10">
+                        <div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-red-500 motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status">
+                            <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
+                        </div>
+                        <p class="mt-4 text-gray-500">Fetching live standings...</p>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div id="standings-error" class="hidden text-center py-10 bg-white rounded-lg shadow-lg">
+                        <svg class="mx-auto h-12 w-12 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <h3 class="mt-2 text-xl font-medium text-gray-900">Could not load standings</h3>
+                        <p class="mt-1 text-base text-gray-600">There was a problem fetching data from the Google Sheet.</p>
+                        <p class="mt-1 text-sm text-gray-500">Please check the console (F12) for details or contact an admin.</p>
+                      </div>
+
+                    <!-- Standings Grid -->
+                    <div id="standings-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Driver cards will be injected here by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Page: Schedule & Live -->
+                <div id="view-schedule" class="page-view view-hidden">
+                    <h1 class="text-4xl font-bold text-gray-900 mb-6">Schedule & Live Stream</h1>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <!-- Live Stream Player -->
+                        <div class="lg:col-span-2 bg-white rounded-lg shadow-xl overflow-hidden">
+                            <div class="aspect-w-16 aspect-h-9">
+                                <iframe 
+                                    src="https://www.youtube.com/embed/live_stream?channel=UCr8Grc2hSg_n0g-m_OQj-WQ" 
+                                    title="YouTube video player" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen
+                                    class="w-full h-full rounded-t-lg">
+                                </iframe>
+                            </div>
+                            <div class="p-6">
+                                <h2 class="text-2xl font-semibold text-gray-900 mb-2">TTRL Live Broadcast</h2>
+                                <p class="text-gray-600">
+                                    Watch all Season 1 races live right here, powered by YouTube.
+                                    Don't forget to subscribe to the channel!
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Race Calendar -->
+                        <div class="lg:col-span-1 bg-white rounded-lg shadow-xl p-6">
+                            <h3 class="text-2xl font-semibold text-gray-900 mb-6">Season 1 Calendar</h3>
+                            <div class="flow-root" style="max-height: 500px; overflow-y: auto;">
+                                <ul role="list" class="-mb-8">
+                                    <!-- Calendar items -->
+                                    <li>
+                                        <div class="relative pb-8">
+                                            <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-300" aria-hidden="true"></span>
+                                            <div class="relative flex space-x-3">
+                                                <div><span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white text-white font-bold">1</span></div>
+                                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                                                    <div>
+                                                        <p class="text-sm text-gray-500">12/09/25 @ 19:00 UTC</p>
+                                                        <p class="font-medium text-gray-900">Japan</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="relative pb-8">
+                                            <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-300" aria-hidden="true"></span>
+                                            <div class="relative flex space-x-3">
+                                                <div><span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white text-white font-bold">2</span></div>
+                                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                                                    <div>
+                                                        <p class="text-sm text-gray-500">19/09/25 @ 19:00 UTC</p>
+                                                        <p class="font-medium text-gray-900">Bahrain</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="relative pb-8">
+                                            <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-300" aria-hidden="true"></span>
+                                            <div class="relative flex space-x-3">
+                                                <div><span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white text-white font-bold">3</span></div>
+                                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                                                    <div>
+                                                        <p class="text-sm text-gray-500">26/09/25 @ 19:00 UTC</p>
+                                                        <p class="font-medium text-gray-900">Australia</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                     <li>
+                                        <div class="relative pb-8">
+                                            <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-300" aria-hidden="true"></span>
+                                            <div class="relative flex space-x-3">
+                                                <div><span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white text-white font-bold">4</span></div>
+                                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                                                    <div>
+                                                        <p class="text-sm text-gray-500">03/10/25 @ 19:00 UTC</p>
+                                                        <p class="font-medium text-gray-900">Imola</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                     <li>
+                                        <div class="relative pb-8">
+                                            <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-300" aria-hidden="true"></span>
+                                            <div class="relative flex space-x-3">
+                                                <div><span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white text-white font-bold">5</span></div>
+                                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                                                    <div>
+                                                        <p class="text-sm text-gray-500">10/10/25 @ 19:00 UTC</p>
+                                                        <p class="font-medium text-gray-900">Spain</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="relative pb-8">
+                                            <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-300" aria-hidden="true"></span>
+                                            <div class="relative flex space-x-3">
+                                                <div><span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white text-white font-bold">6</span></div>
+                                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                                                    <div>
+                                                        <p class="text-sm text-gray-500">24/10/25 @ 19:00 UTC</p>
+                                                        <p class="font-medium text-gray-900">Great Britain</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="relative pb-8">
+                                            <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-300" aria-hidden="true"></span>
+                                            <div class="relative flex space-x-3">
+                                                <div><span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white text-white font-bold">7</span></div>
+                                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                                                    <div>
+                                                        <p class="text-sm text-gray-500">31/10/25 @ 19:00 UTC</p>
+                                                        <p class="font-medium text-gray-900">Las Vegas</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="relative pb-8">
+                                            <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-300" aria-hidden="true"></span>
+                                            <div class="relative flex space-x-3">
+                                                <div><span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white text-white font-bold">8</span></div>
+                                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                                                    <div>
+                                                        <p class="text-sm text-gray-500">07/11/25 @ 19:00 UTC</p>
+                                                        <p class="font-medium text-gray-900">Belgium</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="relative pb-8">
+                                            <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-300" aria-hidden="true"></span>
+                                            <div class="relative flex space-x-3">
+                                                <div><span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white text-white font-bold">9</span></div>
+                                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                                                    <div>
+                                                        <p class="text-sm text-gray-500">14/11/25 @ 19:00 UTC</p>
+                                                        <p class="font-medium text-gray-900">Austria</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="relative pb-8">
+                                            <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-300" aria-hidden="true"></span>
+                                            <div class="relative flex space-x-3">
+                                                <div><span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white text-white font-bold">10</span></div>
+                                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                                                    <div>
+                                                        <p class="text-sm text-gray-500">21/11/25 @ 19:00 UTC</p>
+                                                        <p class="font-medium text-gray-900">Brazil</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="relative pb-8">
+                                            <!-- No connector line on last item -->
+                                            <div class="relative flex space-x-3">
+                                                <div><span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white text-white font-bold">11</span></div>
+                                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                                                    <div>
+                                                        <p class="text-sm text-gray-500">28/11/25 @ 19:00 UTC</p>
+                                                        <p class="font-medium text-gray-900">Abu Dhabi</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Page: Contact -->
+                <div id="view-contact" class="page-view view-hidden">
+                    <h1 class="text-4xl font-bold text-gray-900 mb-6">Contact & Info</h1>
+                    <div class="bg-white rounded-lg shadow-xl overflow-hidden">
+                        <div class="p-6 md:p-8">
+                            <h2 class="text-2xl font-semibold text-gray-900 mb-6">Get in Touch</h2>
+                            <div class="space-y-4">
+                                <div class="flex items-start">
+                                    <svg class="flex-shrink-0 h-6 w-6 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                                    <div class="ml-3">
+                                        <h3 class="text-lg font-medium text-gray-900">Primary Contact (Discord)</h3>
+                                        <p class="mt-1 text-gray-600">The fastest way to reach us is on our Discord server. All league admins and drivers are active there.</p>
+                                        <a href="https://discord.gg/EuyPTXqbg6" target="_blank" class="mt-2 inline-block text-red-500 hover:text-red-600 font-medium">Join Discord Server</a>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <svg class="flex-shrink-0 h-6 w-6 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                    <div class="ml-3">
+                                        <h3 class="text-lg font-medium text-gray-900">Business Inquiries (Email)</h3>
+                                        <p class="mt-1 text-gray-600">For sponsorships or other formal inquiries, you can reach the league admin at:</p>
+                                        <a href="mailto:timothyabraham23@gmail.com" class="mt-2 inline-block text-red-500 hover:text-red-600 font-medium">timothyabraham23@gmail.com</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- Configuration (Provided by Canvas) ---
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        
+        let app, db, auth, userId;
+        
+        // --- Google Sheet Config ---
+        const googleSheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgUVFM_sJkHBFAMeXXWC4dRXnxKtfN2NPYIyqu9O8JxBh39i4-5CbONoz_xliy_vwyZoyRVZ7gcDvZ/pub?gid=588493248&single=true&output=csv';
+        let standingsDataCache = null; // Cache data to avoid re-fetching on every click
+        let isFetchingStandings = false; // Prevent multiple fetches
+        
+        // F1 Team colors for driver cards
+        const teamColors = {
+            'Mercedes': 'border-t-cyan-400',
+            'Ferrari': 'border-t-red-600',
+            'Red Bull': 'border-t-blue-800',
+            'McLaren': 'border-t-orange-500',
+            'Aston Martin': 'border-t-emerald-600',
+            'Alpine': 'border-t-pink-500',
+            'AlphaTauri': 'border-t-blue-500',
+            'Haas': 'border-t-gray-400',
+            'Williams': 'border-t-blue-400',
+            'Kick Sauber': 'border-t-lime-500',
+            'Default': 'border-t-red-500' // TTRL Brand color
+        };
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                setLogLevel('Debug');
+
+                // Sign in
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        console.log("User authenticated:", userId);
+                        // Once authenticated, setup the page
+                        setupApp();
+                    } else {
+                        console.log("No user found, signing in...");
+                        if (initialAuthToken) {
+                            await signInWithCustomToken(auth, initialAuthToken);
+                        } else {
+                            await signInAnonymously(auth);
+                        }
+                    }
+                });
+
+            } catch (error) {
+                console.error("Firebase Init Error:", error);
+                const errorEl = document.getElementById('standings-error');
+                if(errorEl) {
+                    errorEl.classList.remove('hidden');
+                    errorEl.querySelector('h3').textContent = 'Firebase Error';
+                    errorEl.querySelector('p').textContent = 'Could not initialize Firebase. Contact an admin.';
+                }
+            }
+        });
+        
+        /**
+         * Sets up the main application logic after auth is ready.
+         */
+        function setupApp() {
+            setupNavigation();
+            
+            // Show view based on hash or default to 'home'
+            const initialView = window.location.hash.substring(1) || 'home';
+            showView(initialView);
+        }
+
+        // --- Standings Page Logic ---
+
+        /**
+         * Fetches and parses the Google Sheet CSV data.
+         */
+        async function fetchStandings() {
+            if (standingsDataCache) {
+                console.log("Loading standings from cache.");
+                return standingsDataCache;
+            }
+            if (isFetchingStandings) {
+                console.log("Already fetching standings, waiting...");
+                return;
+            }
+
+            console.log("Fetching new standings data...");
+            isFetchingStandings = true;
+            document.getElementById('standings-loading').classList.remove('hidden');
+            document.getElementById('standings-error').classList.add('hidden');
+            document.getElementById('standings-grid').innerHTML = ''; // Clear old grid
+
+            try {
+                // Add timestamp to bypass cache
+                const url = `${googleSheetCsvUrl}&timestamp=${new Date().getTime()}`;
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const csvText = await response.text();
+                const data = parseCSV(csvText);
+                
+                standingsDataCache = data; // Store in cache
+                return data;
+
+            } catch (error) {
+                console.error('Error fetching or parsing standings:', error);
+                document.getElementById('standings-error').classList.remove('hidden');
+                return null; // Return null on error
+            } finally {
+                document.getElementById('standings-loading').classList.add('hidden');
+                isFetchingStandings = false;
+            }
+        }
+
+        /**
+         * Parses CSV text into an array of objects.
+         * Assumes the first row is the header.
+         */
+        function parseCSV(text) {
+            const lines = text.split(/\r?\n/); // Handle both \n and \r\n
+            if (lines.length === 0) return [];
+
+            const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, '')); // Remove quotes
+            console.log('Parsed Headers:', headers); // DEBUG LOG
+            
+            const data = [];
+            for (let i = 1; i < lines.length; i++) {
+                if (!lines[i]) continue; // Skip empty lines
+                
+                const values = lines[i].split(',').map(v => v.trim().replace(/^"|"$/g, '')); // Remove quotes
+                if (values.length !== headers.length) continue; // Skip malformed rows
+
+                const entry = {};
+                headers.forEach((header, index) => {
+                    entry[header] = values[index];
+                });
+                data.push(entry);
+            }
+            console.log('Parsed Data:', data); // DEBUG LOG
+            return data;
+        }
+
+
+        /**
+         * Renders the standings data into the grid.
+         * Assumes data columns are: 'Rank', 'Name', 'Team Name', 'Points'
+         */
+        function renderStandings(data) {
+            const grid = document.getElementById('standings-grid');
+            grid.innerHTML = ''; // Clear previous content
+
+            if (!data || data.length === 0) {
+                document.getElementById('standings-error').classList.remove('hidden');
+                document.getElementById('standings-error').querySelector('h3').textContent = 'No Data Found';
+                document.getElementById('standings-error').querySelector('p').textContent = 'The spreadsheet might be empty or in the wrong format.';
+                return;
+            }
+
+            data.forEach(driver => {
+                // Get team color or default
+                const teamName = driver['Team Name'] || 'Default';
+                const colorClass = teamColors[teamName] || teamColors['Default'];
+
+                // Driver card styles
+                const driverCard = `
+                    <div class="bg-white rounded-lg shadow-xl overflow-hidden border-t-4 ${colorClass}">
+                        <div class="p-5">
+                            <div class="flex justify-between items-center mb-4">
+                                <!-- Rank -->
+                                <span class="text-5xl font-bold text-gray-900">${driver.Rank || 'N/A'}</span>
+                                <!-- Points -->
+                                <span class="text-right">
+                                    <span class="block text-3xl font-bold text-gray-900">${driver.Points || '0'}</span>
+                                    <span class="block text-sm font-medium text-gray-500 uppercase">Points</span>
+                                </span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 truncate" title="${driver.Name}">
+                                ${driver.Name || 'Driver Name'}
+                            </h3>
+                            <p class="text-base text-gray-500 truncate" title="${driver['Team Name']}">
+                                ${driver['Team Name'] || 'Team'}
+                            </p>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += driverCard;
+            });
+        }
+
+
+        // --- Navigation Logic ---
+
+        /**
+         * Sets up all navigation links and mobile menu toggles.
+         */
+        function setupNavigation() {
+            const navLinks = document.querySelectorAll('a[href^="#"]');
+            // DEBUG: Log if links are found
+            console.log(`[Debug] setupNavigation: Found ${navLinks.length} nav links.`);
+            
+            const mobileMenuBtn = document.getElementById('open-mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuBtn && mobileMenu) {
+                const openIcon = mobileMenuBtn.querySelector('svg.block');
+                const closeIcon = mobileMenuBtn.querySelector('svg.hidden');
+
+                // Toggle mobile menu
+                mobileMenuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                    openIcon?.classList.toggle('hidden');
+                    openIcon?.classList.toggle('block');
+                    closeIcon?.classList.toggle('hidden');
+                    closeIcon?.classList.toggle('block');
+                });
+            }
+
+            // Handle link clicks
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const viewId = link.getAttribute('href').substring(1);
+                    
+                    // DEBUG: Log which link was clicked
+                    console.log(`[Debug] Nav link clicked. Showing view: ${viewId}`);
+                    
+                    showView(viewId, true);
+
+                    // Close mobile menu on click, if it's open
+                    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                        const openIcon = mobileMenuBtn?.querySelector('svg.hidden'); // Icon is now 'x' (hidden)
+                        const closeIcon = mobileMenuBtn?.querySelector('svg.block'); // Icon is now 'hamburger' (block)
+                        
+                        // Reset icons
+                        if(openIcon && closeIcon) {
+                             openIcon.classList.add('block');
+                             openIcon.classList.remove('hidden');
+                             closeIcon.classList.add('hidden');
+                             closeIcon.classList.remove('block');
+                        }
+                    }
+                });
+            });
+        }
+        
+        /**
+         * Shows a specific view and hides others.
+         * @param {string} viewId - The ID of the view to show (e.g., 'home', 'register').
+         * @param {boolean} [updateHistory=false] - Whether to update the browser hash.
+         */
+        async function showView(viewId, updateHistory = false) {
+            // Hide all views
+            document.querySelectorAll('.page-view').forEach(view => {
+                view.classList.add('view-hidden');
+            });
+
+            // Show the requested view
+            const viewEl = document.getElementById(`view-${viewId}`);
+            if (viewEl) {
+                viewEl.classList.remove('view-hidden');
+                if (updateHistory) {
+                    window.location.hash = viewId;
+                }
+            } else {
+                console.error(`View not found: view-${viewId}`);
+                const homeView = document.getElementById('view-home');
+                if (homeView) {
+                    homeView.classList.remove('view-hidden'); // Fallback to home
+                }
+            }
+            
+            // Handle special logic for standings page
+            if (viewId === 'standings') {
+                const data = await fetchStandings();
+                if(data) {
+                    renderStandings(data);
+                }
+            }
+
+            // Update active nav link styles
+            updateNavStyles(viewId);
+        }
+        
+        /**
+         * Updates the active styles for both desktop and mobile nav links.
+         * @param {string} viewId - The currently active view ID.
+         */
+        function updateNavStyles(viewId) {
+            // Define class lists for light theme
+            const activeClasses = ['bg-red-600', 'text-white'];
+            const inactiveClasses = ['text-gray-600', 'hover:bg-gray-200', 'hover:text-gray-900'];
+
+            const updateLink = (link) => {
+                const linkView = link.getAttribute('href').substring(1);
+
+                // Remove all possible classes first
+                link.classList.remove(...activeClasses);
+                link.classList.remove(...inactiveClasses);
+
+                // Add the correct classes
+                if (linkView === viewId) {
+                    link.classList.add(...activeClasses);
+                } else {
+                    link.classList.add(...inactiveClasses);
+                }
+            };
+            
+            document.querySelectorAll('.nav-link-desktop').forEach(updateLink);
+            document.querySelectorAll('.nav-link-mobile').forEach(updateLink);
+        }
+
+    </script>
+</body>
+</html>
+
