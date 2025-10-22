@@ -405,6 +405,7 @@
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
         
         let app, db, auth, userId;
+        let appInitialized = false; // Guard to prevent double-setup
         
         // --- Google Sheet Config ---
         const googleSheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgUVFM_sJkHBFAMeXXWC4dRXnxKtfN2NPYIyqu9O8JxBh39i4-5CbONoz_xliy_vwyZoyRVZ7gcDvZ/pub?gid=588493248&single=true&output=csv';
@@ -436,12 +437,14 @@
 
                 // Sign in
                 onAuthStateChanged(auth, async (user) => {
-                    if (user) {
+                    // FIX: Check if app is already initialized
+                    if (user && !appInitialized) {
+                        appInitialized = true; // Set the guard
                         userId = user.uid;
                         console.log("User authenticated:", userId);
                         // Once authenticated, setup the page
                         setupApp();
-                    } else {
+                    } else if (!user) {
                         console.log("No user found, signing in...");
                         if (initialAuthToken) {
                             await signInWithCustomToken(auth, initialAuthToken);
@@ -526,7 +529,7 @@
             if (lines.length === 0) return [];
 
             const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, '')); // Remove quotes
-            console.log('Parsed Headers:', headers); // DEBUG LOG
+            console.log('Parsed Headers:', headers);
             
             const data = [];
             for (let i = 1; i < lines.length; i++) {
@@ -541,7 +544,7 @@
                 });
                 data.push(entry);
             }
-            console.log('Parsed Data:', data); // DEBUG LOG
+            console.log('Parsed Data:', data);
             return data;
         }
 
@@ -600,8 +603,6 @@
          */
         function setupNavigation() {
             const navLinks = document.querySelectorAll('a[href^="#"]');
-            // DEBUG: Log if links are found
-            console.log(`[Debug] setupNavigation: Found ${navLinks.length} nav links.`);
             
             const mobileMenuBtn = document.getElementById('open-mobile-menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
@@ -625,9 +626,6 @@
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
                     const viewId = link.getAttribute('href').substring(1);
-                    
-                    // DEBUG: Log which link was clicked
-                    console.log(`[Debug] Nav link clicked. Showing view: ${viewId}`);
                     
                     showView(viewId, true);
 
