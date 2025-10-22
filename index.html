@@ -1,719 +1,259 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-gray-100">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TTRL F1 25 League</title>
+    <title>Turbo Tribe Racing League (TTRL)</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #f1f1f1;
         }
-        /* For the custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        .hero-bg {
+            background: linear-gradient(rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.85)), url('image_272f7d.jpg') no-repeat center center;
+            background-size: cover;
         }
-        ::-webkit-scrollbar-track {
-            background: #e5e7eb; /* gray-200 */
+        .text-shadow {
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
         }
-        ::-webkit-scrollbar-thumb {
-            background: #9ca3af; /* gray-400 */
-            border-radius: 4px;
+        .track-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #6b7280; /* gray-500 */
+        .track-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3);
         }
-        
-        .view-hidden {
-            display: none;
-        }
-        /* Fix for aspect ratio with Tailwind */
-        @media (min-width: 640px) {
-            .aspect-w-16 { position: relative; padding-bottom: 56.25%; }
-            .aspect-h-9 { position: relative; padding-bottom: 0; }
-            .aspect-w-16 > *, .aspect-h-9 > * { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        #trackModal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
         }
     </style>
 </head>
-<body class="text-gray-800">
+<body class="bg-zinc-950 text-gray-200">
 
-    <!-- Top Navigation Bar -->
-    <nav class="bg-white shadow-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <!-- Logo/Title -->
-                <div class="flex-shrink-0 flex items-center">
-                    <h1 class="text-2xl font-bold text-red-600">TURBO TRIBE</h1>
-                </div>
-                
-                <!-- Desktop Nav Links -->
-                <div class="hidden md:flex md:items-center md:space-x-2">
-                    <!-- Nav Links -->
-                    <a href="#home" class="nav-link-desktop text-white bg-red-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
-                    <a href="#register" class="nav-link-desktop text-gray-600 hover:bg-gray-200 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Register</a>
-                    <a href="#standings" class="nav-link-desktop text-gray-600 hover:bg-gray-200 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Standings</a>
-                    <a href="#schedule" class="nav-link-desktop text-gray-600 hover:bg-gray-200 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Schedule & Live</a>
-                    <a href="#contact" class="nav-link-desktop text-gray-600 hover:bg-gray-200 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Contact</a>
-                </div>
-                
-                <!-- Mobile Menu Button -->
-                <div class="-mr-2 flex items-center md:hidden">
-                    <button type="button" id="open-mobile-menu-btn" class="bg-white inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500">
-                        <span class="sr-only">Open main menu</span>
-                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                        <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
+    <!-- Header / Navigation -->
+    <header class="bg-zinc-900/80 backdrop-blur-sm sticky top-0 z-50 border-b border-zinc-800">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-red-500">
+                <a href="#home">TTRL</a>
+            </h1>
+            <div class="hidden md:flex space-x-6">
+                <a href="#home" class="text-gray-300 hover:text-red-500 transition-colors">Home</a>
+                <a href="#register" class="text-gray-300 hover:text-red-500 transition-colors">Register</a>
+                <a href="#calendar" class="text-gray-300 hover:text-red-500 transition-colors">Calendar</a>
+                <a href="#standings" class="text-gray-300 hover:text-red-500 transition-colors">Standings</a>
+                <a href="#contact" class="text-gray-300 hover:text-red-500 transition-colors">Contact</a>
             </div>
-        </div>
+            <a href="#register" class="md:hidden bg-red-600 px-4 py-2 rounded-lg text-white font-semibold hover:bg-red-700 transition-colors">
+                Sign Up
+            </a>
+        </nav>
+    </header>
 
-        <!-- Mobile menu, show/hide based on menu state. -->
-        <div class="md:hidden hidden bg-white" id="mobile-menu">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#home" class="nav-link-mobile text-white bg-red-600 block px-3 py-2 rounded-md text-base font-medium">Home</a>
-                <a href="#register" class="nav-link-mobile text-gray-600 hover:bg-gray-200 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Register</a>
-                <a href="#standings" class="nav-link-mobile text-gray-600 hover:bg-gray-200 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Standings</a>
-                <a href="#schedule" class="nav-link-mobile text-gray-600 hover:bg-gray-200 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Schedule & Live</a>
-                <a href="#contact" class="nav-link-mobile text-gray-600 hover:bg-gray-200 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Contact</a>
-            </div>
-            <div class="border-t border-gray-200 pt-4 pb-3">
-                 <a href="https://discord.gg/EuyPTXqbg6" target="_blank" class="flex-shrink-0 w-full group block px-5">
-                    <div class="flex items-center">
-                        <div>
-                            <img class="inline-block h-10 w-10 rounded-full" src="https://placehold.co/40x40/ef4444/ffffff?text=D" alt="">
-                        </div>
-                        <div class="ml-3">
-                            <p class="text-base font-medium text-gray-800">Join Discord</p>
-                            <p class="text-sm font-medium text-gray-500 group-hover:text-gray-700">TTRL Community</p>
-                        </div>
-                    </div>
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero-bg min-h-[70vh] flex items-center justify-center text-center p-6">
+            <div class="max-w-3xl">
+                <h1 class="text-5xl md:text-7xl font-black text-white text-shadow uppercase tracking-wide">Turbo Tribe Racing League</h1>
+                <p class="text-xl md:text-2xl text-gray-300 mt-4 font-light text-shadow">Season 1 is LIVE. Do you have what it takes to compete?</p>
+                <a href="#register" class="mt-8 inline-block bg-red-600 text-white text-lg font-semibold px-8 py-3 rounded-lg shadow-lg hover:bg-red-700 transition-transform transform hover:scale-105">
+                    Register Now
                 </a>
             </div>
-        </div>
-    </nav>
+        </section>
 
-    <!-- Main Content Area -->
-    <main class="flex-1">
-        <div class="py-6">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-                
-                <!-- Page: Home -->
-                <div id="view-home" class="page-view">
-                    <h1 class="text-4xl font-bold text-gray-900 mb-6">Welcome to the Turbo Tribe Racing League</h1>
-                    <p class="text-lg text-gray-600 mb-8">
-                        The home of competitive and clean F1 25 league racing. Season 1 is starting soon.
-                        Check the schedule, register to race, and join our community on Discord to get started.
-                    </p>
-                    <div class="bg-white rounded-lg shadow-xl overflow-hidden">
-                        <img src="https://placehold.co/1200x500/ef4444/ffffff?text=TTRL+F1+25+Action" alt="F1 25 League Racing" class="w-full h-auto">
-                        <div class="p-6">
-                            <h2 class="text-2xl font-semibold text-gray-900 mb-4">Get in the Race!</h2>
-                            <p class="text-gray-600 mb-6">
-                                All driver levels are welcome. We focus on fun, fair, and competitive racing. All races are streamed live with commentary.
-                                Join our Discord server to meet the community, find a team, and sign up for the season.
-                            </p>
-                            <a href="https://discord.gg/EuyPTXqbg6" target="_blank" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                Join our Discord Server
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Page: Register -->
-                <div id="view-register" class="page-view view-hidden">
-                    <h1 class="text-4xl font-bold text-gray-900 mb-6">Driver Registration</h1>
-                    <div class="bg-white rounded-lg shadow-xl p-6 md:p-8">
-                        <h2 class="text-2xl font-semibold text-gray-900 mb-4">Sign Up for Season 1</h2>
-                        <p class="text-gray-600 mb-6">
-                            To register for the league, please fill out our official Google Form. This helps us keep all driver information organized.
-                            Make sure you have also joined our Discord server, as all communication happens there.
-                        </p>
-                        <a href="YOUR_GOOGLE_FORM_LINK_HERE" target="_blank" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                            Open Registration Form
-                        </a>
-                        <p class="text-sm text-gray-500 mt-4">
-                            Note: After submitting, your details will be reviewed by an admin. Your name will appear in the Standings/Driver List once confirmed.
-                        </p>
-                    </div>
-                </div>
-
-
-                <!-- Page: Standings -->
-                <div id="view-standings" class="page-view view-hidden">
-                    <h1 class="text-4xl font-bold text-gray-900 mb-6">Driver Standings</h1>
-                    
-                    <!-- Loading Spinner -->
-                    <div id="standings-loading" class="text-center py-10">
-                        <div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-red-500 motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status">
-                            <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
-                        </div>
-                        <p class="mt-4 text-gray-500">Fetching live standings...</p>
-                    </div>
-
-                    <!-- Error Message -->
-                    <div id="standings-error" class="hidden text-center py-10 bg-white rounded-lg shadow-lg">
-                        <svg class="mx-auto h-12 w-12 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
-                        <h3 class="mt-2 text-xl font-medium text-gray-900">Could not load standings</h3>
-                        <p class="mt-1 text-base text-gray-600">There was a problem fetching data from the Google Sheet.</p>
-                        <p class="mt-1 text-sm text-gray-500">Please check the console (F12) for details or contact an admin.</p>
-                      </div>
-
-                    <!-- Standings Grid -->
-                    <div id="standings-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Driver cards will be injected here by JavaScript -->
-                    </div>
-                </div>
-
-                <!-- Page: Schedule & Live -->
-                <div id="view-schedule" class="page-view view-hidden">
-                    <h1 class="text-4xl font-bold text-gray-900 mb-6">Schedule & Live Stream</h1>
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        <!-- Live Stream Player -->
-                        <div class="lg:col-span-2 bg-white rounded-lg shadow-xl overflow-hidden">
-                            <div class="aspect-w-16 aspect-h-9">
-                                <iframe 
-                                    src="https://www.youtube.com/embed/live_stream?channel=UCr8Grc2hSg_n0g-m_OQj-WQ" 
-                                    title="YouTube video player" 
-                                    frameborder="0" 
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                    allowfullscreen
-                                    class="w-full h-full rounded-t-lg">
-                                </iframe>
-                            </div>
-                            <div class="p-6">
-                                <h2 class="text-2xl font-semibold text-gray-900 mb-2">TTRL Live Broadcast</h2>
-                                <p class="text-gray-600">
-                                    Watch all Season 1 races live right here, powered by YouTube.
-                                    Don't forget to subscribe to the channel!
-                                </p>
-                            </div>
-                        </div>
-                        <!-- Race Calendar -->
-                        <div class="lg:col-span-1 bg-white rounded-lg shadow-xl p-6">
-                            <h3 class="text-2xl font-semibold text-gray-900 mb-6">Season 1 Calendar</h3>
-                            <div class="flow-root" style="max-height: 500px; overflow-y: auto;">
-                                <ul role="list" class="-mb-8">
-                                    <!-- Calendar items -->
-                                    <li>
-                                        <div class="relative pb-8">
-                                            <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-300" aria-hidden="true"></span>
-                                            <div class="relative flex space-x-3">
-                                                <div><span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white text-white font-bold">1</span></div>
-                                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                                                    <div>
-                                                        <p class="text-sm text-gray-500">12/09/25 @ 19:00 UTC</p>
-                                                        <p class="font-medium text-gray-900">Japan</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="relative pb-8">
-                                            <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-300" aria-hidden="true"></span>
-                                            <div class="relative flex space-x-3">
-                                                <div><span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white text-white font-bold">2</span></div>
-                                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                                                    <div>
-                                                        <p class="text-sm text-gray-500">19/09/25 @ 19:00 UTC</p>
-                                                        <p class="font-medium text-gray-900">Bahrain</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="relative pb-8">
-                                            <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-300" aria-hidden="true"></span>
-                                            <div class="relative flex space-x-3">
-                                                <div><span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white text-white font-bold">3</span></div>
-                                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                                                    <div>
-                                                        <p class="text-sm text-gray-500">26/09/25 @ 19:00 UTC</p>
-                                                        <p class="font-medium text-gray-900">Australia</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                     <li>
-                                        <div class="relative pb-8">
-                                            <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-300" aria-hidden="true"></span>
-                                            <div class="relative flex space-x-3">
-                                                <div><span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white text-white font-bold">4</span></div>
-                                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                                                    <div>
-                                                        <p class="text-sm text-gray-500">03/10/25 @ 19:00 UTC</p>
-                                                        <p class="font-medium text-gray-900">Imola</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                     <li>
-                                        <div class="relative pb-8">
-                                            <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-300" aria-hidden="true"></span>
-                                            <div class="relative flex space-x-3">
-                                                <div><span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white text-white font-bold">5</span></div>
-                                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                                                    <div>
-                                                        <p class="text-sm text-gray-500">10/10/25 @ 19:00 UTC</p>
-                                                        <p class="font-medium text-gray-900">Spain</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="relative pb-8">
-                                            <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-300" aria-hidden="true"></span>
-                                            <div class="relative flex space-x-3">
-                                                <div><span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white text-white font-bold">6</span></div>
-                                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                                                    <div>
-                                                        <p class="text-sm text-gray-500">24/10/25 @ 19:00 UTC</p>
-                                                        <p class="font-medium text-gray-900">Great Britain</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="relative pb-8">
-                                            <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-300" aria-hidden="true"></span>
-                                            <div class="relative flex space-x-3">
-                                                <div><span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white text-white font-bold">7</span></div>
-                                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                                                    <div>
-                                                        <p class="text-sm text-gray-500">31/10/25 @ 19:00 UTC</p>
-                                                        <p class="font-medium text-gray-900">Las Vegas</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="relative pb-8">
-                                            <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-300" aria-hidden="true"></span>
-                                            <div class="relative flex space-x-3">
-                                                <div><span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white text-white font-bold">8</span></div>
-                                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                                                    <div>
-                                                        <p class="text-sm text-gray-500">07/11/25 @ 19:00 UTC</p>
-                                                        <p class="font-medium text-gray-900">Belgium</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="relative pb-8">
-                                            <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-300" aria-hidden="true"></span>
-                                            <div class="relative flex space-x-3">
-                                                <div><span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white text-white font-bold">9</span></div>
-                                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                                                    <div>
-                                                        <p class="text-sm text-gray-500">14/11/25 @ 19:00 UTC</p>
-                                                        <p class="font-medium text-gray-900">Austria</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="relative pb-8">
-                                            <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-300" aria-hidden="true"></span>
-                                            <div class="relative flex space-x-3">
-                                                <div><span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white text-white font-bold">10</span></div>
-                                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                                                    <div>
-                                                        <p class="text-sm text-gray-500">21/11/25 @ 19:00 UTC</p>
-                                                        <p class="font-medium text-gray-900">Brazil</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="relative pb-8">
-                                            <!-- No connector line on last item -->
-                                            <div class="relative flex space-x-3">
-                                                <div><span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white text-white font-bold">11</span></div>
-                                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                                                    <div>
-                                                        <p class="text-sm text-gray-500">28/11/25 @ 19:00 UTC</p>
-                                                        <p class="font-medium text-gray-900">Abu Dhabi</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Page: Contact -->
-                <div id="view-contact" class="page-view view-hidden">
-                    <h1 class="text-4xl font-bold text-gray-900 mb-6">Contact & Info</h1>
-                    <div class="bg-white rounded-lg shadow-xl overflow-hidden">
-                        <div class="p-6 md:p-8">
-                            <h2 class="text-2xl font-semibold text-gray-900 mb-6">Get in Touch</h2>
-                            <div class="space-y-4">
-                                <div class="flex items-start">
-                                    <svg class="flex-shrink-0 h-6 w-6 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
-                                    <div class="ml-3">
-                                        <h3 class="text-lg font-medium text-gray-900">Primary Contact (Discord)</h3>
-                                        <p class="mt-1 text-gray-600">The fastest way to reach us is on our Discord server. All league admins and drivers are active there.</p>
-                                        <a href="https://discord.gg/EuyPTXqbg6" target="_blank" class="mt-2 inline-block text-red-500 hover:text-red-600 font-medium">Join Discord Server</a>
-                                    </div>
-                                </div>
-                                <div class="flex items-start">
-                                    <svg class="flex-shrink-0 h-6 w-6 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                                    <div class="ml-3">
-                                        <h3 class="text-lg font-medium text-gray-900">Business Inquiries (Email)</h3>
-                                        <p class="mt-1 text-gray-600">For sponsorships or other formal inquiries, you can reach the league admin at:</p>
-                                        <a href="mailto:timothyabraham23@gmail.com" class="mt-2 inline-block text-red-500 hover:text-red-600 font-medium">timothyabraham23@gmail.com</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+        <!-- Registration Section -->
+        <section id="register" class="py-20 bg-zinc-900 text-center">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-bold text-white mb-6">Driver Sign-Up</h2>
+                <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-8">
+                    Registrations for Season 1 are open. Please fill out the Google Form to join the grid. Make sure to join our Discord server to stay up-to-date.
+                </p>
+                <!-- IMPORTANT: Replace 'YOUR_GOOGLE_FORM_LINK_HERE' with your actual Google Form link -->
+                <a href="YOUR_GOOGLE_FORM_LINK_HERE" target="_blank" rel="noopener noreferrer" class="bg-red-600 text-white text-xl font-bold px-10 py-4 rounded-lg shadow-lg hover:bg-red-700 transition-transform transform hover:scale-105">
+                    Go to Google Form
+                </a>
             </div>
-        </div>
+        </section>
+        
+        <!-- Calendar & Track Insights -->
+        <section id="calendar" class="py-20">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-bold text-white mb-10 text-center">Season 1 Calendar & Track Insights</h2>
+                
+                <!-- Calendar Image -->
+                <div class="mb-12">
+                    <img src="image_272f7d.jpg" alt="TTRL Season 1 Calendar" class="w-full max-w-6xl mx-auto rounded-lg shadow-2xl">
+                </div>
+
+                <!-- Track Insights Grid -->
+                <h3 class="text-2xl font-semibold text-white mb-6 text-center">Click a track for insights</h3>
+                <div id="trackGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- Track cards will be injected here by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Standings Section -->
+        <section id="standings" class="py-20 bg-zinc-900">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-bold text-white mb-10 text-center">Current Standings</h2>
+                <p class="text-lg text-gray-400 text-center max-w-2xl mx-auto mb-10">
+                    Standings updated after the Spain GP.
+                </p>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                    <!-- Driver Standings 1-10 -->
+                    <div class="lg:col-span-1">
+                        <img src="image_272f3b.png" alt="Driver Standings 1-10" class="w-full rounded-lg shadow-lg">
+                    </div>
+                    <!-- Driver Standings 11-20 -->
+                    <div class="lg:col-span-1">
+                         <img src="image_272f1e.png" alt="Driver Standings 11-20" class="w-full rounded-lg shadow-lg">
+                    </div>
+                    <!-- Constructor Standings -->
+                    <div class="lg:col-span-1">
+                        <img src="image_272f5a.png" alt="Constructor Standings" class="w-full rounded-lg shadow-lg">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 text-center">
+             <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-bold text-white mb-6">Get In Touch</h2>
+                <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-8">
+                    Have questions? Join our Discord or send us an email.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center items-center space-y-6 sm:space-y-0 sm:space-x-8">
+                    <!-- Discord -->
+                    <a href="https://discord.gg/EuyPTXqbg6" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-3 bg-zinc-800 px-6 py-3 rounded-lg hover:bg-zinc-700 transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.54 0C18.88 0 18.27 0.12 17.72 0.33C17.72 0.33 17.31 0.81 17.11 1.05C15.28 0.7 13.39 0.53 11.48 0.53C9.57 0.53 7.68 0.7 5.86 1.05C5.66 0.81 5.25 0.33 5.25 0.33C4.7 0.12 4.09 0 3.43 0C2.26 0 1.25 0.77 0.85 1.83C0.05 4.06 0 6.36 0 8.64C0 15.17 4.22 19.46 9.87 21.03C10.5 21.25 11.13 21.37 11.75 21.37C12.37 21.37 13 21.25 13.63 21.03C19.28 19.46 23.5 15.17 23.5 8.64C23.5 6.36 23.45 4.06 22.65 1.83C22.25 0.77 21.24 0 20.07 0H19.54ZM7.74 14.77C6.73 14.77 5.9 13.91 5.9 12.87C5.9 11.83 6.73 10.97 7.74 10.97C8.75 10.97 9.58 11.83 9.58 12.87C9.58 13.91 8.75 14.77 7.74 14.77ZM15.76 14.77C14.75 14.77 13.92 13.91 13.92 12.87C13.92 11.83 14.75 10.97 15.76 10.97C16.77 10.97 17.6 11.83 17.6 12.87C17.6 13.91 16.77 14.77 15.76 14.77Z"/></svg>
+                        <span class="text-white font-semibold">Join our Discord</span>
+                    </a>
+                    <!-- YouTube -->
+                    <a href="https://youtube.com/@wi7ard?si=hj6MfGQ_u_rrdkZU" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-3 bg-zinc-800 px-6 py-3 rounded-lg hover:bg-zinc-700 transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                        <span class="text-white font-semibold">Watch on YouTube</span>
+                    </a>
+                    <!-- Email -->
+                    <a href="mailto:timothyabraham23@gmail.com" class="flex items-center space-x-3 bg-zinc-800 px-6 py-3 rounded-lg hover:bg-zinc-700 transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1 0.9 2 2 2h16c1.1 0 2-0.9 2-2V6C22 4.9 21.1 4 20 4zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                        <span class="text-white font-semibold">timothyabraham23@gmail.com</span>
+                    </a>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    <!-- Footer -->
+    <footer class="bg-zinc-900 border-t border-zinc-800 py-10">
+        <div class="container mx-auto px-6 text-center text-gray-500">
+            <p>&copy; 2025 Turbo Tribe Racing League. All rights reserved.</p>
+            <p class="text-sm mt-2">F1 25 and the F1 logo are trademarks of Formula One Licensing BV, a Formula 1 company.</p>
+        </div>
+    </footer>
 
-        // --- Configuration (Provided by Canvas) ---
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-        
-        let app, db, auth, userId;
-        let appInitialized = false; // Guard to prevent double-setup
-        
-        // --- Google Sheet Config ---
-        const googleSheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgUVFM_sJkHBFAMeXXWC4dRXnxKtfN2NPYIyqu9O8JxBh39i4-5CbONoz_xliy_vwyZoyRVZ7gcDvZ/pub?gid=588493248&single=true&output=csv';
-        let standingsDataCache = null; // Cache data to avoid re-fetching on every click
-        let isFetchingStandings = false; // Prevent multiple fetches
-        
-        // F1 Team colors for driver cards
-        const teamColors = {
-            'Mercedes': 'border-t-cyan-400',
-            'Ferrari': 'border-t-red-600',
-            'Red Bull': 'border-t-blue-800',
-            'McLaren': 'border-t-orange-500',
-            'Aston Martin': 'border-t-emerald-600',
-            'Alpine': 'border-t-pink-500',
-            'AlphaTauri': 'border-t-blue-500',
-            'Haas': 'border-t-gray-400',
-            'Williams': 'border-t-blue-400',
-            'Kick Sauber': 'border-t-lime-500',
-            'Default': 'border-t-red-500' // TTRL Brand color
-        };
+    <!-- Track Insight Modal -->
+    <div id="trackModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 invisible opacity-0">
+        <div class="bg-zinc-900 w-full max-w-2xl rounded-lg shadow-2xl border border-zinc-700 overflow-hidden">
+            <div class="flex justify-between items-center p-5 border-b border-zinc-700">
+                <div>
+                    <h3 id="modalTrackName" class="text-2xl font-bold text-red-500"></h3>
+                    <p id="modalCircuitName" class="text-lg text-gray-300"></p>
+                </div>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-white transition-colors">&times;</button>
+            </div>
+            <div class="p-6">
+                <h4 class="text-xl font-semibold text-white mb-3">Track Insight:</h4>
+                <p id="modalTrackInsight" class="text-gray-300 leading-relaxed"></p>
+            </div>
+            <div class="p-4 bg-zinc-800 text-right">
+                 <button onclick="closeModal()" class="bg-red-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
 
-        // --- Initialization ---
-        document.addEventListener('DOMContentLoaded', async () => {
-            try {
-                app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-                setLogLevel('Debug');
 
-                // Sign in
-                onAuthStateChanged(auth, async (user) => {
-                    // FIX: Check if app is already initialized
-                    if (user && !appInitialized) {
-                        appInitialized = true; // Set the guard
-                        userId = user.uid;
-                        console.log("User authenticated:", userId);
-                        // Once authenticated, setup the page
-                        setupApp();
-                    } else if (!user) {
-                        console.log("No user found, signing in...");
-                        if (initialAuthToken) {
-                            await signInWithCustomToken(auth, initialAuthToken);
-                        } else {
-                            await signInAnonymously(auth);
-                        }
-                    }
-                });
+    <script>
+        // Track data based on the calendar and search insights
+        const tracks = [
+            { id: 1, name: 'Japan', circuit: 'Suzuka International Racing Course', date: '12/09/25', insight: 'A high-downforce circuit famed for its technical, high-speed \'S\' curves in Sector 1 and the challenging 130R. Rhythm is key, and a mistake in the S-curves ruins the whole sector. Overtaking is difficult but possible into the final chicane.' },
+            { id: 2, name: 'Bahrain', circuit: 'Bahrain International Circuit', date: '19/09/25', insight: 'A "stop and go" track known for heavy braking zones and good overtaking opportunities, especially into Turns 1 and 4. Tire degradation, particularly rears, is a major factor due to the abrasive surface and high-traction zones.' },
+            { id: 3, name: 'Australia', circuit: 'Albert Park Circuit', date: '26/09/25', insight: 'A fast, flowing street circuit with multiple DRS zones. It\'s a high-speed track that feels like a permanent circuit. Key overtaking spots are Turns 1, 3, and 9. Watch out for walls and safety cars.' },
+            { id: 4, name: 'Imola', circuit: 'Autodromo Internazionale Enzo e Dino Ferrari', date: '03/10/25', insight: 'An old-school, narrow track with punishing gravel traps. It\'s fast, unforgiving, and very technical. Overtaking is notoriously difficult, so qualifying and strategy are critical. Famous for the Tamburello and Villeneuve chicanes.' },
+            { id: 5, name: 'Spain', circuit: 'Circuit de Barcelona-Catalunya', date: '10/10/25', insight: 'A well-known test track with a great mix of high and low-speed corners. The long, sweeping Turn 3 is a true test of car balance. Tire management is crucial here due to the high-energy corners.' },
+            { id: 6, name: 'Great Britain', circuit: 'Silverstone Circuit', date: '24/10/25', insight: 'A high-speed, legendary circuit. Famous for the incredibly fast Maggotts, Becketts, and Chapel complex. Requires high downforce and driver confidence. Weather is always a factor.' },
+            { id: 7, name: 'Las Vegas', circuit: 'Las Vegas Strip Circuit', date: '31/10/25', insight: 'A high-speed street circuit with a massive 1.9km (1.2mi) straight down the Strip. Expect low downforce, high top speeds, and plenty of DRS action, but tight 90-degree corners. Racing at night.' },
+            { id: 8, name: 'Belgium', circuit: 'Circuit de Spa-Francorchamps', date: '07/11/25', insight: 'A legendary, long track featuring the iconic Eau Rouge/Raidillon complex. Unpredictable weather and long straights (like the Kemmel Straight) make for exciting racing and great overtaking into Les Combes.' },
+            { id: 9, name: 'Austria', circuit: 'Red Bull Ring', date: '14/11/25', insight: 'A short, hilly, and power-hungry circuit. The lap is very fast, with long straights in the first half and high-speed corners in the second. Elevation changes are significant, especially into Turn 1 and Turn 3.' },
+            { id: 10, name: 'Brazil', circuit: 'Autódromo José Carlos Pace (Interlagos)', date: '21/11/25', insight: 'An anti-clockwise, bowl-shaped circuit with significant elevation changes. The famous "Senna S" at the start offers a key overtaking spot. The track is bumpy and demanding, and rain can make it chaotic.' },
+            { id: 11, name: 'Abu Dhabi', circuit: 'Yas Marina Circuit', date: '28/11/25', insight: 'A modern circuit that finishes in twilight. Sector 2 features two long straights with heavy braking zones (Turns 6 & 9) for overtaking. Sector 3 is a tight, technical, and twisty complex that tests traction.' }
+        ];
 
-            } catch (error) {
-                console.error("Firebase Init Error:", error);
-                const errorEl = document.getElementById('standings-error');
-                if(errorEl) {
-                    errorEl.classList.remove('hidden');
-                    errorEl.querySelector('h3').textContent = 'Firebase Error';
-                    errorEl.querySelector('p').textContent = 'Could not initialize Firebase. Contact an admin.';
-                }
+        const trackGrid = document.getElementById('trackGrid');
+        const modal = document.getElementById('trackModal');
+        const modalTrackName = document.getElementById('modalTrackName');
+        const modalCircuitName = document.getElementById('modalCircuitName');
+        const modalTrackInsight = document.getElementById('modalTrackInsight');
+
+        // Populate track grid
+        tracks.forEach(track => {
+            const card = document.createElement('div');
+            card.className = 'track-card bg-zinc-800 rounded-lg shadow-lg overflow-hidden cursor-pointer border border-zinc-700/50';
+            card.innerHTML = `
+                <div class="p-5">
+                    <p class="text-xs text-red-400 font-semibold">${track.date}</p>
+                    <h4 class="text-xl font-bold text-white mt-1">${track.name}</h4>
+                    <p class="text-sm text-gray-400">${track.circuit}</p>
+                </div>
+            `;
+            card.onclick = () => openModal(track.id);
+            trackGrid.appendChild(card);
+        });
+
+        // Modal functions
+        function openModal(trackId) {
+            const track = tracks.find(t => t.id === trackId);
+            if (track) {
+                modalTrackName.textContent = track.name;
+                modalCircuitName.textContent = track.circuit;
+                modalTrackInsight.textContent = track.insight;
+                modal.classList.remove('invisible', 'opacity-0');
+            }
+        }
+
+        function closeModal() {
+            modal.classList.add('invisible', 'opacity-0');
+        }
+
+        // Close modal on escape key
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.classList.contains('invisible')) {
+                closeModal();
             }
         });
         
-        /**
-         * Sets up the main application logic after auth is ready.
-         */
-        function setupApp() {
-            setupNavigation();
-            
-            // Show view based on hash or default to 'home'
-            const initialView = window.location.hash.substring(1) || 'home';
-            showView(initialView);
-        }
-
-        // --- Standings Page Logic ---
-
-        /**
-         * Fetches and parses the Google Sheet CSV data.
-         */
-        async function fetchStandings() {
-            if (standingsDataCache) {
-                console.log("Loading standings from cache.");
-                return standingsDataCache;
+        // Close modal on outside click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
             }
-            if (isFetchingStandings) {
-                console.log("Already fetching standings, waiting...");
-                return;
-            }
+        });
 
-            console.log("Fetching new standings data...");
-            isFetchingStandings = true;
-            document.getElementById('standings-loading').classList.remove('hidden');
-            document.getElementById('standings-error').classList.add('hidden');
-            document.getElementById('standings-grid').innerHTML = ''; // Clear old grid
-
-            try {
-                // Add timestamp to bypass cache
-                const url = `${googleSheetCsvUrl}&timestamp=${new Date().getTime()}`;
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const csvText = await response.text();
-                const data = parseCSV(csvText);
-                
-                standingsDataCache = data; // Store in cache
-                return data;
-
-            } catch (error) {
-                console.error('Error fetching or parsing standings:', error);
-                document.getElementById('standings-error').classList.remove('hidden');
-                return null; // Return null on error
-            } finally {
-                document.getElementById('standings-loading').classList.add('hidden');
-                isFetchingStandings = false;
-            }
-        }
-
-        /**
-         * Parses CSV text into an array of objects.
-         * Assumes the first row is the header.
-         */
-        function parseCSV(text) {
-            const lines = text.split(/\r?\n/); // Handle both \n and \r\n
-            if (lines.length === 0) return [];
-
-            const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, '')); // Remove quotes
-            console.log('Parsed Headers:', headers);
-            
-            const data = [];
-            for (let i = 1; i < lines.length; i++) {
-                if (!lines[i]) continue; // Skip empty lines
-                
-                const values = lines[i].split(',').map(v => v.trim().replace(/^"|"$/g, '')); // Remove quotes
-                if (values.length !== headers.length) continue; // Skip malformed rows
-
-                const entry = {};
-                headers.forEach((header, index) => {
-                    entry[header] = values[index];
-                });
-                data.push(entry);
-            }
-            console.log('Parsed Data:', data);
-            return data;
-        }
-
-
-        /**
-         * Renders the standings data into the grid.
-         * Assumes data columns are: 'Rank', 'Name', 'Team Name', 'Points'
-         */
-        function renderStandings(data) {
-            const grid = document.getElementById('standings-grid');
-            grid.innerHTML = ''; // Clear previous content
-
-            if (!data || data.length === 0) {
-                document.getElementById('standings-error').classList.remove('hidden');
-                document.getElementById('standings-error').querySelector('h3').textContent = 'No Data Found';
-                document.getElementById('standings-error').querySelector('p').textContent = 'The spreadsheet might be empty or in the wrong format.';
-                return;
-            }
-
-            data.forEach(driver => {
-                // Get team color or default
-                const teamName = driver['Team Name'] || 'Default';
-                const colorClass = teamColors[teamName] || teamColors['Default'];
-
-                // Driver card styles
-                const driverCard = `
-                    <div class="bg-white rounded-lg shadow-xl overflow-hidden border-t-4 ${colorClass}">
-                        <div class="p-5">
-                            <div class="flex justify-between items-center mb-4">
-                                <!-- Rank -->
-                                <span class="text-5xl font-bold text-gray-900">${driver.Rank || 'N/A'}</span>
-                                <!-- Points -->
-                                <span class="text-right">
-                                    <span class="block text-3xl font-bold text-gray-900">${driver.Points || '0'}</span>
-                                    <span class="block text-sm font-medium text-gray-500 uppercase">Points</span>
-                                </span>
-                            </div>
-                            <h3 class="text-2xl font-bold text-gray-900 truncate" title="${driver.Name}">
-                                ${driver.Name || 'Driver Name'}
-                            </h3>
-                            <p class="text-base text-gray-500 truncate" title="${driver['Team Name']}">
-                                ${driver['Team Name'] || 'Team'}
-                            </p>
-                        </div>
-                    </div>
-                `;
-                grid.innerHTML += driverCard;
-            });
-        }
-
-
-        // --- Navigation Logic ---
-
-        /**
-         * Sets up all navigation links and mobile menu toggles.
-         */
-        function setupNavigation() {
-            const navLinks = document.querySelectorAll('a[href^="#"]');
-            
-            const mobileMenuBtn = document.getElementById('open-mobile-menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-            
-            if (mobileMenuBtn && mobileMenu) {
-                const openIcon = mobileMenuBtn.querySelector('svg.block');
-                const closeIcon = mobileMenuBtn.querySelector('svg.hidden');
-
-                // Toggle mobile menu
-                mobileMenuBtn.addEventListener('click', () => {
-                    mobileMenu.classList.toggle('hidden');
-                    openIcon?.classList.toggle('hidden');
-                    openIcon?.classList.toggle('block');
-                    closeIcon?.classList.toggle('hidden');
-                    closeIcon?.classList.toggle('block');
-                });
-            }
-
-            // Handle link clicks
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const viewId = link.getAttribute('href').substring(1);
-                    
-                    showView(viewId, true);
-
-                    // Close mobile menu on click, if it's open
-                    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
-                        mobileMenu.classList.add('hidden');
-                        const openIcon = mobileMenuBtn?.querySelector('svg.hidden'); // Icon is now 'x' (hidden)
-                        const closeIcon = mobileMenuBtn?.querySelector('svg.block'); // Icon is now 'hamburger' (block)
-                        
-                        // Reset icons
-                        if(openIcon && closeIcon) {
-                             openIcon.classList.add('block');
-                             openIcon.classList.remove('hidden');
-                             closeIcon.classList.add('hidden');
-                             closeIcon.classList.remove('block');
-                        }
-                    }
+        // Smooth scrolling for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
                 });
             });
-        }
-        
-        /**
-         * Shows a specific view and hides others.
-         * @param {string} viewId - The ID of the view to show (e.g., 'home', 'register').
-         * @param {boolean} [updateHistory=false] - Whether to update the browser hash.
-         */
-        async function showView(viewId, updateHistory = false) {
-            // Hide all views
-            document.querySelectorAll('.page-view').forEach(view => {
-                view.classList.add('view-hidden');
-            });
-
-            // Show the requested view
-            const viewEl = document.getElementById(`view-${viewId}`);
-            if (viewEl) {
-                viewEl.classList.remove('view-hidden');
-                if (updateHistory) {
-                    window.location.hash = viewId;
-                }
-            } else {
-                console.error(`View not found: view-${viewId}`);
-                const homeView = document.getElementById('view-home');
-                if (homeView) {
-                    homeView.classList.remove('view-hidden'); // Fallback to home
-                }
-            }
-            
-            // Handle special logic for standings page
-            if (viewId === 'standings') {
-                const data = await fetchStandings();
-                if(data) {
-                    renderStandings(data);
-                }
-            }
-
-            // Update active nav link styles
-            updateNavStyles(viewId);
-        }
-        
-        /**
-         * Updates the active styles for both desktop and mobile nav links.
-         * @param {string} viewId - The currently active view ID.
-         */
-        function updateNavStyles(viewId) {
-            // Define class lists for light theme
-            const activeClasses = ['bg-red-600', 'text-white'];
-            const inactiveClasses = ['text-gray-600', 'hover:bg-gray-200', 'hover:text-gray-900'];
-
-            const updateLink = (link) => {
-                const linkView = link.getAttribute('href').substring(1);
-
-                // Remove all possible classes first
-                link.classList.remove(...activeClasses);
-                link.classList.remove(...inactiveClasses);
-
-                // Add the correct classes
-                if (linkView === viewId) {
-                    link.classList.add(...activeClasses);
-                } else {
-                    link.classList.add(...inactiveClasses);
-                }
-            };
-            
-            document.querySelectorAll('.nav-link-desktop').forEach(updateLink);
-            document.querySelectorAll('.nav-link-mobile').forEach(updateLink);
-        }
-
+        });
     </script>
 </body>
 </html>
-
