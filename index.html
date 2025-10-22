@@ -66,6 +66,18 @@
             border-radius: 0.5rem; /* Rounded corners for the map */
             background-color: #ffffff; /* White background for transparent PNGs */
         }
+
+        /* Team Colors for Standings */
+        .team-ferrari { color: #E8002D; font-weight: 600; }
+        .team-williams { color: #00A3E0; font-weight: 600; }
+        .team-alpine { color: #0090FF; font-weight: 600; }
+        .team-haas { color: #B6B6B8; font-weight: 600; }
+        .team-mclaren { color: #FF8000; font-weight: 600; }
+        .team-kick-sauber { color: #00E000; font-weight: 600; }
+        .team-aston-martin { color: #006F62; font-weight: 600; }
+        .team-racing-bulls { color: #469BFF; font-weight: 600; }
+        .team-mercedes { color: #00D2BE; font-weight: 600; }
+        .team-red-bull-racing { color: #0600EF; font-weight: 600; }
     </style>
 </head>
 <body class="bg-zinc-950 text-gray-200">
@@ -174,19 +186,78 @@
                 <p class="text-lg text-gray-400 text-center max-w-2xl mx-auto mb-10">
                     Standings updated after the Spain GP.
                 </p>
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-                    <!-- Driver Standings 1-10 -->
-                    <div class="lg:col-span-1">
-                        <img src="image_272f3b.png" alt="Driver Standings 1-10" class="w-full rounded-lg shadow-lg">
+                <!-- Updated Grid: Replaced images with HTML tables -->
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
+                    
+                    <!-- Driver Standings Table -->
+                    <div class="lg:col-span-3 bg-zinc-800 rounded-lg shadow-lg overflow-hidden border border-zinc-700">
+                        <h3 class="text-2xl text-white p-4 text-center">Driver Standings</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead>
+                                    <tr class="bg-zinc-700">
+                                        <th class="p-3 text-sm font-semibold text-gray-300 uppercase tracking-wider text-center">Pos</th>
+                                        <th class="p-3 text-sm font-semibold text-gray-300 uppercase tracking-wider">Driver</th>
+                                        <th class="p-3 text-sm font-semibold text-gray-300 uppercase tracking-wider">Team</th>
+                                        <th class="p-3 text-sm font-semibold text-gray-300 uppercase tracking-wider text-right">Points</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-gray-200">
+                                    <!-- Driver data injected here -->
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">1</td><td class="p-3">Simman</td><td class="p-3"><span class="team-ferrari">Ferrari</span></td><td class="p-3 text-right font-bold">91</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">2</td><td class="p-3">Wi7ard</td><td class="p-3"><span class="team-williams">Williams</span></td><td class="p-3 text-right font-bold">70</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">3</td><td class="p-3">TheGodfather</td><td class="p-3"><span class="team-alpine">Alpine</span></td><td class="p-3 text-right font-bold">40</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">4</td><td class="p-3">ApexEntropy</td><td class="p-3"><span class="team-alpine">Alpine</span></td><td class="p-3 text-right font-bold">27</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">5</td><td class="p-3">Overlord</td><td class="p-3"><span class="team-mclaren">McLaren</span></td><td class="p-3 text-right font-bold">22</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">6</td><td class="p-3">Kentucky</td><td class="p-3"><span class="team-haas">Haas</span></td><td class="p-3 text-right font-bold">22</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">7</td><td class="p-3">Oxygen</td><td class="p-3"><span class="team-kick-sauber">Kick Sauber</span></td><td class="p-3 text-right font-bold">18</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">8</td><td class="p-3">Vibin</td><td class="p-3"><span class="team-aston-martin">Aston Martin</span></td><td class="p-3 text-right font-bold">18</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">9</td><td class="p-3">Apurrv</td><td class="p-3"><span class="team-aston-martin">Aston Martin</span></td><td class="p-3 text-right font-bold">17</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">10</td><td class="p-3">Mahesh</td><td class="p-3"><span class="team-williams">Williams</span></td><td class="p-3 text-right font-bold">16</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">11</td><td class="p-3">Harish</td><td class="p-3"><span class="team-haas">Haas</span></td><td class="p-3 text-right font-bold">15</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">12</td><td class="p-3">Clone</td><td class="p-3"><span class="team-racing-bulls">Racing Bulls</span></td><td class="p-3 text-right font-bold">8</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">13</td><td class="p-3">Memb</td><td class="p-3"><span class="team-mercedes">Mercedes</span></td><td class="p-3 text-right font-bold">8</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">14</td><td class="p-3">Bopedope</td><td class="p-3"><span class="team-mclaren">McLaren</span></td><td class="p-3 text-right font-bold">6</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">15</td><td class="p-3">Majunu</td><td class="p-3"><span class="team-ferrari">Ferrari</span></td><td class="p-3 text-right font-bold">4</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">16</td><td class="p-3">Denji</td><td class="p-3"><span class="team-red-bull-racing">Red Bull Racing</span></td><td class="p-3 text-right font-bold">2</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">17</td><td class="p-3">Doc YT</td><td class="p-3"><span class="team-racing-bulls">Racing Bulls</span></td><td class="p-3 text-right font-bold">1</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">18</td><td class="p-3">Maayaone</td><td class="p-3"><span class="team-mercedes">Mercedes</span></td><td class="p-3 text-right font-bold">0</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">19</td><td class="p-3">HarryBeckham</td><td class="p-3"><span class="team-red-bull-racing">Red Bull Racing</span></td><td class="p-3 text-right font-bold">0</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">20</td><td class="p-3">Bala</td><td class="p-3"><span class="team-kick-sauber">Kick Sauber</span></td><td class="p-3 text-right font-bold">0</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <!-- Driver Standings 11-20 -->
-                    <div class="lg:col-span-1">
-                         <img src="image_272f1e.png" alt="Driver Standings 11-20" class="w-full rounded-lg shadow-lg">
+                    
+                    <!-- Constructor Standings Table -->
+                    <div class="lg:col-span-2 bg-zinc-800 rounded-lg shadow-lg overflow-hidden border border-zinc-700">
+                        <h3 class="text-2xl text-white p-4 text-center">Constructor Standings</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead>
+                                    <tr class="bg-zinc-700">
+                                        <th class="p-3 text-sm font-semibold text-gray-300 uppercase tracking-wider text-center">Pos</th>
+                                        <th class="p-3 text-sm font-semibold text-gray-300 uppercase tracking-wider">Team</th>
+                                        <th class="p-3 text-sm font-semibold text-gray-300 uppercase tracking-wider text-right">Points</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-gray-200">
+                                    <!-- Constructor data injected here -->
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">1</td><td classs="p-3"><span class="team-ferrari">Ferrari</span></td><td class="p-3 text-right font-bold">95</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">2</td><td class="p-3"><span class="team-williams">Williams</span></td><td class="p-3 text-right font-bold">86</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">3</td><td class="p-3"><span class="team-alpine">Alpine</span></td><td class="p-3 text-right font-bold">53</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">4</td><td class="p-3"><span class="team-haas">Haas</span></td><td class="p-3 text-right font-bold">38</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">5</td><td class="p-3"><span class="team-aston-martin">Aston Martin</span></td><td class="p-3 text-right font-bold">35</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">6</td><td class="p-3"><span class="team-kick-sauber">Kick Sauber</span></td><td class="p-3 text-right font-bold">33</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">7</td><td class="p-3"><span class="team-mclaren">McLaren</span></td><td class="p-3 text-right font-bold">28</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">8</td><td class="p-3"><span class="team-red-bull-racing">Red Bull Racing</span></td><td class="p-3 text-right font-bold">23</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">9</td><td class="p-3"><span class="team-racing-bulls">Racing Bulls</span></td><td class="p-3 text-right font-bold">9</td></tr>
+                                    <tr class="border-b border-zinc-700/50"><td class="p-3 text-center">10</td><td class="p-3"><span class="team-mercedes">Mercedes</span></td><td class="p-3 text-right font-bold">8</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <!-- Constructor Standings -->
-                    <div class="lg:col-span-1">
-                        <img src="image_272f5a.png" alt="Constructor Standings" class="w-full rounded-lg shadow-lg">
-                    </div>
+
                 </div>
             </div>
         </section>
@@ -412,4 +483,6 @@
     </script>
 </body>
 </html>
+
+
 
