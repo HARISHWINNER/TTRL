@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TTRL Turbo Tribe Racing League</title>
     <!-- Tailwind script removed from here -->
-    
+
     <!-- Google Fonts: Oswald (for headings) and Inter (for body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
-    
+
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -21,7 +21,7 @@
             background-color: #030712; /* A very dark blue/black (Tailwind gray-950) */
             color: #d1d5db; /* text-gray-300 */
         }
-        
+
         /* --- F1-STYLE TYPOGRAPHY --- */
         /* Apply Oswald font to all major headings and modal titles */
         h1, h2, h3, h4, .tab-button, #modal-gp, #modal-title {
@@ -78,7 +78,7 @@
 
 
         /* --- INNOVATIVE HOVER & SECTION STYLES --- */
-        
+
         /* --- Cursor Styles --- */
         /* Ensure default cursor is standard */
         body { cursor: auto; }
@@ -108,7 +108,7 @@
             border-color: #e11d48; /* Red border */
             box-shadow: 0 10px 30px rgba(225, 29, 72, 0.2); /* Red glow */
         }
-        
+
         /* --- TEAM COLORS FOR STANDINGS --- */
         .team-ferrari      { color: #DC0000; }
         .team-williams     { color: #0082FA; }
@@ -130,7 +130,7 @@
         /* --- OTHER STYLES --- */
 
         /* Custom scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; } /* Added height for horizontal scroll */
         ::-webkit-scrollbar-track { background: #1f2937; }
         ::-webkit-scrollbar-thumb { background: #e11d48; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #be123c; }
@@ -156,16 +156,13 @@
         .standing-row {
              transition: background-color 0.2s ease, box-shadow 0.2s ease; /* Added box-shadow */
         }
-        .standing-row:hover {
-            background-color: #374151; /* gray-700 */
-        }
-        
+
         thead {
            background: linear-gradient(to bottom, #1f2937, #111827); /* gray-800 to gray-900 */
         }
 
+
         th.sortable { /* Only make sortable headers clickable */
-            /* cursor: pointer; */ /* Handled by global cursor rule */
             user-select: none; /* Prevent text selection on click */
         }
         th .sort-icon {
@@ -187,9 +184,34 @@
         /* Apply glow on hover to the team row */
         tr.group:hover {
              box-shadow: 0 0 15px rgba(225, 29, 72, 0.5); /* Rose glow */
-             /* Add background color change on hover if desired */
-             /* background-color: #111827; */
         }
+
+        /* Zebra Stripes for Tables */
+        #driver-standings-body tr:nth-child(even),
+        #constructor-standings-body tr.group:nth-child(4n+3), /* Target odd pairs of team rows (1&2 dark, 3&4 light) */
+        #constructor-standings-body tr.group:nth-child(4n+4)
+        {
+             background-color: rgba(31, 41, 55, 0.5); /* bg-gray-800/50 */
+        }
+        /* Ensure hover overrides zebra stripe and keeps driver row same color */
+        #driver-standings-body tr.standing-row:hover
+         {
+             background-color: #374151; /* gray-700 */
+        }
+        #constructor-standings-body tr.group:hover,
+        #constructor-standings-body tr.group:hover + tr.driver-row {
+             background-color: #374151; /* gray-700 */
+        }
+        /* Driver row needs background explicitly set as it might inherit from zebra stripe otherwise */
+        #constructor-standings-body tr.driver-row {
+             background-color: #1f2937; /* Default bg-gray-800 for driver rows */
+        }
+        /* Adjust driver row bg color if following an even team row */
+        #constructor-standings-body tr.group:nth-child(4n+3) + tr.driver-row,
+        #constructor-standings-body tr.group:nth-child(4n+4) + tr.driver-row {
+             background-color: rgba(31, 41, 55, 0.5); /* bg-gray-800/50 */
+        }
+
 
         .driver-row {
             max-height: 0;
@@ -198,7 +220,6 @@
             transition: max-height 0.4s ease-out; /* Slightly longer transition */
         }
         .driver-row td {
-            /* horizontal padding is set by 'px-6' in the JS */
             padding-top: 0;
             padding-bottom: 0;
             border-bottom: 1px solid #374151;
@@ -212,7 +233,7 @@
             padding-top: 0.75rem; /* 12px */
             padding-bottom: 0.75rem; /* 12px */
         }
-        
+
         /* --- Loading Screen Styles --- */
         #loading-screen {
             position: fixed;
@@ -233,7 +254,7 @@
             visibility: hidden;
             pointer-events: none; /* Allow interaction with content below after hiding */
         }
-        
+
         /* F1 Lights Container */
         .lights-container {
             display: flex;
@@ -248,7 +269,7 @@
             box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
             opacity: 0; /* Start hidden */
             /* Animation name, duration, fill-mode */
-            animation: lightUp 3.5s forwards; 
+            animation: lightUp 3.5s forwards;
         }
 
         /* Staggered animation delays for each light */
@@ -262,20 +283,20 @@
         @keyframes lightUp {
             0% { opacity: 0; background-color: #4b0000; } /* Start hidden */
             10% { opacity: 1; background-color: #4b0000; } /* Appear (off state) */
-            20% { 
+            20% {
                 background-color: #ff0000; /* Turn on bright red */
                 box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 0 20px #ff0000; /* Add glow */
             }
             85% { /* Hold the lit state until near the end */
-                 background-color: #ff0000; 
+                 background-color: #ff0000;
                  box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 0 20px #ff0000;
                  opacity: 1;
             }
-            100% { 
+            100% {
                 background-color: #1a1a1a; /* Turn off (dark gray) */
-                box-shadow: inset 0 0 10px rgba(0,0,0,0.5); 
+                box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
                 opacity: 0.5; /* Fade slightly */
-            } 
+            }
         }
 
     </style>
@@ -300,10 +321,11 @@
     <header class="bg-gray-950/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-800">
         <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
-                <!-- Logo / Title -->
+                <!-- Logo / Title - Replaced text with image -->
                 <div class="flex-shrink-0">
-                    <a href="#home" class="text-2xl md:text-3xl font-bold text-white tracking-wider">
-                        <span class="text-rose-600">TTRL</span>
+                    <a href="#home" class="block">
+                        <img src="https://raw.githubusercontent.com/HARISHWINNER/TTRL/ade50d630c482acbb96676fc69c2849a58494f7f/RESOURCES/image.png"
+                             alt="TTRL Logo" class="h-12 w-auto">
                     </a>
                 </div>
                 <!-- Navigation Links -->
@@ -436,7 +458,7 @@
                                         <th scope="col" class="px-4 sm:px-6 py-4 text-right text-xs sm:text-sm font-medium text-rose-500 uppercase tracking-wider w-3/12 sortable" data-sort="points">Points <span class="sort-icon"><i class="fa-solid fa-sort"></i></span></th>
                                     </tr>
                                 </thead>
-                                <tbody id="driver-standings-body" class="bg-gray-800 divide-y divide-gray-700">
+                                <tbody id="driver-standings-body" class="divide-y divide-gray-700">
                                     <!-- Driver rows will be injected here -->
                                 </tbody>
                             </table>
@@ -454,7 +476,7 @@
                                         <th scope="col" class="px-4 sm:px-6 py-4 text-right text-xs sm:text-sm font-medium text-rose-500 uppercase tracking-wider w-2/6 sortable" data-sort="points">Points <span class="sort-icon"><i class="fa-solid fa-sort"></i></span></th>
                                     </tr>
                                 </thead>
-                                <tbody id="constructor-standings-body" class="bg-gray-800 divide-y divide-gray-700">
+                                <tbody id="constructor-standings-body" class="divide-y divide-gray-700">
                                     <!-- Constructor rows will be injected here -->
                                 </tbody>
                             </table>
@@ -476,7 +498,7 @@
                     Fill out the Google Form to secure your spot for the upcoming season.
                 </p>
                 <div class="mt-12">
-                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSc1xE8SkAOIKoHaryLjNgTNXJfmBCSv73vdgxaAA0_uxnmUTw/viewform?usp=sharing&ouid=104200385701338668462" target="_blank" rel="noopener noreferrer" 
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSc1xE8SkAOIKoHaryLjNgTNXJfmBCSv73vdgxaAA0_uxnmUTw/viewform?usp=sharing&ouid=104200385701338668462" target="_blank" rel="noopener noreferrer"
                        class="inline-block px-12 py-5 bg-rose-600 text-white text-xl font-bold rounded-lg shadow-xl btn-glow">
                         <i class="fa-brands fa-google-drive mr-2"></i> ENROLLMENT
                     </a>
@@ -497,20 +519,20 @@
                     Get in touch with the league admins and join the conversation.
                 </p>
             </div>
-            
+
             <!-- Social Links Grid -->
             <div class="flex flex-wrap justify-center gap-6 text-3xl sm:text-4xl">
                 <!-- Discord -->
-                <a href="https://discord.gg/EuyPTXqbg6" target="_blank" rel="noopener noreferrer" 
+                <a href="https://discord.gg/EuyPTXqbg6" target="_blank" rel="noopener noreferrer"
                    class="flex flex-col items-center group w-28 text-gray-400 hover:text-[#5865F2] transition-all duration-300">
                     <div class="p-5 bg-gray-800 rounded-full group-hover:bg-gray-700/50 group-hover:scale-110 border border-gray-700 group-hover:border-[#5865F2] transition-all duration-300">
                         <i class="fa-brands fa-discord"></i>
                     </div>
                     <span class="mt-3 text-sm font-medium uppercase tracking-wide">Discord</span>
                 </a>
-                
+
                 <!-- YouTube -->
-                <a href="https://youtube.com/@wi7ard?si=hj6MfGQ_u_rrdkZU" target="_blank" rel="noopener noreferrer" 
+                <a href="https://www.youtube.com/@TurboTribeRacingLeague" target="_blank" rel="noopener noreferrer"
                    class="flex flex-col items-center group w-28 text-gray-400 hover:text-[#FF0000] transition-all duration-300">
                     <div class="p-5 bg-gray-800 rounded-full group-hover:bg-gray-700/50 group-hover:scale-110 border border-gray-700 group-hover:border-[#FF0000] transition-all duration-300">
                         <i class="fa-brands fa-youtube"></i>
@@ -519,7 +541,7 @@
                 </a>
 
                 <!-- Email -->
-                <a href="mailto:timothyabraham23@gmail.com" 
+                <a href="mailto:turbotriberacingleague@gmail.com"
                    class="flex flex-col items-center group w-28 text-gray-400 hover:text-[#3B82F6] transition-all duration-300">
                     <div class="p-5 bg-gray-800 rounded-full group-hover:bg-gray-700/50 group-hover:scale-110 border border-gray-700 group-hover:border-[#3B82F6] transition-all duration-300">
                         <i class="fa-solid fa-envelope"></i>
@@ -528,13 +550,12 @@
                 </a>
 
                 <!-- Steam -->
-                <a href="#" target="_blank" rel="noopener noreferrer" 
+                <a href="https://steamcommunity.com/profiles/76561199497506530/" target="_blank" rel="noopener noreferrer"
                    class="flex flex-col items-center group w-28 text-gray-400 hover:text-white transition-all duration-300">
                     <div class="p-5 bg-gray-800 rounded-full group-hover:bg-gray-700/50 group-hover:scale-110 border border-gray-700 group-hover:border-white transition-all duration-300">
                         <i class="fa-brands fa-steam"></i>
                     </div>
                     <span class="mt-3 text-sm font-medium uppercase tracking-wide">Steam</span>
-                    <span class="text-xs text-gray-600">(Link TBD)</span>
                 </a>
             </div>
 
@@ -564,13 +585,13 @@
                     <p id="modal-date" class="text-sm font-medium text-rose-500 mb-1" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;"></p>
                     <h4 id="modal-gp" class="text-3xl font-bold text-white mb-1">Grand Prix Name</h4>
                     <p id="modal-track" class="text-lg text-gray-400 mb-5" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;"></p>
-                    
+
                     <!-- INSIGHT BLOCK -->
                     <div class="mb-5">
                         <h4 class="text-base font-semibold text-gray-200 mb-2 uppercase tracking-wider">Insight</h4>
                         <p id="modal-insight" class="text-gray-300 text-base" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;">Loading insight...</p>
                     </div>
-                    
+
                     <!-- STATS BLOCK -->
                     <div id="modal-stats-block" class="border-t border-gray-700 pt-5">
                         <h4 class="text-base font-semibold text-gray-200 mb-3 uppercase tracking-wider">Track Stats</h4>
@@ -662,7 +683,7 @@
                 stats: { laps: 29, length: "5.281 km" }
             }
         ];
-        
+
         // Original data, DO NOT MODIFY
         const originalDriverStandings = Object.freeze([
             { pos: 1, driver: "Simman", team: "Ferrari", points: 91 },
@@ -703,7 +724,7 @@
         // Create mutable copies for sorting
         let currentDriverStandings = [...originalDriverStandings];
         let currentConstructorStandings = [...originalConstructorStandings];
-        
+
         // Sorting state variables
         let driverSortColumn = 'pos';
         let driverSortDirection = 'asc';
@@ -714,10 +735,12 @@
         // Helper function to get team CSS class
         function getTeamClass(teamName) {
             const name = teamName.toLowerCase().replace(/ /g, '-');
-            if (name.includes('red-bull')) return 'team-red-bull';
+            // Handle multi-word teams first
+            if (name.includes('red-bull-racing')) return 'team-red-bull'; // More specific
             if (name.includes('kick-sauber')) return 'team-kick-sauber';
             if (name.includes('aston-martin')) return 'team-aston-martin';
             if (name.includes('racing-bulls')) return 'team-racing-bulls';
+            // Then single word teams
             return `team-${name}`;
         }
 
@@ -730,7 +753,7 @@
                 const animationDuration = 3500; // 3.5s
                 // Fade-out duration
                 const fadeDuration = 500; // 0.5s
-                
+
                 // Set the transition property *before* adding the class
                 // It should start fading *after* the animation duration
                 loadingScreen.style.transition = `opacity ${fadeDuration}ms ease-out ${animationDuration}ms, visibility ${fadeDuration}ms ease-out ${animationDuration}ms`;
@@ -749,7 +772,7 @@
             } else {
                 console.warn("Could not find 'current-year' element. Footer might be missing.");
             }
-            
+
             // --- DYNAMIC COUNTDOWN LOGIC ---
             // User-defined race time: Friday 10:30 PM IST (which is 17:00 UTC)
             const RACE_TIME_UTC = { hours: 17, minutes: 0, seconds: 0 };
@@ -758,16 +781,16 @@
 
             for (const race of leagueCalendar) {
                 // Skip non-race events (testing and breaks)
-                if (race.round === 0 || race.round === "break") continue; 
-                
+                if (race.round === 0 || race.round === "break") continue;
+
                 const [day, month, year] = race.date.split('/').map(Number);
                 // Create a UTC date object for the race
                 const raceDate = new Date(Date.UTC(2000 + year, month - 1, day, RACE_TIME_UTC.hours, RACE_TIME_UTC.minutes, RACE_TIME_UTC.seconds));
-                
+
                 if (raceDate > now) {
                     nextRace = race; // Found the first upcoming race
                     nextRace.utcDate = raceDate; // Attach the full date object
-                    break; 
+                    break;
                 }
             }
 
@@ -775,7 +798,7 @@
             const nextRaceTitleEl = document.getElementById("next-race-gp");
             const nextRaceTrackEl = document.getElementById("next-race-track");
             const countdownEl = document.getElementById('countdown');
-            
+
             if (nextRace) {
                 // We found an upcoming race
                 nextRaceTitleEl.textContent = nextRace.gp;
@@ -861,7 +884,7 @@
                 // Check for Pre-Season
                 const isTesting = race.round === 0;
                 const roundText = isTesting ? "TESTING" : `RND ${race.round}`;
-                
+
                 // Standard race card
                 const card = `
                     <div data-round="${race.round}" class="calendar-card rounded-lg shadow-xl overflow-hidden cursor-pointer">
@@ -878,7 +901,7 @@
                 grid.innerHTML += card;
             });
         }
-        
+
         // --- Standings Population and Sorting ---
 
         function sortAndPopulateDriverStandings() {
@@ -898,7 +921,7 @@
 
                 if (valA < valB) return driverSortDirection === 'asc' ? -1 : 1;
                 if (valA > valB) return driverSortDirection === 'asc' ? 1 : -1;
-                
+
                 // If values are equal, sort by original position (pos) to maintain stability
                 return a.pos - b.pos;
             });
@@ -907,12 +930,12 @@
             const tbody = document.getElementById('driver-standings-body');
             if (!tbody) return;
             tbody.innerHTML = ''; // Clear existing
-            
+
             currentDriverStandings.forEach((driver) => {
                 const teamClass = getTeamClass(driver.team);
                 const row = document.createElement('tr');
                 row.className = 'standing-row'; // Keep hover effect class
-                
+
                 row.innerHTML = `
                     <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm sm:text-base font-medium text-white">${driver.pos}</td>
                     <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm sm:text-base font-medium text-white">${driver.driver}</td>
@@ -953,7 +976,7 @@
 
             // Build the driver map from the original, unsorted driver list
             const teamDriverMap = {};
-            originalDriverStandings.forEach(driver => {
+            originalDriverStandings.forEach(driver => { // Use originalDriverStandings here
                 if (!teamDriverMap[driver.team]) {
                     teamDriverMap[driver.team] = [];
                 }
@@ -964,18 +987,18 @@
             currentConstructorStandings.forEach((team) => {
                 const drivers = teamDriverMap[team.team] || ["N/A", "N/A"];
                 const teamClass = getTeamClass(team.team);
-                
+
                 const teamRow = `
-                    <tr class="team-row group standing-row"> 
+                    <tr class="team-row group standing-row">
                         <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm sm:text-base font-medium text-white">${team.pos}</td>
                         <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm sm:text-base team-cell ${teamClass}">${team.team}</td>
                         <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm sm:text-base font-bold text-rose-500">${team.points}</td>
                     </tr>
                 `;
-                
+
                 // Note: padding-x needs to match header padding
                 const driverRow = `
-                    <tr class="driver-row bg-gray-900">
+                    <tr class="driver-row">
                         <td colspan="3" class="px-6 text-sm text-gray-300" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;">
                             <span class="font-medium text-gray-400">Drivers:</span> ${drivers.join(', ')}
                         </td>
@@ -1076,11 +1099,7 @@
                 driversTab.classList.remove('tab-inactive');
                 constructorsTab.classList.add('tab-inactive');
                 constructorsTab.classList.remove('tab-active');
-                // Reset sort when switching
-                driverSortColumn = 'pos';
-                driverSortDirection = 'asc';
-                currentDriverStandings = [...originalDriverStandings];
-                sortAndPopulateDriverStandings();
+                // No need to re-populate if sorting handles it
             });
 
             constructorsTab.addEventListener('click', () => {
@@ -1090,11 +1109,7 @@
                 constructorsTab.classList.remove('tab-inactive');
                 driversTab.classList.add('tab-inactive');
                 driversTab.classList.remove('tab-active');
-                 // Reset sort when switching
-                constructorSortColumn = 'pos';
-                constructorSortDirection = 'asc';
-                currentConstructorStandings = [...originalConstructorStandings];
-                sortAndPopulateConstructorStandings();
+                 // No need to re-populate if sorting handles it
             });
         }
 
@@ -1117,7 +1132,7 @@
             const modalLaps = document.getElementById('modal-laps');
             const modalLength = document.getElementById('modal-length');
             const modalStatsBlock = document.getElementById('modal-stats-block');
-            
+
             function openModal(race) {
                 if (!race) return; // Safety check
 
@@ -1140,7 +1155,7 @@
                     modalLength.textContent = race.stats.length;
                     modalStatsBlock.classList.remove('hidden');
                 } else {
-                    // It's testing, hide stats
+                    // It's testing or break, hide stats
                     modalStatsBlock.classList.add('hidden');
                 }
 
