@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTRL Turbo Tribe Racing League</title>
+    <!-- Tailwind script removed from here -->
+    
+    <!-- Google Fonts: Oswald (for headings) and Inter (for body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* Base body styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #030712; /* A very dark blue/black (Tailwind gray-950) */
+            color: #d1d5db; /* text-gray-300 */
+        }
+        
+        /* --- F1-STYLE TYPOGRAPHY --- */
+        /* Apply Oswald font to all major headings and modal titles */
+        h1, h2, h3, h4, .tab-button, #modal-gp, #modal-title {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase; /* F1 style is very uppercase */
+            font-weight: 700;
+            letter-spacing: 0.05em; /* Add a little space */
+        }
+
+        /* Countdown timer numbers */
+        #countdown span[id] {
+            font-family: 'Oswald', sans-serif;
+            font-weight: 500;
+        }
+
+        /* --- NEW HERO SECTION STYLE --- */
+        .hero-bg {
+            /* Background image with dark overlay for readability */
+            background-image: linear-gradient(rgba(3, 7, 18, 0.7), rgba(3, 7, 18, 0.7)), url('https://raw.githubusercontent.com/HARISHWINNER/TTRL/refs/heads/main/RESOURCES/Belgium.avif');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Added parallax */
+            min-height: 75vh;
+            position: relative; /* Needed for z-index context */
+        }
+
+        /* Custom text shadow for better readability on hero */
+        .hero-text-shadow {
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        /* --- CALENDAR SECTION BACKGROUND --- */
+        #calendar {
+            background-image: linear-gradient(rgba(3, 7, 18, 0.85), rgba(3, 7, 18, 0.85)), url('https://raw.githubusercontent.com/HARISHWINNER/TTRL/1bdfb752d8fcf8f1ae23c7d6e3bed31a32718a87/RESOURCES/1-w-GettyImages-2048270135.webp');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* This gives the parallax effect */
+            position: relative;
+        }
+
+        /* --- REGISTRATION SECTION BACKGROUND --- */
+        #register {
+            background-image: linear-gradient(rgba(3, 7, 18, 0.85), rgba(3, 7, 18, 0.85)), url('https://raw.githubusercontent.com/HARISHWINNER/TTRL/cd1be0e0f854cf13a15343f5efc2caab5232c583/RESOURCES/001-EA-Sports-F1-2023-Video-Game-Review.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Parallax effect */
+            position: relative;
+        }
+        #register .container {
+            position: relative;
+            z-index: 1;
+        }
+
+
+        /* --- INNOVATIVE HOVER & SECTION STYLES --- */
+        
+        /* --- Cursor Styles --- */
+        /* Ensure default cursor is standard */
+        body { cursor: auto; }
+        /* Make clearly interactive elements use the pointer */
+        a, button, .calendar-card[data-round], th.sortable {
+            cursor: pointer;
+        }
+
+        /* Glowing button effect */
+        .btn-glow {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(225, 29, 72, 0.2);
+        }
+        .btn-glow:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(225, 29, 72, 0.4); /* Brighter, larger glow */
+        }
+
+        /* Glowing calendar card effect */
+        .calendar-card {
+            background-color: #1f2937; /* bg-gray-800 */
+            border: 1px solid #374151; /* bg-gray-700 */
+            transition: all 0.3s ease;
+        }
+        .calendar-card:hover {
+            transform: translateY(-5px);
+            border-color: #e11d48; /* Red border */
+            box-shadow: 0 10px 30px rgba(225, 29, 72, 0.2); /* Red glow */
+        }
+        
+        /* --- TEAM COLORS FOR STANDINGS --- */
+        .team-ferrari      { color: #DC0000; }
+        .team-williams     { color: #0082FA; }
+        .team-alpine       { color: #0090FF; }
+        .team-haas         { color: #B6B6B8; }
+        .team-mclaren      { color: #FF8700; }
+        .team-kick-sauber  { color: #52E252; }
+        .team-aston-martin { color: #006F62; }
+        .team-racing-bulls { color: #469BFF; }
+        .team-mercedes     { color: #00D2BE; }
+        .team-red-bull     { color: #0600EF; } /* Adjusted for better visibility */
+
+        /* Style for the table cell containing the team name */
+        .team-cell {
+            font-weight: 600;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+        }
+
+        /* --- OTHER STYLES --- */
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1f2937; }
+        ::-webkit-scrollbar-thumb { background: #e11d48; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #be123c; }
+
+        /* Standings tabs and reset button */
+        .tab-active { background-color: #e11d48; color: #ffffff; }
+        .tab-inactive { background-color: #374151; color: #d1d5db; }
+        #reset-sort-btn {
+            background-color: #4b5563; /* gray-600 */
+            color: #d1d5db; /* gray-300 */
+            transition: background-color 0.2s ease;
+        }
+        #reset-sort-btn:hover {
+             background-color: #6b7280; /* gray-500 */
+        }
+
+
+        /* Modal styles */
+        .modal { transition: opacity 0.3s ease, visibility 0.3s ease; }
+        .modal-content { transition: transform 0.3s ease; }
+
+        /* Standings Table Enhancements */
+        .standing-row {
+             transition: background-color 0.2s ease, box-shadow 0.2s ease; /* Added box-shadow */
+        }
+        .standing-row:hover {
+            background-color: #374151; /* gray-700 */
+        }
+        
+        thead {
+           background: linear-gradient(to bottom, #1f2937, #111827); /* gray-800 to gray-900 */
+        }
+
+        th.sortable { /* Only make sortable headers clickable */
+            /* cursor: pointer; */ /* Handled by global cursor rule */
+            user-select: none; /* Prevent text selection on click */
+        }
+        th .sort-icon {
+            display: inline-block;
+            margin-left: 0.5rem;
+            opacity: 0.5;
+            transition: opacity 0.2s ease;
+        }
+        th.sortable:hover .sort-icon { /* Only show hover effect on sortable */
+            opacity: 1;
+        }
+        th .sort-icon.active {
+            opacity: 1;
+            color: #f43f5e; /* rose-500 */
+        }
+
+
+        /* --- Constructor Standings Hover Animation --- */
+        /* Apply glow on hover to the team row */
+        tr.group:hover {
+             box-shadow: 0 0 15px rgba(225, 29, 72, 0.5); /* Rose glow */
+             /* Add background color change on hover if desired */
+             /* background-color: #111827; */
+        }
+
+        .driver-row {
+            max-height: 0;
+            overflow: hidden;
+            display: none; /* Initially hidden */
+            transition: max-height 0.4s ease-out; /* Slightly longer transition */
+        }
+        .driver-row td {
+            /* horizontal padding is set by 'px-6' in the JS */
+            padding-top: 0;
+            padding-bottom: 0;
+            border-bottom: 1px solid #374151;
+            transition: padding-top 0.4s ease-out, padding-bottom 0.4s ease-out;
+        }
+        tr.group:hover + tr.driver-row {
+            display: table-row; /* Make visible on hover */
+            max-height: 100px; /* Animate max-height to show */
+        }
+        tr.group:hover + tr.driver-row td {
+            padding-top: 0.75rem; /* 12px */
+            padding-bottom: 0.75rem; /* 12px */
+        }
+        
+        /* --- Loading Screen Styles --- */
+        #loading-screen {
+            position: fixed;
+            inset: 0;
+            background-color: #030712; /* gray-950 */
+            display: flex;
+            flex-direction: column; /* Stack lights container and title */
+            align-items: center;
+            justify-content: center;
+            z-index: 100; /* Ensure it's on top */
+            opacity: 1;
+            /* Delay fade out to let animation play */
+            transition: opacity 0.5s ease-out 3.5s, visibility 0.5s ease-out 3.5s;
+            visibility: visible;
+        }
+        #loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none; /* Allow interaction with content below after hiding */
+        }
+        
+        /* F1 Lights Container */
+        .lights-container {
+            display: flex;
+            gap: 1.5rem; /* Space between lights */
+            margin-bottom: 2rem; /* Space below lights */
+        }
+        .light {
+            width: 50px; /* Size of lights */
+            height: 50px;
+            border-radius: 50%;
+            background-color: #4b0000; /* Dark red, off state */
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            opacity: 0; /* Start hidden */
+            /* Animation name, duration, fill-mode */
+            animation: lightUp 3.5s forwards; 
+        }
+
+        /* Staggered animation delays for each light */
+        .light:nth-child(1) { animation-delay: 0.2s; }
+        .light:nth-child(2) { animation-delay: 0.7s; }
+        .light:nth-child(3) { animation-delay: 1.2s; }
+        .light:nth-child(4) { animation-delay: 1.7s; }
+        .light:nth-child(5) { animation-delay: 2.2s; }
+
+        /* Keyframes for the light animation */
+        @keyframes lightUp {
+            0% { opacity: 0; background-color: #4b0000; } /* Start hidden */
+            10% { opacity: 1; background-color: #4b0000; } /* Appear (off state) */
+            20% { 
+                background-color: #ff0000; /* Turn on bright red */
+                box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 0 20px #ff0000; /* Add glow */
+            }
+            85% { /* Hold the lit state until near the end */
+                 background-color: #ff0000; 
+                 box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 0 20px #ff0000;
+                 opacity: 1;
+            }
+            100% { 
+                background-color: #1a1a1a; /* Turn off (dark gray) */
+                box-shadow: inset 0 0 10px rgba(0,0,0,0.5); 
+                opacity: 0.5; /* Fade slightly */
+            } 
+        }
+
+    </style>
+</head>
+<body class="bg-gray-950 text-gray-300">
+
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="lights-container">
+            <div class="light"></div>
+            <div class="light"></div>
+            <div class="light"></div>
+            <div class="light"></div>
+            <div class="light"></div>
+        </div>
+        <h1 class="text-4xl font-bold text-white">
+             <span class="text-rose-600">TTRL</span> LOADING...
+        </h1>
+    </div>
+
+    <!-- Header / Navigation -->
+    <header class="bg-gray-950/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-800">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo / Title -->
+                <div class="flex-shrink-0">
+                    <a href="#home" class="text-2xl md:text-3xl font-bold text-white tracking-wider">
+                        <span class="text-rose-600">TTRL</span>
+                    </a>
+                </div>
+                <!-- Navigation Links -->
+                <div class="hidden md:flex md:items-center md:space-x-6">
+                    <a href="#home" class="text-gray-300 hover:text-rose-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">HOME</a>
+                    <a href="#calendar" class="text-gray-300 hover:text-rose-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">CALENDAR</a>
+                    <a href="#standings" class="text-gray-300 hover:text-rose-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">STANDINGS</a>
+                    <a href="#contact" class="text-gray-300 hover:text-rose-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">CONTACT</a>
+                    <a href="#register" class="ml-4 px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold rounded-md shadow-lg transition-all transform hover:scale-105 btn-glow">
+                        ENROLLMENT
+                    </a>
+                </div>
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <a href="#register" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold rounded-md shadow-lg transition-all btn-glow">
+                        ENROLLMENT
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Home Section -->
+        <section id="home" class="hero-bg relative flex items-center justify-center text-center overflow-hidden px-4 py-32">
+            <div class="relative z-10">
+                <h1 class="text-5xl sm:text-7xl lg:text-8xl font-extrabold text-white tracking-tight hero-text-shadow">
+                    TTRL <span class="text-rose-600">TURBO TRIBE</span><br>RACING LEAGUE
+                </h1>
+                <p class="mt-6 text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto hero-text-shadow">
+                    The ultimate destination for competitive and realistic F1 25 sim racing.
+                    Do you have what it takes to become a champion?
+                </p>
+                <div class="mt-12">
+                    <a href="#register" class="inline-block px-10 py-4 bg-rose-600 text-white text-lg font-bold rounded-md shadow-lg btn-glow">
+                        JOIN THE GRID
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Countdown Timer Section -->
+        <section id="countdown-section" class="bg-gray-900 py-12 sm:py-16 relative z-10 border-b-4 border-rose-600">
+            <div class="container mx-auto px-4">
+                <div class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl max-w-4xl mx-auto p-6 sm:p-8 shadow-2xl">
+                    <div class="text-center">
+                        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-2">
+                            NEXT RACE: <span id="next-race-gp" class="text-rose-500">LOADING...</span>
+                        </h2>
+                        <h3 id="next-race-track" class="text-xl sm:text-2xl font-medium text-gray-400 mb-8" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;">
+                            Calculating...
+                        </h3>
+                    </div>
+                    <div id="countdown" class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-white">
+                        <div class="bg-gray-900/70 p-4 rounded-lg border border-gray-700 text-center">
+                            <span id="days" class="block text-5xl sm:text-7xl font-extrabold">00</span>
+                            <span class="block text-sm sm:text-base font-medium text-gray-400">DAYS</span>
+                        </div>
+                        <div class="bg-gray-900/70 p-4 rounded-lg border border-gray-700 text-center">
+                            <span id="hours" class="block text-5xl sm:text-7xl font-extrabold">00</span>
+                            <span class="block text-sm sm:text-base font-medium text-gray-400">HOURS</span>
+                        </div>
+                        <div class="bg-gray-900/70 p-4 rounded-lg border border-gray-700 text-center">
+                            <span id="minutes" class="block text-5xl sm:text-7xl font-extrabold">00</span>
+                            <span class="block text-sm sm:text-base font-medium text-gray-400">MINUTES</span>
+                        </div>
+                        <div class="bg-gray-900/70 p-4 rounded-lg border border-gray-700 text-center">
+                            <span id="seconds" class="block text-5xl sm:text-7xl font-extrabold text-rose-500">00</span>
+                            <span class="block text-sm sm:text-base font-medium text-gray-400">SECONDS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Calendar Section -->
+        <section id="calendar" class="py-24 relative">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-extrabold text-white sm:text-5xl">
+                        LEAGUE <span class="text-rose-600">CALENDAR</span>
+                    </h2>
+                    <p class="mt-4 text-lg text-gray-200 max-w-2xl mx-auto" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;">
+                        Our 10-race championship spans the globe. Click a track for insights.
+                    </p>
+                </div>
+
+                <!-- Calendar Grid -->
+                <div id="calendar-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Calendar cards will be injected here by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Standings Section -->
+        <section id="standings" class="py-24 bg-gray-900 border-y-4 border-gray-800">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-extrabold text-white sm:text-5xl">
+                        CURRENT <span class="text-rose-600">STANDINGS</span>
+                    </h2>
+                    <p class="mt-4 text-lg text-gray-400 max-w-2xl mx-auto" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;">
+                        Who's leading the pack? See the latest points after the last round. Click headers to sort.
+                    </p>
+                </div>
+
+                <!-- Standings Tabs and Reset Button -->
+                <div class="flex flex-col sm:flex-row justify-center items-center mb-8 gap-4">
+                    <div class="flex space-x-2 sm:space-x-4">
+                        <button id="drivers-tab" class="tab-button tab-active px-4 py-3 sm:px-6 font-bold text-base sm:text-lg rounded-md transition-all">DRIVER STANDINGS</button>
+                        <button id="constructors-tab" class="tab-button tab-inactive px-4 py-3 sm:px-6 font-bold text-base sm:text-lg rounded-md transition-all">CONSTRUCTOR STANDINGS</button>
+                    </div>
+                    <button id="reset-sort-btn" class="px-3 py-2 text-xs font-semibold rounded-md transition-all" title="Reset Sort Order">
+                        <i class="fa-solid fa-arrow-rotate-left mr-1"></i> RESET SORT
+                    </button>
+                </div>
+
+
+                <!-- Standings Tables Container -->
+                <div class="max-w-6xl mx-auto">
+                    <!-- Driver Standings Table -->
+                    <div id="drivers-table-container">
+                        <div class="bg-gray-800 shadow-xl rounded-lg overflow-hidden border border-gray-700">
+                            <table class="min-w-full divide-y divide-gray-700">
+                                <thead class="bg-gray-900/50">
+                                    <tr>
+                                        <th scope="col" class="px-4 sm:px-6 py-4 text-left text-xs sm:text-sm font-medium text-rose-500 uppercase tracking-wider w-1/12 sortable" data-sort="pos">Pos <span class="sort-icon"><i class="fa-solid fa-sort"></i></span></th>
+                                        <th scope="col" class="px-4 sm:px-6 py-4 text-left text-xs sm:text-sm font-medium text-gray-300 uppercase tracking-wider w-4/12 sortable" data-sort="driver">Driver <span class="sort-icon"><i class="fa-solid fa-sort"></i></span></th>
+                                        <th scope="col" class="px-4 sm:px-6 py-4 text-left text-xs sm:text-sm font-medium text-gray-300 uppercase tracking-wider w-4/12 sortable" data-sort="team">Team <span class="sort-icon"><i class="fa-solid fa-sort"></i></span></th>
+                                        <th scope="col" class="px-4 sm:px-6 py-4 text-right text-xs sm:text-sm font-medium text-rose-500 uppercase tracking-wider w-3/12 sortable" data-sort="points">Points <span class="sort-icon"><i class="fa-solid fa-sort"></i></span></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="driver-standings-body" class="bg-gray-800 divide-y divide-gray-700">
+                                    <!-- Driver rows will be injected here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Constructor Standings Table -->
+                    <div id="constructors-table-container" class="hidden">
+                        <div class="bg-gray-800 shadow-xl rounded-lg overflow-hidden border border-gray-700">
+                            <table class="min-w-full divide-y divide-gray-700">
+                                <thead class="bg-gray-900/50">
+                                    <tr>
+                                        <th scope="col" class="px-4 sm:px-6 py-4 text-left text-xs sm:text-sm font-medium text-rose-500 uppercase tracking-wider w-1/6 sortable" data-sort="pos">Pos <span class="sort-icon"><i class="fa-solid fa-sort"></i></span></th>
+                                        <th scope="col" class="px-4 sm:px-6 py-4 text-left text-xs sm:text-sm font-medium text-gray-300 uppercase tracking-wider w-3/6 sortable" data-sort="team">Team <span class="sort-icon"><i class="fa-solid fa-sort"></i></span></th>
+                                        <th scope="col" class="px-4 sm:px-6 py-4 text-right text-xs sm:text-sm font-medium text-rose-500 uppercase tracking-wider w-2/6 sortable" data-sort="points">Points <span class="sort-icon"><i class="fa-solid fa-sort"></i></span></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="constructor-standings-body" class="bg-gray-800 divide-y divide-gray-700">
+                                    <!-- Constructor rows will be injected here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Registration Section -->
+        <section id="register" class="py-24 text-center">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <i class="fa-solid fa-flag-checkered text-6xl text-rose-600 mb-6"></i>
+                <h2 class="text-4xl font-extrabold text-white sm:text-5xl">
+                    JOIN THE <span class="text-rose-600">GRID</span>
+                </h2>
+                <p class="mt-4 text-lg text-gray-200 max-w-2xl mx-auto" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;">
+                    Ready to prove your skill? Registrations are now open.
+                    Fill out the Google Form to secure your spot for the upcoming season.
+                </p>
+                <div class="mt-12">
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSc1xE8SkAOIKoHaryLjNgTNXJfmBCSv73vdgxaAA0_uxnmUTw/viewform?usp=sharing&ouid=104200385701338668462" target="_blank" rel="noopener noreferrer" 
+                       class="inline-block px-12 py-5 bg-rose-600 text-white text-xl font-bold rounded-lg shadow-xl btn-glow">
+                        <i class="fa-brands fa-google-drive mr-2"></i> ENROLLMENT
+                    </a>
+                    <p class="mt-4 text-sm text-gray-500">You will be redirected to an external Google Form.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer / Contact Section -->
+    <footer id="contact" class="bg-gray-900 border-t border-gray-800">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-extrabold text-white">
+                    CONTACT & <span class="text-rose-600">COMMUNITY</span>
+                </h2>
+                <p class="mt-3 text-lg text-gray-400" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;">
+                    Get in touch with the league admins and join the conversation.
+                </p>
+            </div>
+            
+            <!-- Social Links Grid -->
+            <div class="flex flex-wrap justify-center gap-6 text-3xl sm:text-4xl">
+                <!-- Discord -->
+                <a href="https://discord.gg/EuyPTXqbg6" target="_blank" rel="noopener noreferrer" 
+                   class="flex flex-col items-center group w-28 text-gray-400 hover:text-[#5865F2] transition-all duration-300">
+                    <div class="p-5 bg-gray-800 rounded-full group-hover:bg-gray-700/50 group-hover:scale-110 border border-gray-700 group-hover:border-[#5865F2] transition-all duration-300">
+                        <i class="fa-brands fa-discord"></i>
+                    </div>
+                    <span class="mt-3 text-sm font-medium uppercase tracking-wide">Discord</span>
+                </a>
+                
+                <!-- YouTube -->
+                <a href="https://youtube.com/@wi7ard?si=hj6MfGQ_u_rrdkZU" target="_blank" rel="noopener noreferrer" 
+                   class="flex flex-col items-center group w-28 text-gray-400 hover:text-[#FF0000] transition-all duration-300">
+                    <div class="p-5 bg-gray-800 rounded-full group-hover:bg-gray-700/50 group-hover:scale-110 border border-gray-700 group-hover:border-[#FF0000] transition-all duration-300">
+                        <i class="fa-brands fa-youtube"></i>
+                    </div>
+                    <span class="mt-3 text-sm font-medium uppercase tracking-wide">Stream</span>
+                </a>
+
+                <!-- Email -->
+                <a href="mailto:timothyabraham23@gmail.com" 
+                   class="flex flex-col items-center group w-28 text-gray-400 hover:text-[#3B82F6] transition-all duration-300">
+                    <div class="p-5 bg-gray-800 rounded-full group-hover:bg-gray-700/50 group-hover:scale-110 border border-gray-700 group-hover:border-[#3B82F6] transition-all duration-300">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                    <span class="mt-3 text-sm font-medium uppercase tracking-wide">Email</span>
+                </a>
+
+                <!-- Steam -->
+                <a href="#" target="_blank" rel="noopener noreferrer" 
+                   class="flex flex-col items-center group w-28 text-gray-400 hover:text-white transition-all duration-300">
+                    <div class="p-5 bg-gray-800 rounded-full group-hover:bg-gray-700/50 group-hover:scale-110 border border-gray-700 group-hover:border-white transition-all duration-300">
+                        <i class="fa-brands fa-steam"></i>
+                    </div>
+                    <span class="mt-3 text-sm font-medium uppercase tracking-wide">Steam</span>
+                    <span class="text-xs text-gray-600">(Link TBD)</span>
+                </a>
+            </div>
+
+            <div class="mt-16 text-center text-gray-500 text-sm">
+                <p>&copy; <span id="current-year"></span> TTRL Turbo Tribe Racing League. All rights reserved.</p>
+                <p class="mt-1">This is an unofficial fan-run league and is not affiliated with Codemasters, EA, or Formula One.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Calendar Modal -->
+    <div id="calendar-modal" class="modal fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div id="modal-backdrop" class="fixed inset-0"></div>
+        <!-- Modal content -->
+        <div class="modal-content bg-gray-900 w-full max-w-2xl rounded-xl shadow-2xl border border-gray-700 overflow-hidden relative z-10 transform scale-95 opacity-0">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center p-5 border-b border-gray-700">
+                <h3 id="modal-title" class="text-2xl font-bold text-white">Track Insights</h3>
+                <button id="modal-close-btn" class="text-gray-400 hover:text-white transition-colors">
+                    <i class="fa-solid fa-xmark fa-2x"></i>
+                </button>
+            </div>
+            <!-- Modal Body -->
+            <div class="p-0 max-h-[80vh] overflow-y-auto">
+                <img id="modal-map" class="w-full h-64 object-contain bg-black" src="https://placehold.co/768x432/374151/e11d48?text=Track+Map" alt="Track Map">
+                <div class="p-6">
+                    <p id="modal-date" class="text-sm font-medium text-rose-500 mb-1" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;"></p>
+                    <h4 id="modal-gp" class="text-3xl font-bold text-white mb-1">Grand Prix Name</h4>
+                    <p id="modal-track" class="text-lg text-gray-400 mb-5" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;"></p>
+                    
+                    <!-- INSIGHT BLOCK -->
+                    <div class="mb-5">
+                        <h4 class="text-base font-semibold text-gray-200 mb-2 uppercase tracking-wider">Insight</h4>
+                        <p id="modal-insight" class="text-gray-300 text-base" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;">Loading insight...</p>
+                    </div>
+                    
+                    <!-- STATS BLOCK -->
+                    <div id="modal-stats-block" class="border-t border-gray-700 pt-5">
+                        <h4 class="text-base font-semibold text-gray-200 mb-3 uppercase tracking-wider">Track Stats</h4>
+                        <div class="grid grid-cols-2 gap-x-4 gap-y-3 text-base" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;">
+                            <div class="text-gray-400">Laps: <span id="modal-laps" class="font-semibold text-gray-200">--</span></div>
+                            <div class="text-gray-400">Length: <span id="modal-length" class="font-semibold text-gray-200">-- km</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA ---
+
+        // League Calendar Data
+        const leagueCalendar = [
+            {
+                round: 0, gp: "Pre-Season Testing", date: "12/09/25", track: "Suzuka International Racing Course",
+                mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Suzuka-International-Racing-Course--768x432.png",
+                insight: "A crucial time for teams to gather data, test new parts, and understand the car before the championship begins at Bahrain.",
+                stats: null // No stats for testing
+            },
+            {
+                round: 1, gp: "Bahrain Grand Prix", date: "19/09/25", track: "Bahrain International Circuit",
+                mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Bahrain-circuit-768x432.png",
+                insight: "A 'stop and go' track known for heavy braking zones and good overtaking opportunities, especially into Turns 1 and 4. Tire degradation is a major factor.",
+                stats: { laps: 29, length: "5.412 km" }
+            },
+            {
+                round: 2, gp: "Australian Grand Prix", date: "26/09/25", track: "Albert Park Circuit",
+                mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Albert-Park-Circuit-768x432.png",
+                insight: "A fast, flowing street circuit with multiple DRS zones. It's a high-speed track that feels like a permanent circuit. Key overtaking spots are Turns 1, 3, and 9.",
+                stats: { laps: 29, length: "5.278 km" }
+            },
+            {
+                round: 3, gp: "Emilia Romagna Grand Prix", date: "03/10/25", track: "Autodromo Enzo e Dino Ferrari (Imola)",
+                mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Autodromo-Enzo-e-Dino-Ferrari-768x432.png",
+                insight: "An old-school, narrow track with punishing gravel traps. It's fast, unforgiving, and very technical. Overtaking is notoriously difficult, so qualifying and strategy are critical.",
+                stats: { laps: 32, length: "4.909 km" }
+            },
+            {
+                round: 4, gp: "Spanish Grand Prix", date: "10/10/25", track: "Circuit de Barcelona-Catalunya",
+                mapUrl: "https://www.sportmonks.com/wp-content/uploads/2024/02/Circuit-de-Barcelona-768x432.png",
+                insight: "A well-known test track with a great mix of high and low-speed corners. The long, sweeping Turn 3 is a true test of car balance. Tire management is crucial here.",
+                stats: { laps: 33, length: "4.657 km" }
+            },
+            {
+                round: "break", gp: "Season Break", date: "", track: "Time for teams to regroup and upgrade.",
+                mapUrl: "https://placehold.co/768x432/1f2937/e11d48?text=SEASON+BREAK",
+                insight: "A mid-season break for teams to analyze performance, develop upgrades, and for drivers to recharge before the second half of the championship.",
+                stats: null
+            },
+            {
+                round: 5, gp: "Great Britain Grand Prix", date: "24/10/25", track: "Silverstone Circuit",
+                mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Silverstone-Circuit--768x432.png",
+                insight: "An iconic, high-speed circuit featuring legendary corners like Maggotts, Becketts, and Chapel. Requires high downforce and strong aerodynamic efficiency.",
+                stats: { laps: 26, length: "5.891 km" }
+            },
+            {
+                round: 6, gp: "Las Vegas Grand Prix", date: "31/10/25", track: "Las Vegas Strip Circuit",
+                mapUrl: "https://www.sportmonks.com/wp-content/uploads/2024/02/Las-Vegas-GP-768x432.png",
+                insight: "A fast street circuit with long straights, especially down the famous Strip. Expect high top speeds, heavy braking, and many overtaking opportunities.",
+                stats: { laps: 25, length: "6.201 km" }
+            },
+            {
+                round: 7, gp: "Belgian Grand Prix", date: "07/11/25", track: "Circuit de Spa-Francorchamps",
+                mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Circuit-de-Spa-Francorchamps-768x432.png",
+                insight: "A driver favorite, known for its length, elevation changes, and the iconic Eau Rouge/Raidillon sequence. It's a high-speed, low-downforce track.",
+                stats: { laps: 22, length: "7.004 km" }
+            },
+            {
+                round: 8, gp: "Austrian Grand Prix", date: "14/11/25", track: "Red Bull Ring",
+                mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Red-Bull-Ring-768x432.png",
+                insight: "A short, 'power' circuit with long straights and heavy uphill braking zones. The lap is very quick. It offers great overtaking opportunities into Turns 1, 3, and 4.",
+                stats: { laps: 36, length: "4.318 km" }
+            },
+            {
+                round: 9, gp: "São Paulo Grand Prix", date: "21/11/25", track: "Autódromo José Carlos Pace (Interlagos)",
+                mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Auto%CC%81dromo-Jose%CC%81-Carlos-Pace--768x432.png",
+                insight: "A classic anti-clockwise track with significant elevation changes. The long uphill run to Turn 1 is a major DRS zone. The 'Senna S' is an iconic opening sequence.",
+                stats: { laps: 36, length: "4.309 km" }
+            },
+            {
+                round: 10, gp: "Abu Dhabi Grand Prix", date: "28/11/25", track: "Yas Marina Circuit",
+                mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Yas-Marina-Circuit--768x432.png",
+                insight: "A modern circuit with a mix of high-speed straights and a technical final sector. Overtaking was improved with recent layout changes.",
+                stats: { laps: 29, length: "5.281 km" }
+            }
+        ];
+        
+        // Original data, DO NOT MODIFY
+        const originalDriverStandings = Object.freeze([
+            { pos: 1, driver: "Simman", team: "Ferrari", points: 91 },
+            { pos: 2, driver: "Wi7ard", team: "Williams", points: 70 },
+            { pos: 3, driver: "TheGodfather", team: "Alpine", points: 40 },
+            { pos: 4, driver: "ApexEntropy", team: "Alpine", points: 27 },
+            { pos: 5, driver: "Overlord", team: "McLaren", points: 22 },
+            { pos: 6, driver: "Kentucky", team: "Haas", points: 22 },
+            { pos: 7, driver: "Oxygen", team: "Kick Sauber", points: 18 },
+            { pos: 8, driver: "Vibin", team: "Aston Martin", points: 18 },
+            { pos: 9, driver: "Apurrv", team: "Aston Martin", points: 17 },
+            { pos: 10, driver: "Mahesh", team: "Williams", points: 16 },
+            { pos: 11, driver: "Harish", team: "Haas", points: 15 },
+            { pos: 12, driver: "Clone", team: "Racing Bulls", points: 8 },
+            { pos: 13, driver: "Memb", team: "Mercedes", points: 8 },
+            { pos: 14, driver: "Bopedope", team: "McLaren", points: 6 },
+            { pos: 15, driver: "Majunu", team: "Ferrari", points: 4 },
+            { pos: 16, driver: "Denji", team: "Red Bull Racing", points: 2 },
+            { pos: 17, driver: "Doc YT", team: "Racing Bulls", points: 1 },
+            { pos: 18, driver: "Maayaone", team: "Mercedes", points: 0 },
+            { pos: 19, driver: "HarryBeckham", team: "Red Bull Racing", points: 0 },
+            { pos: 20, driver: "Bala", team: "Kick Sauber", points: 0 }
+        ]);
+
+        const originalConstructorStandings = Object.freeze([
+            { pos: 1, team: "Ferrari", points: 95 },
+            { pos: 2, team: "Williams", points: 86 },
+            { pos: 3, team: "Alpine", points: 53 },
+            { pos: 4, team: "Haas", points: 38 },
+            { pos: 5, team: "Aston Martin", points: 35 },
+            { pos: 6, team: "Kick Sauber", points: 33 },
+            { pos: 7, team: "McLaren", points: 28 },
+            { pos: 8, team: "Red Bull Racing", points: 23 },
+            { pos: 9, team: "Racing Bulls", points: 9 },
+            { pos: 10, team: "Mercedes", points: 8 }
+        ]);
+
+        // Create mutable copies for sorting
+        let currentDriverStandings = [...originalDriverStandings];
+        let currentConstructorStandings = [...originalConstructorStandings];
+        
+        // Sorting state variables
+        let driverSortColumn = 'pos';
+        let driverSortDirection = 'asc';
+        let constructorSortColumn = 'pos';
+        let constructorSortDirection = 'asc';
+
+
+        // Helper function to get team CSS class
+        function getTeamClass(teamName) {
+            const name = teamName.toLowerCase().replace(/ /g, '-');
+            if (name.includes('red-bull')) return 'team-red-bull';
+            if (name.includes('kick-sauber')) return 'team-kick-sauber';
+            if (name.includes('aston-martin')) return 'team-aston-martin';
+            if (name.includes('racing-bulls')) return 'team-racing-bulls';
+            return `team-${name}`;
+        }
+
+        // --- PAGE INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+             // --- Loading Screen Logic ---
+            const loadingScreen = document.getElementById('loading-screen');
+            if (loadingScreen) {
+                // Total animation time for lights
+                const animationDuration = 3500; // 3.5s
+                // Fade-out duration
+                const fadeDuration = 500; // 0.5s
+                
+                // Set the transition property *before* adding the class
+                // It should start fading *after* the animation duration
+                loadingScreen.style.transition = `opacity ${fadeDuration}ms ease-out ${animationDuration}ms, visibility ${fadeDuration}ms ease-out ${animationDuration}ms`;
+
+                 // Use setTimeout to add the 'hidden' class, triggering the fade
+                 setTimeout(() => {
+                    loadingScreen.classList.add('hidden');
+                 }, animationDuration); // Start fade exactly when animation ends
+            }
+             // --- End Loading Screen Logic ---
+
+            // FIX: Added null check for 'current-year'
+            const yearSpan = document.getElementById('current-year');
+            if (yearSpan) {
+                yearSpan.textContent = new Date().getFullYear();
+            } else {
+                console.warn("Could not find 'current-year' element. Footer might be missing.");
+            }
+            
+            // --- DYNAMIC COUNTDOWN LOGIC ---
+            // User-defined race time: Friday 10:30 PM IST (which is 17:00 UTC)
+            const RACE_TIME_UTC = { hours: 17, minutes: 0, seconds: 0 };
+            const now = new Date();
+            let nextRace = null;
+
+            for (const race of leagueCalendar) {
+                // Skip non-race events (testing and breaks)
+                if (race.round === 0 || race.round === "break") continue; 
+                
+                const [day, month, year] = race.date.split('/').map(Number);
+                // Create a UTC date object for the race
+                const raceDate = new Date(Date.UTC(2000 + year, month - 1, day, RACE_TIME_UTC.hours, RACE_TIME_UTC.minutes, RACE_TIME_UTC.seconds));
+                
+                if (raceDate > now) {
+                    nextRace = race; // Found the first upcoming race
+                    nextRace.utcDate = raceDate; // Attach the full date object
+                    break; 
+                }
+            }
+
+            // Update UI with next race info and start timer
+            const nextRaceTitleEl = document.getElementById("next-race-gp");
+            const nextRaceTrackEl = document.getElementById("next-race-track");
+            const countdownEl = document.getElementById('countdown');
+            
+            if (nextRace) {
+                // We found an upcoming race
+                nextRaceTitleEl.textContent = nextRace.gp;
+                nextRaceTrackEl.textContent = nextRace.track;
+                startCountdown(nextRace.utcDate.getTime());
+            } else {
+                // No races left, show a "season over" message
+                nextRaceTitleEl.textContent = "SEASON 1 COMPLETE";
+                nextRaceTrackEl.textContent = "The championship has concluded!";
+                countdownEl.innerHTML = '<h2 class="col-span-2 sm:col-span-4 text-4xl font-bold text-gray-400 text-center py-10">SEE YOU NEXT SEASON</h2>';
+            }
+            // --- END DYNAMIC COUNTDOWN LOGIC ---
+
+            populateCalendar();
+            sortAndPopulateDriverStandings(); // Initial sort by pos
+            sortAndPopulateConstructorStandings(); // Initial sort by pos
+            setupTabs();
+            setupCalendarModal();
+            setupSorting(); // Add event listeners for sorting
+            setupResetSortButton(); // Add event listener for reset button
+        });
+
+        // --- FUNCTIONS ---
+
+        // Countdown Timer Function
+        function startCountdown(targetDate) {
+            const daysEl = document.getElementById('days');
+            const hoursEl = document.getElementById('hours');
+            const minutesEl = document.getElementById('minutes');
+            const secondsEl = document.getElementById('seconds');
+            const countdownEl = document.getElementById('countdown');
+
+            // Initial check in case elements don't exist
+            if (!daysEl || !hoursEl || !minutesEl || !secondsEl || !countdownEl) {
+                console.error("Countdown elements not found!");
+                return;
+            }
+
+            const interval = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                if (distance < 0) {
+                    clearInterval(interval);
+                    countdownEl.innerHTML = '<h2 class="col-span-2 sm:col-span-4 text-4xl font-bold text-green-500 text-center py-10">RACE IS LIVE!</h2>';
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                daysEl.textContent = String(days).padStart(2, '0');
+                hoursEl.textContent = String(hours).padStart(2, '0');
+                minutesEl.textContent = String(minutes).padStart(2, '0');
+                secondsEl.textContent = String(seconds).padStart(2, '0');
+            }, 1000);
+        }
+
+        // Populate Calendar Grid
+        function populateCalendar() {
+            const grid = document.getElementById('calendar-grid');
+            if (!grid) return;
+            grid.innerHTML = ''; // Clear grid
+
+            leagueCalendar.forEach(race => {
+                // Special card for season break
+                if (race.round === "break") {
+                    const breakCard = `
+                    <div class="lg:col-span-3 md:col-span-2 col-span-1 calendar-card rounded-lg shadow-xl overflow-hidden flex items-center justify-center min-h-[150px] opacity-80 border-rose-600/50">
+                        <div class="p-6 text-center">
+                            <i class="fa-solid fa-pause-circle text-5xl text-rose-600 mb-3"></i>
+                            <h3 class="text-3xl font-bold text-white mb-1">${race.gp}</h3>
+                            <p class="text-base text-gray-400" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;">${race.track}</p>
+                        </div>
+                    </div>
+                    `;
+                    grid.innerHTML += breakCard;
+                    return; // Use return
+                }
+
+                // Check for Pre-Season
+                const isTesting = race.round === 0;
+                const roundText = isTesting ? "TESTING" : `RND ${race.round}`;
+                
+                // Standard race card
+                const card = `
+                    <div data-round="${race.round}" class="calendar-card rounded-lg shadow-xl overflow-hidden cursor-pointer">
+                        <div class="p-6 relative">
+                            <div class="absolute top-0 right-0 ${isTesting ? 'bg-blue-600' : 'bg-rose-600'} text-white font-bold px-3 py-1 m-4 rounded-md text-sm" style="font-family: 'Inter', sans-serif; letter-spacing: normal; text-transform: none;">
+                                ${roundText}
+                            </div>
+                            <p class="text-sm font-medium ${isTesting ? 'text-blue-500' : 'text-rose-500'} mb-1" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;">${race.date}</p>
+                            <h3 class="text-2xl font-bold text-white mb-1 mt-2">${race.gp}</h3>
+                            <p class="text-base text-gray-400" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;">${race.track}</p>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += card;
+            });
+        }
+        
+        // --- Standings Population and Sorting ---
+
+        function sortAndPopulateDriverStandings() {
+            // Sort the data
+            currentDriverStandings.sort((a, b) => {
+                let valA = a[driverSortColumn];
+                let valB = b[driverSortColumn];
+
+                // Numeric sort for pos and points
+                if (driverSortColumn === 'pos' || driverSortColumn === 'points') {
+                    valA = Number(valA);
+                    valB = Number(valB);
+                } else { // String sort for driver and team
+                    valA = String(valA).toLowerCase();
+                    valB = String(valB).toLowerCase();
+                }
+
+                if (valA < valB) return driverSortDirection === 'asc' ? -1 : 1;
+                if (valA > valB) return driverSortDirection === 'asc' ? 1 : -1;
+                
+                // If values are equal, sort by original position (pos) to maintain stability
+                return a.pos - b.pos;
+            });
+
+            // Populate the table
+            const tbody = document.getElementById('driver-standings-body');
+            if (!tbody) return;
+            tbody.innerHTML = ''; // Clear existing
+            
+            currentDriverStandings.forEach((driver) => {
+                const teamClass = getTeamClass(driver.team);
+                const row = document.createElement('tr');
+                row.className = 'standing-row'; // Keep hover effect class
+                
+                row.innerHTML = `
+                    <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm sm:text-base font-medium text-white">${driver.pos}</td>
+                    <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm sm:text-base font-medium text-white">${driver.driver}</td>
+                    <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm sm:text-base team-cell ${teamClass}">${driver.team}</td>
+                    <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm sm:text-base font-bold text-rose-500">${driver.points}</td>
+                `;
+                tbody.appendChild(row);
+            });
+            updateSortIcons('drivers-table-container', driverSortColumn, driverSortDirection);
+        }
+
+        function sortAndPopulateConstructorStandings() {
+            // Sort the data
+            currentConstructorStandings.sort((a, b) => {
+                let valA = a[constructorSortColumn];
+                let valB = b[constructorSortColumn];
+
+                 // Numeric sort for pos and points
+                if (constructorSortColumn === 'pos' || constructorSortColumn === 'points') {
+                    valA = Number(valA);
+                    valB = Number(valB);
+                } else { // String sort for team
+                    valA = String(valA).toLowerCase();
+                    valB = String(valB).toLowerCase();
+                }
+
+                if (valA < valB) return constructorSortDirection === 'asc' ? -1 : 1;
+                if (valA > valB) return constructorSortDirection === 'asc' ? 1 : -1;
+
+                // If values are equal, sort by original position (pos)
+                return a.pos - b.pos;
+            });
+
+            // Populate the table
+            const tbody = document.getElementById('constructor-standings-body');
+            if (!tbody) return;
+            tbody.innerHTML = ''; // Clear existing
+
+            // Build the driver map from the original, unsorted driver list
+            const teamDriverMap = {};
+            originalDriverStandings.forEach(driver => {
+                if (!teamDriverMap[driver.team]) {
+                    teamDriverMap[driver.team] = [];
+                }
+                teamDriverMap[driver.team].push(driver.driver);
+            });
+
+
+            currentConstructorStandings.forEach((team) => {
+                const drivers = teamDriverMap[team.team] || ["N/A", "N/A"];
+                const teamClass = getTeamClass(team.team);
+                
+                const teamRow = `
+                    <tr class="team-row group standing-row"> 
+                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm sm:text-base font-medium text-white">${team.pos}</td>
+                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm sm:text-base team-cell ${teamClass}">${team.team}</td>
+                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm sm:text-base font-bold text-rose-500">${team.points}</td>
+                    </tr>
+                `;
+                
+                // Note: padding-x needs to match header padding
+                const driverRow = `
+                    <tr class="driver-row bg-gray-900">
+                        <td colspan="3" class="px-6 text-sm text-gray-300" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;">
+                            <span class="font-medium text-gray-400">Drivers:</span> ${drivers.join(', ')}
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += teamRow + driverRow;
+            });
+             updateSortIcons('constructors-table-container', constructorSortColumn, constructorSortDirection);
+        }
+
+        // Update Sort Icons in Table Header
+        function updateSortIcons(tableContainerId, activeColumn, direction) {
+            const headers = document.querySelectorAll(`#${tableContainerId} th.sortable`);
+            headers.forEach(th => {
+                const icon = th.querySelector('.sort-icon i');
+                const sortKey = th.dataset.sort;
+                icon.classList.remove('fa-sort', 'fa-sort-up', 'fa-sort-down');
+                th.querySelector('.sort-icon').classList.remove('active');
+
+                if (sortKey === activeColumn) {
+                    icon.classList.add(direction === 'asc' ? 'fa-sort-up' : 'fa-sort-down');
+                     th.querySelector('.sort-icon').classList.add('active');
+                } else {
+                    icon.classList.add('fa-sort');
+                }
+            });
+        }
+
+
+        // Setup Sorting Event Listeners
+        function setupSorting() {
+             const driverHeaders = document.querySelectorAll('#drivers-table-container th.sortable');
+             const constructorHeaders = document.querySelectorAll('#constructors-table-container th.sortable');
+
+             driverHeaders.forEach(th => {
+                 th.addEventListener('click', () => {
+                     const sortKey = th.dataset.sort;
+                     if (driverSortColumn === sortKey) {
+                         driverSortDirection = driverSortDirection === 'asc' ? 'desc' : 'asc';
+                     } else {
+                         driverSortColumn = sortKey;
+                         driverSortDirection = 'asc'; // Default to ascending on new column
+                     }
+                     sortAndPopulateDriverStandings();
+                 });
+             });
+
+            constructorHeaders.forEach(th => {
+                 th.addEventListener('click', () => {
+                     const sortKey = th.dataset.sort;
+                     if (constructorSortColumn === sortKey) {
+                         constructorSortDirection = constructorSortDirection === 'asc' ? 'desc' : 'asc';
+                     } else {
+                         constructorSortColumn = sortKey;
+                         constructorSortDirection = 'asc'; // Default to ascending on new column
+                     }
+                     sortAndPopulateConstructorStandings();
+                 });
+             });
+        }
+
+        // Setup Reset Sort Button Listener
+        function setupResetSortButton() {
+            const resetButton = document.getElementById('reset-sort-btn');
+            const driversTab = document.getElementById('drivers-tab'); // Need to check active tab
+
+            resetButton.addEventListener('click', () => {
+                if (driversTab.classList.contains('tab-active')) {
+                    // Reset driver sort
+                    driverSortColumn = 'pos';
+                    driverSortDirection = 'asc';
+                    // Reset data to original
+                    currentDriverStandings = [...originalDriverStandings];
+                    sortAndPopulateDriverStandings();
+                } else {
+                    // Reset constructor sort
+                    constructorSortColumn = 'pos';
+                    constructorSortDirection = 'asc';
+                    // Reset data to original
+                    currentConstructorStandings = [...originalConstructorStandings];
+                    sortAndPopulateConstructorStandings();
+                }
+            });
+        }
+
+
+        // Setup Standings Tabs
+        function setupTabs() {
+            const driversTab = document.getElementById('drivers-tab');
+            const constructorsTab = document.getElementById('constructors-tab');
+            const driversTable = document.getElementById('drivers-table-container');
+            const constructorsTable = document.getElementById('constructors-table-container');
+
+            driversTab.addEventListener('click', () => {
+                driversTable.classList.remove('hidden');
+                constructorsTable.classList.add('hidden');
+                driversTab.classList.add('tab-active');
+                driversTab.classList.remove('tab-inactive');
+                constructorsTab.classList.add('tab-inactive');
+                constructorsTab.classList.remove('tab-active');
+                // Reset sort when switching
+                driverSortColumn = 'pos';
+                driverSortDirection = 'asc';
+                currentDriverStandings = [...originalDriverStandings];
+                sortAndPopulateDriverStandings();
+            });
+
+            constructorsTab.addEventListener('click', () => {
+                driversTable.classList.add('hidden');
+                constructorsTable.classList.remove('hidden');
+                constructorsTab.classList.add('tab-active');
+                constructorsTab.classList.remove('tab-inactive');
+                driversTab.classList.add('tab-inactive');
+                driversTab.classList.remove('tab-active');
+                 // Reset sort when switching
+                constructorSortColumn = 'pos';
+                constructorSortDirection = 'asc';
+                currentConstructorStandings = [...originalConstructorStandings];
+                sortAndPopulateConstructorStandings();
+            });
+        }
+
+        // Setup Calendar Modal
+        function setupCalendarModal() {
+            const modal = document.getElementById('calendar-modal');
+            const modalBackdrop = document.getElementById('modal-backdrop');
+            const modalContent = modal.querySelector('.modal-content');
+            const closeBtn = document.getElementById('modal-close-btn');
+            const grid = document.getElementById('calendar-grid');
+
+            if (!modal || !grid || !closeBtn || !modalBackdrop) return;
+
+            const modalTitle = document.getElementById('modal-title');
+            const modalMap = document.getElementById('modal-map');
+            const modalDate = document.getElementById('modal-date');
+            const modalGp = document.getElementById('modal-gp');
+            const modalTrack = document.getElementById('modal-track');
+            const modalInsight = document.getElementById('modal-insight');
+            const modalLaps = document.getElementById('modal-laps');
+            const modalLength = document.getElementById('modal-length');
+            const modalStatsBlock = document.getElementById('modal-stats-block');
+            
+            function openModal(race) {
+                if (!race) return; // Safety check
+
+                modalTitle.textContent = `${race.gp} Insights`;
+                modalMap.src = race.mapUrl;
+                modalMap.alt = `${race.track} Map`;
+                 // Add error handling for map image
+                modalMap.onerror = () => {
+                    modalMap.src = `https://placehold.co/768x432/374151/e11d48?text=Map+Error`;
+                    modalMap.alt = 'Track map loading error';
+                };
+                modalDate.textContent = race.date;
+                modalGp.textContent = race.gp;
+                modalTrack.textContent = race.track;
+                modalInsight.textContent = race.insight;
+
+                if (race.stats) {
+                    // It's a race, show stats
+                    modalLaps.textContent = race.stats.laps;
+                    modalLength.textContent = race.stats.length;
+                    modalStatsBlock.classList.remove('hidden');
+                } else {
+                    // It's testing, hide stats
+                    modalStatsBlock.classList.add('hidden');
+                }
+
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    modalContent.classList.remove('scale-95', 'opacity-0');
+                    modalContent.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            }
+
+            function closeModal() {
+                modalContent.classList.add('scale-95', 'opacity-0');
+                modal.classList.add('opacity-0');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            }
+
+            grid.addEventListener('click', (e) => {
+                const card = e.target.closest('.calendar-card[data-round]');
+                if (card) {
+                    const roundValue = card.dataset.round;
+                    if (roundValue === "break") return; // Don't open modal for break
+
+                    const round = Number(roundValue); // This will handle "0" for testing
+                    const raceData = leagueCalendar.find(r => r.round === round);
+                    openModal(raceData);
+                }
+            });
+
+            closeBtn.addEventListener('click', closeModal);
+            modalBackdrop.addEventListener('click', closeModal);
+             // Close modal on escape key
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                    closeModal();
+                }
+            });
+        }
+
+    </script>
+    <!-- MOVED Tailwind Script to end of body -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</body>
+</html>
+
