@@ -9,12 +9,16 @@
     <!-- Google Fonts: Oswald (for headings) and Inter (for body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Added Work Sans and Open Sans for the new navigation -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;700&family=Work+Sans:wght@300;400;700&family=Open+Sans:ital,wght@1,300&display=swap" rel="stylesheet">
+    <!-- Added Work Sans, Open Sans, Exo, Montserrat, and Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Exo:wght@800&family=Inter:wght@400;500;600;700&family=Montserrat:wght@700&family=Oswald:wght@500;700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Work+Sans:wght@300;400;700&family=Open+Sans:ital,wght@1,300&display=swap" rel="stylesheet">
 
 
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- IonIcons Script (for old constructor cards, can be removed if not needed) -->
+    <!-- <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script> -->
+    <!-- <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script> -->
 
     <style>
         /* Base body styles */
@@ -26,7 +30,7 @@
 
         /* --- F1-STYLE TYPOGRAPHY --- */
         /* Apply Oswald font to all major headings and modal titles */
-        h1, h2, h3, h4, .tab-button, #modal-gp, #modal-title, .bar-team-name { /* Updated selector */
+        h1, h2, h3, h4, .tab-button, #modal-gp, #modal-title {
             font-family: 'Oswald', sans-serif;
             text-transform: uppercase; /* F1 style is very uppercase */
             font-weight: 700;
@@ -73,7 +77,7 @@
         /* --- INNOVATIVE HOVER & SECTION STYLES --- */
         /* --- Cursor Styles --- */
         body { cursor: auto; }
-        a, button, .calendar-card[data-round], th.sortable { cursor: pointer; }
+        a, button, .calendar-card[data-round] { cursor: pointer; }
 
         /* Glowing button effect */
         .btn-glow {
@@ -85,17 +89,66 @@
             box-shadow: 0 6px 25px rgba(225, 29, 72, 0.4);
         }
 
-        /* Glowing calendar card effect */
+
+        /* --- NEW Card Overlay Effect (Calendar) --- */
         .calendar-card {
-            background-color: #1f2937;
-            border: 1px solid #374151;
-            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden; /* Contain the overlay */
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+            --active-color: #e11d48; /* Default to TTRL Red */
         }
+        
+        /* The circular overlay */
+        .calendar-card::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px; /* Start small */
+            height: 20px; /* Start small */
+            border-radius: 50%;
+            background: var(--active-color);
+            opacity: 0.8;
+            transform: translate(-50%, -50%) scale(0); /* Start at center, scaled to 0 */
+            transition: transform 0.4s cubic-bezier(0.5, 1, 0.89, 1);
+            z-index: 1;
+        }
+        
         .calendar-card:hover {
-            transform: translateY(-5px);
-            border-color: #e11d48;
-            box-shadow: 0 10px 30px rgba(225, 29, 72, 0.2);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 24px 36px rgba(0,0,0,0.11),
+                0 24px 46px rgba(0,0,0,0.1);
         }
+        
+        /* Scale the overlay to fill the card */
+        .calendar-card:hover::after {
+            transform: translate(-50%, -50%) scale(20); /* Scale up to cover card */
+        }
+
+        /* Card Content (Sits on top of overlay) */
+        .calendar-card .card-content {
+            position: relative;
+            z-index: 2;
+            background: transparent; /* Was bg-gray-800/70 */
+            transition: all 0.3s ease-out;
+            /* Ensure content respects padding */
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Text color transitions */
+        .calendar-card .card-date,
+        .calendar-card .card-gp,
+        .calendar-card .card-track {
+            transition: color 0.3s ease-out;
+        }
+        
+        .calendar-card:hover .card-date { color: #f9a8d4; /* Lighter pink */ }
+        .calendar-card:hover .card-gp { color: #ffffff; }
+        .calendar-card:hover .card-track { color: #d1d5db; /* text-gray-300 */ }
+        
+        /* --- END Card Overlay Effect --- */
+
 
         /* --- TEAM COLORS (Text & Background) --- */
         /* Text Colors */
@@ -109,22 +162,6 @@
         .team-racing-bulls { color: #469BFF; }
         .team-mercedes     { color: #00D2BE; }
         .team-red-bull     { color: #0600EF; }
-        .team-cell {
-            font-weight: 600;
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
-        }
-        /* Background Colors with Alpha for Glass Effect */
-        .bg-team-ferrari      { background-color: rgba(220, 0, 0, 0.7); } /* #DC0000 */
-        .bg-team-williams     { background-color: rgba(0, 130, 250, 0.7); } /* #0082FA */
-        .bg-team-alpine       { background-color: rgba(0, 144, 255, 0.7); } /* #0090FF */
-        .bg-team-haas         { background-color: rgba(127, 140, 141, 0.7); } /* #7f8c8d */
-        .bg-team-mclaren      { background-color: rgba(204, 102, 0, 0.7); } /* Darker Orange: ~#CC6600 */
-        .bg-team-kick-sauber  { background-color: rgba(42, 180, 42, 0.7); } /* Darker Green: ~#2AB42A */
-        .bg-team-aston-martin { background-color: rgba(0, 111, 98, 0.7); } /* #006F62 */
-        .bg-team-racing-bulls { background-color: rgba(70, 155, 255, 0.7); } /* #469BFF */
-        .bg-team-mercedes     { background-color: rgba(0, 210, 190, 0.7); } /* #00D2BE */
-        .bg-team-red-bull     { background-color: rgba(6, 0, 239, 0.7); }   /* #0600EF */
-
 
         /* --- OTHER STYLES --- */
         /* Custom scrollbar */
@@ -136,12 +173,6 @@
         /* Standings tabs and reset button */
         .tab-active { background-color: #e11d48; color: #ffffff; }
         .tab-inactive { background-color: #374151; color: #d1d5db; }
-        #reset-sort-btn {
-            background-color: #4b5563;
-            color: #d1d5db;
-            transition: background-color 0.2s ease;
-        }
-        #reset-sort-btn:hover { background-color: #6b7280; }
 
         /* Modal styles */
         .modal { transition: opacity 0.3s ease, visibility 0.3s ease; }
@@ -167,85 +198,382 @@
         }
 
 
-        /* Driver Standings Table Enhancements */
-        .standing-row { transition: background-color 0.2s ease, box-shadow 0.2s ease; }
-        thead { background: linear-gradient(to bottom, #1f2937, #111827); }
-        th.sortable { user-select: none; }
-        th .sort-icon { display: inline-block; margin-left: 0.5rem; opacity: 0.5; transition: opacity 0.2s ease; }
-        th.sortable:hover .sort-icon { opacity: 1; }
-        th .sort-icon.active { opacity: 1; color: #f43f5e; }
-
-        /* Zebra Stripes for Driver Table */
-        #driver-standings-body tr:nth-child(even) { background-color: rgba(31, 41, 55, 0.5); }
-        #driver-standings-body tr.standing-row:hover { background-color: #374151; }
-
-        /* --- NEW Constructor Standings Bar Design --- */
-        .constructor-bar-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem; /* Space between bars */
+        /* --- NEW Driver Standings Card Grid (Hexagonal) --- */
+        #driver-card-grid {
+            display: grid;
+            grid-template-columns: 1fr; /* 1 column by default */
+            gap: 2.5rem; /* More gap for the effect */
+            font-weight: 800;
+            text-transform: uppercase;
         }
-        .constructor-bar-item {
+        
+        /* 2 columns for medium screens */
+        @media (min-width: 768px) {
+            #driver-card-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        #driver-card-grid img {
+            width: 100%;
+            vertical-align: middle;
+        }
+        
+        .driver-card__border,
+        .driver-card__border-line,
+        .driver-card__inner {
+            -webkit-clip-path: polygon(50% 0, 100% 20%, 100% 80%, 50% 100%, 0% 80%, 0% 20%);
+            clip-path: polygon(50% 0, 100% 20%, 100% 80%, 50% 100%, 0% 80%, 0% 20%);
+        }
+        
+        .driver-card {
+            font-family: "Exo", sans-serif;
+            -webkit-filter: drop-shadow(0px 0px 5px var(--color)) drop-shadow(0px 0px 15px var(--color));
+            filter: drop-shadow(0px 0px 5px var(--color)) drop-shadow(0px 0px 15px var(--color));
             position: relative;
-            display: flex;
-            align-items: center;
-            height: 70px; /* Height of the bar */
-            border-radius: 0.375rem; /* rounded-md */
-            overflow: visible; /* Allow car image to overflow slightly */
-            padding-left: 1rem; /* Space for car */
-            padding-right: 1rem; /* Space for points */
-            color: #ffffff; /* White text on colored bar */
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.7); /* Stronger shadow for readability */
-            backdrop-filter: blur(4px); /* Glass effect */
-            -webkit-backdrop-filter: blur(4px); /* Safari support */
-            border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border for glass */
+            max-width: 400px;
+            margin: auto;
+            color: #ffffff; /* Make text white */
         }
-        .bar-car-image {
+        
+        .driver-card__border {
             position: absolute;
-            left: 10px; /* Moved right */
-            bottom: -5px; /* Nudge slightly down */
-            height: 80px; /* Slightly larger than bar height */
-            width: auto;
-            max-width: 200px;
-            object-fit: contain;
-            z-index: 5;
-            filter: drop-shadow(5px 5px 5px rgba(0,0,0,0.4));
-            transition: filter 0.3s ease; /* Transition for glow */
+            width: 98%;
+            height: 102%;
+            background: var(--color);
+            left: 1%;
+            top: 1%;
         }
-        /* Glow effect on hover */
-        .constructor-bar-item:hover .bar-car-image {
-            filter: drop-shadow(5px 5px 5px rgba(0,0,0,0.4)) drop-shadow(0 0 15px rgba(255, 255, 255, 0.7)); /* White glow */
+        
+        .driver-card__border-line {
+            position: absolute;
+            width: 95%;
+            height: 99%;
+            left: 2.5%;
+            top: 2.5%;
+            background: -webkit-gradient(linear,
+                left top, left bottom,
+                color-stop(33%, hsl(42, 90%, 72%)),
+                color-stop(70%, hsl(0, 0%, 0%)));
+            background: linear-gradient(to bottom,
+                hsl(42, 90%, 72%) 33%,
+                hsl(0, 0%, 0%) 70%);
+        }
+        
+        .driver-card__inner {
+            background: -webkit-linear-gradient(179deg, var(--color), #e3a83b 90%);
+            background: linear-gradient(179deg, var(--color), #e3a83b 90%);
+            padding: 0.5rem 0.2rem 0rem;
+            width: 92%;
+            margin-top: 4.8%;
+            margin-left: 4%;
+            position: relative; /* Ensure inner is relative for content */
+        }
+        
+        .driver-card__img {
+            padding: 0 1rem;
+            background: repeating-linear-gradient(126deg,
+                hsla(0, 0%, 100%, 0.219) 0%,
+                #ffffff57 1.2%,
+                transparent 1.19%,
+                transparent 4%,
+                transparent 4.1%);
+        }
+        
+        @media screen and (max-width: 550px) {
+            .driver-card__img {
+                padding: 0 .2rem;
+            }
+        }
+        
+        .driver-img__team {
+            background: hsla(0, 0%, 0%, 0.82);
+            display: flex;
+            padding: 1.5rem; /* More padding */
+            align-items: center;
+            justify-content: center; /* Center logo */
+            min-height: 250px; /* Give it a fixed height */
         }
 
-        .bar-team-name {
-            font-size: 2.25rem; /* text-4xl */
-            margin-left: 220px; /* Adjusted space after car image */
-            font-weight: 700;
+        .driver-img__team img {
+            max-width: 80%; /* Don't let logo be 100% width */
+            height: auto;
+            object-fit: contain;
         }
-        .bar-points {
+
+        .driver-card__pos {
+            width: min-content;
+            margin: auto;
+            padding: 0 1.5rem; /* Use rem for padding */
+            border-radius: 5px;
+            background: var(--bg-color, #374151); /* Use team color or fallback */
+            color: #ffffff; /* Use light text */
+            font-size: 1.5rem;
+            margin-top: -6%;
+            position: relative; /* Ensure it sits on top */
+            z-index: 2;
+        }
+
+        @media screen and (max-width: 500px) {
+            .driver-card__pos {
+                font-size: min(1.2rem, 5vw);
+            }
+        }
+        
+        .driver-card__text{
+            position: relative;
+            padding-bottom: 16%;
+            z-index: 1; /* Sit above pseudo-element */
+        }
+        
+        .driver-card__text:before{
+            content: '';
             position: absolute;
-            right: 1.5rem; /* Position points from right */
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background: url('https://i.pinimg.com/originals/80/7d/ce/807dcedf950725fea6b935cdb6ffb4a6.jpg'); /* Sand texture*/
+            opacity: 0.3;
+            z-index: -1; /* Sit behind text */
+        }
+        
+        .driver-card__name {
+            font-family: "Exo", sans-serif;
+            font-size: 2.8rem;
+            margin: 2% 0 0;
+            position: relative;
+            color: #ffffff;
+            /* Gradient border below the player name */
+        }
+        
+        .driver-card__name:before {
+            content: '';
+            background: -webkit-gradient(linear,
+                left top, right top,
+                from(transparent),
+                color-stop(#3730305c) ,
+                color-stop(black),
+                color-stop(#0000004f) ,
+                to(transparent));
+            background: linear-gradient(to right,
+                transparent,
+                #3730305c ,
+                black,
+                #0000004f ,
+                transparent);
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 5%;
+        }
+
+        @media screen and (max-width: 500px) {
+            .driver-card__name {
+                font-size: min(10vw, 2.5rem);
+            }
+        }
+        
+        .driver-card__points {
+            font-family: "Exo", sans-serif;
+            font-size: 4rem;
+            margin: 0rem 0 10%;
+            position: relative;
+            color: #ffffff;
+        }
+        
+        .driver-card__points:before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: -2px;
+            transform: translateX(-50%);
+            width: 25%;
+            height: 5%;
+            background: black;
+        }
+        
+        @media screen and (max-width: 500px) {
+            .driver-card__points {
+                font-size: min(12vw, 3.5rem);
+            }
+        }
+        /* --- END Driver Standings Card Grid --- */
+
+
+        /* --- NEW CONSTRUCTOR CARD STYLES (Nike) --- */
+        #constructors-list-container {
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Responsive grid */
+            gap: 2rem;
+            justify-items: center;
+        }
+
+        #constructors-list-container .card {
+            position: relative;
+            width: 320px;
+            height: 450px;
+            background: #232323;
+            border-radius: 20px;
+            overflow: hidden;
+            color: #fff; /* Default text color */
+        }
+
+        #constructors-list-container .card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--color, #9bdc28); /* Use team color */
+            clip-path: circle(150px at 80% 20%);
+            transition: 0.5s ease-in-out;
+        }
+
+        #constructors-list-container .card:hover:before {
+            clip-path: circle(300px at 80% -20%);
+        }
+
+        #constructors-list-container .card:after {
+            content: var(--team-name, 'Team'); /* Use team name */
+            position: absolute;
+            top: 30%;
+            left: -20%;
+            font-size: 8em; /* Smaller font */
+            font-weight: 800;
+            font-style: italic;
+            color: rgba(255,255,255,0.05); /* White transparent */
+            white-space: nowrap;
+        }
+
+        #constructors-list-container .card .imgBx {
+            position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            font-family: 'Oswald', sans-serif;
-            font-size: 2.5rem; /* Larger points */
-            font-weight: 700;
+            z-index: 10000;
+            width: 100%;
+            height: 220px;
+            transition: 0.5s;
         }
-        /* Driver Names on Hover */
-        .bar-driver-names {
-            font-family: 'Inter', sans-serif; /* Use Inter for drivers */
-            text-transform: none; /* Normal case */
-            letter-spacing: normal;
-            font-size: 0.9rem; /* Smaller font size */
-            color: rgba(255, 255, 255, 0.8); /* Slightly faded white */
-            margin-left: 1rem; /* Space after team name */
+
+        #constructors-list-container .card:hover .imgBx {
+            top: 0%;
+            transform: translateY(0%);
+        }
+
+        #constructors-list-container .card .imgBx img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Removed rotate */
+            width: 270px;
+            object-fit: contain; /* Use contain for car images */
+        }
+
+        #constructors-list-container .card .contentBx {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 120px; /* Increased initial height */
+            text-align: center;
+            transition: 1s;
+            z-index: 10;
+        }
+
+        #constructors-list-container .card:hover .contentBx {
+            height: 210px;
+        }
+
+        #constructors-list-container .card .contentBx h2 {
+            position: relative;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #fff;
+            margin: 0;
+            font-size: 1.5rem; /* Added font size */
+        }
+        
+        /* Using .drivers for Drivers */
+        #constructors-list-container .card .contentBx .drivers {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 8px 20px;
+            transition: 0.5s;
             opacity: 0; /* Hidden by default */
-            transition: opacity 0.3s ease;
-            white-space: nowrap; /* Prevent wrapping */
+            visibility: hidden; /* Hidden by default */
+            padding-top: 0;
+            padding-bottom: 0;
         }
-        .constructor-bar-item:hover .bar-driver-names {
-            opacity: 1; /* Show on hover */
+        
+        /* Using .points for Points */
+        #constructors-list-container .card .contentBx .points {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 8px 20px;
+            /* Removed opacity, visibility, transition */
         }
+
+
+        #constructors-list-container .card:hover .contentBx .drivers {
+            opacity: 1;
+            visibility: visible;
+            transition-delay: 0.5s;
+        }
+        
+        /* Keep hover styles for points (optional, for consistency) */
+        /* #constructors-list-container .card:hover .contentBx .points {
+            opacity: 1;
+            visibility: visible;
+            transition-delay: 0.6s;
+        } */
+
+        #constructors-list-container .card .contentBx .drivers h3,
+        #constructors-list-container .card .contentBx .points h3 {
+            color: #fff;
+            font-weight: 300;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-right: 10px;
+        }
+
+        #constructors-list-container .card .contentBx .drivers span {
+            /* width: auto; */ /* Auto width for names */
+            /* height: 26px; */
+            padding: 0 8px; /* Padding for names */
+            line-height: 26px;
+            font-size: 14px;
+            display: inline-block;
+            color: #111;
+            background: #fff;
+            margin: 0 5px;
+            transition: 0.5s;
+            border-radius: 4px;
+            cursor: default; /* Not clickable */
+        }
+        
+        #constructors-list-container .card .contentBx .points span {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        #constructors-list-container .card .contentBx .drivers span:hover {
+            background: var(--color, #9bdc28); /* Hover with team color */
+            color: #111;
+        }
+        
+        /* Removed link styles */
+        /* #constructors-list-container .card .contentBx a { ... } */
+        /* #constructors-list-container .card:hover .contentBx a { ... } */
+        
+        /* --- END CONSTRUCTOR CARD STYLES --- */
 
 
         /* --- Loading Screen Styles --- */
@@ -670,49 +998,35 @@
                         CURRENT <span class="text-rose-600">STANDINGS</span>
                     </h2>
                     <p class="mt-4 text-lg text-gray-200 max-w-2xl mx-auto" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;">
-                        Who's leading the pack? See the latest points after the last round. Click Driver headers to sort.
+                        Who's leading the pack? See the latest points after the last round.
                     </p>
                 </div>
 
-                <!-- Standings Tabs and Reset Button -->
-                <div class="flex flex-col sm:flex-row justify-center items-center mb-8 gap-4">
+                <!-- Standings Tabs -->
+                <div class="flex justify-center items-center mb-8 gap-4">
                     <div class="flex space-x-2 sm:space-x-4">
                         <button id="drivers-tab" class="tab-button tab-active px-4 py-3 sm:px-6 font-bold text-base sm:text-lg rounded-md transition-all">DRIVER STANDINGS</button>
                         <button id="constructors-tab" class="tab-button tab-inactive px-4 py-3 sm:px-6 font-bold text-base sm:text-lg rounded-md transition-all">CONSTRUCTOR STANDINGS</button>
                     </div>
-                    <button id="reset-sort-btn" class="px-3 py-2 text-xs font-semibold rounded-md transition-all" title="Reset Sort Order">
-                        <i class="fa-solid fa-arrow-rotate-left mr-1"></i> RESET DRIVER SORT
-                    </button>
                 </div>
 
 
                 <!-- Standings Content Container -->
                 <div class="max-w-4xl mx-auto">
-                    <!-- Driver Standings Table -->
+                    
+                    <!-- NEW Driver Standings Card Grid -->
                     <div id="drivers-table-container">
-                        <div class="bg-gray-800/70 backdrop-blur-sm shadow-xl rounded-lg overflow-hidden border border-gray-700">
-                            <table class="min-w-full divide-y divide-gray-700">
-                                <thead class="bg-gray-900/70">
-                                    <tr>
-                                        <th scope="col" class="px-4 sm:px-6 py-4 text-left text-xs sm:text-sm font-medium text-rose-500 uppercase tracking-wider w-1/12 sortable" data-sort="pos">Pos <span class="sort-icon"><i class="fa-solid fa-sort"></i></span></th>
-                                        <th scope="col" class="px-4 sm:px-6 py-4 text-left text-xs sm:text-sm font-medium text-gray-300 uppercase tracking-wider w-4/12 sortable" data-sort="driver">Driver <span class="sort-icon"><i class="fa-solid fa-sort"></i></span></th>
-                                        <th scope="col" class="px-4 sm:px-6 py-4 text-left text-xs sm:text-sm font-medium text-gray-300 uppercase tracking-wider w-4/12 sortable" data-sort="team">Team <span class="sort-icon"><i class="fa-solid fa-sort"></i></span></th>
-                                        <th scope="col" class="px-4 sm:px-6 py-4 text-right text-xs sm:text-sm font-medium text-rose-500 uppercase tracking-wider w-3/12 sortable" data-sort="points">Points <span class="sort-icon"><i class="fa-solid fa-sort"></i></span></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="driver-standings-body" class="divide-y divide-gray-700">
-                                    {/* Driver rows will be injected here */}
-                                </tbody>
-                            </table>
+                        <div id="driver-card-grid">
+                             <!-- Driver cards will be injected here -->
                         </div>
+                        <p class="text-center text-sm text-gray-200 mt-4">Points after the Spain GP</p>
                     </div>
 
-                    {/* New Constructor Standings Bar List */}
+
+                    <!-- NEW Constructor Standings Card List -->
                     <div id="constructors-list-container" class="hidden">
-                         <div class="constructor-bar-list">
-                             {/* Constructor bar items will be injected here */}
-                         </div>
-                         <p class="text-center text-sm text-gray-200 mt-4">Points after the Spain GP</p>
+                         <!-- Constructor cards will be injected here -->
+                         <p class="text-center text-sm text-gray-200 mt-4" style="grid-column: 1 / -1;">Points after the Spain GP</p>
                     </div>
                 </div>
             </div>
@@ -871,16 +1185,7 @@
             { pos: 1, team: "Ferrari", points: 95 }, { pos: 2, team: "Williams", points: 86 }, { pos: 3, team: "Alpine", points: 53 }, { pos: 4, team: "Haas", points: 38 }, { pos: 5, team: "Aston Martin", points: 35 }, { pos: 6, team: "Kick Sauber", points: 33 }, { pos: 7, team: "McLaren", points: 28 }, { pos: 8, team: "Red Bull Racing", points: 23 }, { pos: 9, team: "Racing Bulls", points: 9 }, { pos: 10, team: "Mercedes", points: 8 }
         ]);
 
-        // Create mutable copies for sorting
-        let currentDriverStandings = [...originalDriverStandings];
-        // Constructor standings are now static visually
-
-        // Sorting state variables (Only for Driver standings now)
-        let driverSortColumn = 'pos';
-        let driverSortDirection = 'asc';
-
-
-        // Helper function to get team CSS class (Text Color)
+        // Helper function to get team CSS class (for border accent)
         function getTeamClass(teamName) {
             const name = teamName.toLowerCase().replace(/ /g, '-');
             if (name.includes('red-bull-racing')) return 'team-red-bull';
@@ -889,16 +1194,37 @@
             if (name.includes('racing-bulls')) return 'team-racing-bulls';
             return `team-${name}`;
         }
-
-        // Helper function to get team BG CSS class (Background Color for Bars)
-        function getTeamBgClass(teamName) {
-            const name = teamName.toLowerCase().replace(/ /g, '-');
-            if (name.includes('red-bull-racing')) return 'bg-team-red-bull';
-            if (name.includes('kick-sauber')) return 'bg-team-kick-sauber';
-            if (name.includes('aston-martin')) return 'bg-team-aston-martin';
-            if (name.includes('racing-bulls')) return 'bg-team-racing-bulls';
-            return `bg-team-${name}`;
-        }
+        
+        // --- NEW Team Color & Logo Maps ---
+        // Used for --color on driver/constructor cards
+        const teamColorMap = {
+            "Ferrari": "hsl(357, 100%, 49%)", // #DC0000
+            "Williams": "hsl(217, 100%, 49%)", // #0082FA
+            "Alpine": "hsl(205, 100%, 50%)", // #0090FF
+            "Haas": "hsl(220, 3%, 73%)", // #B6B6B8
+            "McLaren": "hsl(32, 100%, 50%)", // #FF8700
+            "Kick Sauber": "hsl(120, 73%, 58%)", // #52E252
+            "Aston Martin": "hsl(172, 100%, 22%)", // #006F62
+            "Racing Bulls": "hsl(211, 100%, 64%)", // #469BFF
+            "Mercedes": "hsl(174, 100%, 41%)", // #00D2BE
+            "Red Bull Racing": "hsl(240, 100%, 48%)", // #0600EF
+            "default": "hsl(347, 83%, 54%)" // #e11d48
+        };
+        
+        // Used for team logos on driver cards
+        const teamLogoMap = {
+            "Ferrari": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/ferrari.png",
+            "Williams": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/williams.png",
+            "Alpine": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/alpine.png",
+            "Haas": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/haas.png",
+            "McLaren": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/mclaren.png",
+            "Kick Sauber": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/kick_sauber.png",
+            "Aston Martin": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/martin.png",
+            "Racing Bulls": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/vcarb.png",
+            "Mercedes": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/mercedes.png",
+            "Red Bull Racing": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/redbull.png"
+        };
+        // --- END Team Color & Logo Maps ---
 
         // --- CORE FUNCTIONS (Moved before DOMContentLoaded) ---
 
@@ -917,39 +1243,90 @@
         // Populate Calendar Grid
         function populateCalendar() {
             const grid = document.getElementById('calendar-grid'); if (!grid) return; grid.innerHTML = '';
+            
+            // Define colors for calendar cards
+            const testingColor = "#0082FA"; // Williams Blue
+            const raceColor = "#e11d48"; // TTRL Red
+            
             leagueCalendar.forEach(race => {
-                if (race.round === "break") { grid.innerHTML += `<div class="lg:col-span-3 md:col-span-2 col-span-1 calendar-card rounded-lg shadow-xl overflow-hidden flex items-center justify-center min-h-[150px] opacity-80 border-rose-600/50"><div class="p-6 text-center"><i class="fa-solid fa-pause-circle text-5xl text-rose-600 mb-3"></i><h3 class="text-3xl font-bold text-white mb-1">${race.gp}</h3><p class="text-base text-gray-400" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;">${race.track}</p></div></div>`; return; }
-                const isTesting = race.round === 0; const roundText = isTesting ? "TESTING" : `RND ${race.round}`;
-                const card = `<div data-round="${race.round}" class="calendar-card rounded-lg shadow-xl overflow-hidden cursor-pointer"><div class="p-6 relative"><div class="absolute top-0 right-0 ${isTesting ? 'bg-blue-600' : 'bg-rose-600'} text-white font-bold px-3 py-1 m-4 rounded-md text-sm" style="font-family: 'Inter', sans-serif; letter-spacing: normal; text-transform: none;">${roundText}</div><p class="text-sm font-medium ${isTesting ? 'text-blue-500' : 'text-rose-500'} mb-1" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;">${race.date}</p><h3 class="text-2xl font-bold text-white mb-1 mt-2">${race.gp}</h3><p class="text-base text-gray-400" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;">${race.track}</p></div></div>`;
+                if (race.round === "break") { 
+                    grid.innerHTML += `
+                        <div class="lg:col-span-3 md:col-span-2 col-span-1 rounded-lg shadow-xl overflow-hidden flex items-center justify-center min-h-[150px] opacity-80 border-2 border-dashed border-gray-700 bg-gray-800/50">
+                            <div class="p-6 text-center">
+                                <i class="fa-solid fa-pause-circle text-5xl text-gray-500 mb-3"></i>
+                                <h3 class="text-3xl font-bold text-white mb-1">${race.gp}</h3>
+                                <p class="text-base text-gray-400" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;">${race.track}</p>
+                            </div>
+                        </div>`;
+                    return; 
+                }
+                
+                const isTesting = race.round === 0;
+                const roundText = isTesting ? "TESTING" : `RND ${race.round}`;
+                const activeColor = isTesting ? testingColor : raceColor;
+                const tagBg = isTesting ? 'bg-blue-600' : 'bg-rose-600';
+                const tagText = isTesting ? 'text-blue-400' : 'text-rose-500';
+
+                const card = `
+                    <div data-round="${race.round}" class="calendar-card rounded-lg shadow-xl cursor-pointer bg-gray-800/70 border border-gray-700" style="--active-color: ${activeColor};">
+                        <div class="card-content p-6 relative">
+                            <div class="absolute top-0 right-0 ${tagBg} text-white font-bold px-3 py-1 m-4 rounded-md text-sm" style="font-family: 'Inter', sans-serif; letter-spacing: normal; text-transform: none;">
+                                ${roundText}
+                            </div>
+                            <p class="card-date text-sm font-medium ${tagText} mb-1" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;">${race.date}</p>
+                            <h3 class="card-gp text-2xl font-bold text-white mb-1 mt-2">${race.gp}</h3>
+                            <p class="card-track text-base text-gray-400" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;">${race.track}</p>
+                        </div>
+                    </div>`;
                 grid.innerHTML += card;
             });
         }
 
         // --- Standings Population and Sorting ---
 
-        function sortAndPopulateDriverStandings() {
-            currentDriverStandings.sort((a, b) => {
-                let valA = a[driverSortColumn]; let valB = b[driverSortColumn];
-                if (driverSortColumn === 'pos' || driverSortColumn === 'points') { valA = Number(valA); valB = Number(valB); }
-                else { valA = String(valA).toLowerCase(); valB = String(valB).toLowerCase(); }
-                if (valA < valB) return driverSortDirection === 'asc' ? -1 : 1; if (valA > valB) return driverSortDirection === 'asc' ? 1 : -1;
-                return a.pos - b.pos; // Stable sort
+        // NEW: Populate Driver Cards (Hexagonal)
+        function populateDriverCards() {
+            const grid = document.getElementById('driver-card-grid');
+            if (!grid) return;
+            grid.innerHTML = ''; // Clear existing content
+
+            originalDriverStandings.forEach((driver) => {
+                const teamClass = getTeamClass(driver.team);
+                const activeColor = teamColorMap[driver.team] || teamColorMap['default'];
+                const logoUrl = teamLogoMap[driver.team] || `https://placehold.co/100x24/374151/e11d48?text=${driver.team.replace(/ /g, '+')}`;
+                
+                // Get driver's first name for the card
+                const driverName = driver.driver; // Using full name
+
+                const cardHTML = `
+                    <div class="driver-card ${teamClass}" style="--color: ${activeColor};">
+                        <div class="driver-card__border"></div>
+                        <div class="driver-card__border-line"></div>
+                        <div class="driver-card__inner">
+                            <div class="driver-card__img">
+                                <div class="driver-img__team">
+                                    <img src="${logoUrl}" alt="Team: ${driver.team} logo" 
+                                         onerror="this.src='https://placehold.co/100x24/374151/e11d48?text=${driver.team.replace(/ /g, '+')}';">
+                                </div>
+                            </div>
+                            <div class="driver-card__text">
+                                <div class="driver-card__pos" style="--bg-color: ${activeColor};">P${driver.pos}</div>
+                                <h1 class="driver-card__name">${driverName}</h1>
+                                <p class="driver-card__points">${driver.points} PTS</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += cardHTML;
             });
-            const tbody = document.getElementById('driver-standings-body'); if (!tbody) return; tbody.innerHTML = '';
-            currentDriverStandings.forEach((driver) => {
-                const teamClass = getTeamClass(driver.team); const row = document.createElement('tr'); row.className = 'standing-row';
-                row.innerHTML = `<td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm sm:text-base font-medium text-white">${driver.pos}</td> <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm sm:text-base font-medium text-white">${driver.driver}</td> <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm sm:text-base team-cell ${teamClass}">${driver.team}</td> <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm sm:text-base font-bold text-rose-500">${driver.points}</td>`;
-                tbody.appendChild(row);
-            });
-            updateSortIcons('drivers-table-container', driverSortColumn, driverSortDirection);
         }
 
-        // Populate the constructor list (div bar format)
+
+        // Populate the constructor list (NEW Nike-style card format)
         function populateConstructorList() {
             const listContainer = document.getElementById('constructors-list-container');
-            const listContent = listContainer.querySelector('.constructor-bar-list'); // Target the inner div
-            if (!listContainer || !listContent) return;
-            listContent.innerHTML = ''; // Clear existing content
+            if (!listContainer) return;
+            listContainer.innerHTML = ''; // Clear existing content
 
             // Build the driver map from the original, unsorted driver list
             const teamDriverMap = {};
@@ -974,72 +1351,44 @@
                 "Racing Bulls": "https://raw.githubusercontent.com/HARISHWINNER/TTRL/0209d9644059efa457ae2add943edb21beba6349/RESOURCES/Constructor/racing_bulls.png",
                 "Mercedes": "https://raw.githubusercontent.com/HARISHWINNER/TTRL/0209d9644059efa457ae2add943edb21beba6349/RESOURCES/Constructor/mecedes.png" // Typo in URL maintained
             };
-            const defaultCarImage = "https://placehold.co/120x40/374151/6b7280?text=Car+IMG";
+            const defaultCarImage = "https://placehold.co/270x220/1f2937/6b7280?text=Car+Image";
 
             originalConstructorStandings.forEach(team => {
-                const teamBgClass = getTeamBgClass(team.team); // Get BG color class
                 const carImageUrl = teamImageMap[team.team] || defaultCarImage;
-                const drivers = teamDriverMap[team.team] || ["N/A", "N/A"];
+                const drivers = teamDriverMap[team.team] || ["Driver 1", "Driver 2"];
+                const driver1 = drivers[0];
+                const driver2 = drivers[1];
+                const teamColor = teamColorMap[team.team] || teamColorMap['default'];
+                
+                // Get a short name for the background text
+                let bgTeamName = team.team;
+                if (bgTeamName.includes("Racing")) bgTeamName = "Red Bull"; // Red Bull Racing
+                if (bgTeamName.includes("Kick")) bgTeamName = "Sauber";
+                if (bgTeamName.includes("Racing Bulls")) bgTeamName = "VCARB";
 
 
                 const itemHTML = `
-                    <div class="constructor-bar-item ${teamBgClass}">
-                         <img src="${carImageUrl}" alt="${team.team} Car" class="bar-car-image" onerror="this.src='${defaultCarImage}'; this.alt='Error loading image';">
-                         <span class="bar-team-name">${team.team}</span>
-                         <span class="bar-driver-names">(${drivers.join(', ')})</span>
-                         <span class="bar-points">${team.points}</span>
+                <div class="card" style="--color: ${teamColor}; --team-name: '${bgTeamName}';">
+                    <div class="imgBx">
+                        <img src="${carImageUrl}" alt="${team.team} Car" onerror="this.src='${defaultCarImage}';">
                     </div>
+                    <div class="contentBx">
+                        <h2>${team.team}</h2>
+                        <div class="points">
+                            <h3>Points :</h3>
+                            <span>${team.points}</span>
+                        </div>
+                        <div class="drivers">
+                            <h3>Drivers :</h3>
+                            <span>${driver1}</span>
+                            <span>${driver2}</span>
+                        </div>
+                        <!-- Removed Team Details Link -->
+                    </div>
+                </div>
                 `;
-                listContent.innerHTML += itemHTML;
+                listContainer.innerHTML += itemHTML;
             });
-        }
-
-        // Update Sort Icons in Table Header (Only needed for Driver table now)
-        function updateSortIcons(tableContainerId, activeColumn, direction) {
-            if (tableContainerId !== 'drivers-table-container') return;
-            const headers = document.querySelectorAll(`#${tableContainerId} th.sortable`);
-            headers.forEach(th => {
-                const icon = th.querySelector('.sort-icon i'); const sortKey = th.dataset.sort;
-                icon.classList.remove('fa-sort', 'fa-sort-up', 'fa-sort-down'); th.querySelector('.sort-icon').classList.remove('active');
-                if (sortKey === activeColumn) { icon.classList.add(direction === 'asc' ? 'fa-sort-up' : 'fa-sort-down'); th.querySelector('.sort-icon').classList.add('active'); }
-                else { icon.classList.add('fa-sort'); }
-            });
-        }
-
-
-        // Setup Sorting Event Listeners (Only for Driver table now)
-        function setupSorting() {
-             const driverHeaders = document.querySelectorAll('#drivers-table-container th.sortable');
-             driverHeaders.forEach(th => {
-                 th.addEventListener('click', () => {
-                     const sortKey = th.dataset.sort;
-                     if (driverSortColumn === sortKey) { driverSortDirection = driverSortDirection === 'asc' ? 'desc' : 'asc'; }
-                     else { driverSortColumn = sortKey; driverSortDirection = 'asc'; }
-                     sortAndPopulateDriverStandings();
-                 });
-             });
-        }
-
-        // Setup Reset Sort Button Listener (Only for Driver table now)
-        function setupResetSortButton() {
-            const resetButton = document.getElementById('reset-sort-btn');
-            const driversTab = document.getElementById('drivers-tab');
-            const constructorsTab = document.getElementById('constructors-tab');
-
-            resetButton.addEventListener('click', () => {
-                if (driversTab.classList.contains('tab-active')) {
-                    driverSortColumn = 'pos'; driverSortDirection = 'asc';
-                    currentDriverStandings = [...originalDriverStandings];
-                    sortAndPopulateDriverStandings();
-                }
-            });
-
-             driversTab.addEventListener('click', () => resetButton.style.display = 'block');
-             constructorsTab.addEventListener('click', () => resetButton.style.display = 'none');
-             if (constructorsTab.classList.contains('tab-active')) {
-                 resetButton.style.display = 'none';
-             }
-
         }
 
 
@@ -1049,15 +1398,18 @@
             const constructorsTab = document.getElementById('constructors-tab');
             const driversTable = document.getElementById('drivers-table-container');
             const constructorsList = document.getElementById('constructors-list-container');
-            const resetButton = document.getElementById('reset-sort-btn');
-
+            
+            // Check if elements exist
+            if (!driversTab || !constructorsTab || !driversTable || !constructorsList) {
+                console.error("Tab elements not found. Skipping tab setup.");
+                return;
+            }
 
             driversTab.addEventListener('click', () => {
                 driversTable.classList.remove('hidden');
                 constructorsList.classList.add('hidden');
                 driversTab.classList.add('tab-active'); driversTab.classList.remove('tab-inactive');
                 constructorsTab.classList.add('tab-inactive'); constructorsTab.classList.remove('tab-active');
-                resetButton.style.display = 'block';
             });
 
             constructorsTab.addEventListener('click', () => {
@@ -1065,7 +1417,6 @@
                 constructorsList.classList.remove('hidden');
                 constructorsTab.classList.add('tab-active'); constructorsTab.classList.remove('tab-inactive');
                 driversTab.classList.add('tab-inactive'); driversTab.classList.remove('tab-active');
-                resetButton.style.display = 'none';
             });
         }
 
@@ -1126,12 +1477,10 @@
             // --- END DYNAMIC COUNTDOWN LOGIC ---
 
             populateCalendar();
-            sortAndPopulateDriverStandings(); // Initial sort by pos
-            populateConstructorList(); // Populate the new list format
+            populateDriverCards(); // New function for driver cards
+            populateConstructorList(); // New function for constructor cards
             setupTabs();
             setupCalendarModal();
-            setupSorting(); // Add event listeners for sorting (Driver only now)
-            setupResetSortButton(); // Add event listener for reset button (Driver only now)
 
             // --- p5.js Initialization ---
             const createP5Sketch = (targetElementId) => {
@@ -1200,6 +1549,10 @@
 
                     sketch.setup = () => {
                         sectionElement = document.getElementById(targetElementId.substring(1));
+                        if (!sectionElement) {
+                            console.error(`p5.js target element "${targetElementId}" not found.`);
+                            return;
+                        }
                         const canvas = sketch.createCanvas(sectionElement.offsetWidth, sectionElement.offsetHeight);
                         canvas.parent(targetElementId.substring(1)); // Attach canvas to the target element
                         
