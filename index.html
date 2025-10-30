@@ -206,16 +206,32 @@
             font-family: 'Inter', sans-serif; /* Use Inter for base card font */
             position: relative;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Responsive grid */
-            gap: 2rem;
-            justify-items: center;
+            grid-template-columns: repeat(2, 1fr); /* 2 columns for mobile */
+            gap: 1.5rem; /* Smaller gap for mobile */
+            justify-items: stretch; /* Stretch items to fill column */
             align-items: stretch; /* Ensure cards in a row have same height */
         }
+        
+        /* 3 columns for tablet */
+        @media (min-width: 768px) {
+            #driver-card-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 2rem; /* Restore gap */
+            }
+        }
+        
+        /* 5 columns for desktop */
+        @media (min-width: 1024px) {
+            #driver-card-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
 
         #driver-card-grid .card {
             position: relative;
-            width: 320px; /* Fixed width */
-            height: 450px; /* Fixed height */
+            width: 100%; /* Fill the grid column */
+            height: 400px; /* Fixed height - CHANGED from 450px */
             background: #232323;
             border-radius: 20px;
             overflow: hidden;
@@ -260,7 +276,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%); /* Center the logo */
-            width: 200px; /* Adjust size as needed */
+            width: 80%; /* Scale with card */
+            max-width: 200px; /* But don't get too big */
             height: auto;
             object-fit: contain;
         }
@@ -853,7 +870,7 @@
     <!-- NEW Video Background -->
     <video id="scroll-video" muted playsinline preload="auto" loop>
         <!-- Use the RAW video link -->
-        <source src="https://raw.githubusercontent.com/S-HARISH44/TTRL/d0f2d018e946241ea417ae29d5280b59555d8b0b/RESOURCES/final_bg_video.mp4" type="video/mp4">
+        <source src="https://raw.githubusercontent.com/S-HARISH44/TTRL/a4fbb33beb65b2d127b0c67f94abbabe66c0d3ca/RESOURCES/final%20extact%2060%20fpss.mp4?raw=true" type="video/mp4">
         Your browser does not support the video tag.
     </video>
     
@@ -931,9 +948,10 @@
         </section>
 
         <!-- Countdown Timer Section -->
-        <section id="countdown-section" class="bg-gray-900 py-12 sm:py-16 relative z-10 border-b-4 border-rose-600">
+        <section id="countdown-section" class="py-12 sm:py-16 relative z-10"> <!-- Removed bg-gray-900 and border-b-4 -->
             <div class="container mx-auto px-4">
-                <div class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl max-w-4xl mx-auto p-6 sm:p-8 shadow-2xl">
+                <!-- Removed: bg-gray-800/50 backdrop-blur-sm border border-gray-700 shadow-2xl -->
+                <div class="rounded-xl max-w-4xl mx-auto p-6 sm:p-8">
                     <div class="text-center">
                         <h2 class="text-3xl sm:text-4xl font-bold text-white mb-2">
                             NEXT RACE: <span id="next-race-gp" class="text-rose-500">LOADING...</span>
@@ -943,18 +961,22 @@
                         </h3>
                     </div>
                     <div id="countdown" class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-white">
+                        <!-- Restored background and border to boxes -->
                         <div class="bg-gray-900/70 p-4 rounded-lg border border-gray-700 text-center">
                             <span id="days" class="block text-5xl sm:text-7xl font-extrabold">00</span>
                             <span class="block text-sm sm:text-base font-medium text-gray-400">DAYS</span>
                         </div>
+                        <!-- Restored background and border to boxes -->
                         <div class="bg-gray-900/70 p-4 rounded-lg border border-gray-700 text-center">
                             <span id="hours" class="block text-5xl sm:text-7xl font-extrabold">00</span>
                             <span class="block text-sm sm:text-base font-medium text-gray-400">HOURS</span>
                         </div>
+                        <!-- Restored background and border to boxes -->
                         <div class="bg-gray-900/70 p-4 rounded-lg border border-gray-700 text-center">
                             <span id="minutes" class="block text-5xl sm:text-7xl font-extrabold">00</span>
                             <span class="block text-sm sm:text-base font-medium text-gray-400">MINUTES</span>
                         </div>
+                        <!-- Restored background and border to boxes -->
                         <div class="bg-gray-900/70 p-4 rounded-lg border border-gray-700 text-center">
                             <span id="seconds" class="block text-5xl sm:text-7xl font-extrabold text-rose-500">00</span>
                             <span class="block text-sm sm:text-base font-medium text-gray-400">SECONDS</span>
@@ -984,7 +1006,7 @@
         </section>
 
         <!-- Standings Section -->
-        <section id="standings" class="py-24 border-y-4 border-gray-800">
+        <section id="standings" class="py-24 relative"> <!-- Removed border-y-4 -->
             <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div class="text-center mb-16">
                     <h2 class="text-4xl font-extrabold text-white sm:text-5xl">
@@ -1005,19 +1027,21 @@
 
 
                 <!-- Standings Content Container -->
-                <div class="max-w-4xl mx-auto">
+                <div> <!-- Removed max-w-4xl mx-auto -->
                     
                     <!-- NEW Driver Standings Card Grid (Nike Style) -->
                     <div id="drivers-table-container">
                         <div id="driver-card-grid">
                              <!-- Driver cards will be injected here -->
                         </div>
-                        <p class="text-center text-sm text-gray-200 mt-4">Points after the Spain GP</p>
+                         <!-- Added max-w-4xl mx-auto to this paragraph -->
+                        <p class="text-center text-sm text-gray-200 mt-4 max-w-4xl mx-auto">Points after the Spain GP</p>
                     </div>
 
 
                     <!-- NEW Constructor Standings Card List (Carousel Item Style) -->
-                    <div id="constructors-list-container" class="hidden">
+                    <!-- Added max-w-4xl mx-auto to this container -->
+                    <div id="constructors-list-container" class="hidden max-w-4xl mx-auto">
                          <!-- Carousel will be injected here -->
                          <p class="text-center text-sm text-gray-200 mt-4" style="grid-column: 1 / -1;">Points after the Spain GP. Click and drag cards to explore.</p>
                     </div>
@@ -1048,7 +1072,7 @@
     </main>
 
     <!-- Footer / Contact Section -->
-    <footer id="contact" class="bg-gray-900 border-t border-gray-800">
+    <footer id="contact" class="bg-gray-900"> <!-- Removed border-t -->
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-extrabold text-white">
@@ -1562,14 +1586,14 @@
             backLight.position.set( -40, 100, 20 );
             scene.add(backLight);
 
-            // 5. Floor
-            const floorGeometry = new THREE.PlaneGeometry( 500, 500, 1, 1 );
-            const floorMaterial = new THREE.MeshLambertMaterial( { color: 0x202020, side: THREE.DoubleSide } ); // Use MeshLambertMaterial for shadows
-            const floor = new THREE.Mesh( floorGeometry, floorMaterial );
-            floor.position.y = -150;
-            floor.rotation.x = -Math.PI / 2; // Correct rotation
-            floor.receiveShadow = true;
-            scene.add(floor);
+            // 5. Floor (REMOVED)
+            // const floorGeometry = new THREE.PlaneGeometry( 500, 500, 1, 1 );
+            // const floorMaterial = new THREE.MeshLambertMaterial( { color: 0x202020, side: THREE.DoubleSide } ); // Use MeshLambertMaterial for shadows
+            // const floor = new THREE.Mesh( floorGeometry, floorMaterial );
+            // floor.position.y = -150;
+            // floor.rotation.x = -Math.PI / 2; // Correct rotation
+            // floor.receiveShadow = true;
+            // scene.add(floor); // <-- This line is removed
 
             // 6. Shape
             const geometry = new THREE.BoxGeometry( 50, 50, 50 );
@@ -1613,9 +1637,9 @@
                 scene.remove(shape);
                 geometry.dispose();
                 material.dispose();
-                scene.remove(floor);
-                floorGeometry.dispose();
-                floorMaterial.dispose();
+                // scene.remove(floor); // <-- This line is removed
+                // floorGeometry.dispose(); // <-- This line is removed
+                // floorMaterial.dispose(); // <-- This line is removed
                 // Dispose lights if needed
                 renderer.dispose();
                 if (container.contains(renderer.domElement)) {
@@ -1781,4 +1805,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </body>
 </html>
+
+
+
+
 
