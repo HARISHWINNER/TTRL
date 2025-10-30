@@ -182,7 +182,7 @@
         .team-racing-bulls { color: #469BFF; }
         .team-mercedes     { color: #00D2BE; }
         .team-red-bull     { color: #0600EF; }
-        .team-reserve      { color: #888888; } /* Color for Reserve */
+        /* .team-reserve      { color: #888888; } */ /* Removed Reserve */
 
         /* --- OTHER STYLES --- */
         /* Custom scrollbar (Now hidden) */
@@ -249,7 +249,7 @@
         #driver-card-grid .card {
             position: relative;
             width: 100%; /* Fill the grid column */
-            height: 280px; /* Fixed height */
+            height: 320px; /* CHANGED: Fixed height */
             background: #232323;
             border-radius: 20px;
             overflow: hidden;
@@ -280,7 +280,7 @@
             transform: translateY(-50%);
             z-index: 10000;
             width: 100%;
-            height: 140px; /* CHANGED: Was 150px */
+            height: 160px; /* CHANGED: Half of 320px */
             transition: 0.5s;
         }
 
@@ -311,7 +311,7 @@
         }
 
         #driver-card-grid .card:hover .contentBx {
-            height: 140px; /* CHANGED: Was 150px. 140 + 140 = 280 */
+            height: 160px; /* CHANGED: Half of 320px */
         }
 
         #driver-card-grid .card .contentBx h2 {
@@ -627,6 +627,7 @@
             transform: translateY(0);
         }
         
+        /* FIXED: Corrected nth-of-type selectors to apply delays */
         .overlay-active nav ul li:nth-of-type(1) { transition: transform 0.4s ease-in-out 0.2s; }
         .overlay-active nav ul li:nth-of-type(2) { transition: transform 0.4s ease-in-out 0.3s; }
         .overlay-active nav ul li:nth-of-type(3) { transition: transform 0.4s ease-in-out 0.4s; }
@@ -948,7 +949,7 @@
     <div id="video-fallback-bg"></div> <!-- Fallback bg -->
     <video id="scroll-video" muted playsinline preload="auto" loop>
         <!-- Use the RAW video link -->
-        <source src="https://raw.githubusercontent.com/S-HARISH44/TTRL/37bce13579c98a7a033f8ae419f1cf1d05bafe7d/RESOURCES/final%2090%20fps.mp4?raw=true" type="video/mp4">
+        <source src="https://raw.githubusercontent.com/S-HARISH44/TTRL/2e08d9d6e75d5621deee1b522fb5a6dc91bb4689/RESOURCES/sample_frame.mp4?raw=true" type="video/mp4">
         Your browser does not support the video tag.
     </video>
     
@@ -1307,10 +1308,8 @@
             { driver: "Doc YT", team: "Racing Bulls", points: 1 },
             { driver: "Maayaone", team: "Mercedes", points: 0 },
             { driver: "Bala", team: "Kick Sauber", points: 0 },
-            { driver: "HarryBeckham", team: "Red Bull Racing", points: 0 },
-            { driver: "Nightfury", team: "Reserve", points: 23 },
-            { driver: "Peter", team: "Reserve", points: 0 },
-            { driver: "Arvind Siva", team: "Reserve", points: 0 }
+            { driver: "HarryBeckham", team: "Red Bull Racing", points: 0 }
+            // Removed Reserve Drivers
         ];
         
         // NEW: Mutable arrays for processed data
@@ -1320,17 +1319,9 @@
         // --- NEW: Function to calculate and sort all standings ---
         function processStandings() {
             // 1. Process Driver Standings
-            // Sort drivers by two criteria:
-            // 1. If team is "Reserve", move to bottom
-            // 2. By points, descending
+            // Sort drivers by points, descending
             currentDriverStandings = [...driverData].sort((a, b) => {
-                if (a.team === 'Reserve' && b.team !== 'Reserve') {
-                    return 1; // a (Reserve) comes after b
-                }
-                if (a.team !== 'Reserve' && b.team === 'Reserve') {
-                    return -1; // a comes before b (Reserve)
-                }
-                // If both are Reserve or both are not, sort by points
+                // Main drivers sorted by points
                 return b.points - a.points;
             });
             
@@ -1344,7 +1335,7 @@
             
             // Sum points and collect drivers for each team
             currentDriverStandings.forEach(driver => {
-                // Ignore Reserve drivers for constructor standings
+                // Ignore Reserve drivers for constructor standings (if any were left)
                 if (driver.team === 'Reserve') return;
 
                 if (!constructorMap.has(driver.team)) {
@@ -1395,7 +1386,7 @@
             "Racing Bulls": "hsl(211, 100%, 64%)", // #469BFF
             "Mercedes": "hsl(174, 100%, 41%)", // #00D2BE
             "Red Bull Racing": "hsl(240, 100%, 48%)", // #0600EF
-            "Reserve": "hsl(0, 0%, 50%)", // #808080
+            // "Reserve": "hsl(0, 0%, 50%)", // #808080 // Removed
             "default": "hsl(347, 83%, 54%)" // #e11d48
         };
         
@@ -1410,8 +1401,8 @@
             "Aston Martin": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/martin.png",
             "Racing Bulls": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/vcarb.png",
             "Mercedes": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/mercedes.png",
-            "Red Bull Racing": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/redbull.png",
-            "Reserve": "https://placehold.co/200x100/808080/FFFFFF?text=RESERVE" // Placeholder for Reserve
+            "Red Bull Racing": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/redbull.png"
+            // "Reserve": "https://placehold.co/200x100/808080/FFFFFF?text=RESERVE" // Removed
         };
         
          // Used for car images on constructor cards (Carousel Style)
