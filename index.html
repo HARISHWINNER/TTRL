@@ -231,7 +231,7 @@
         #driver-card-grid .card {
             position: relative;
             width: 100%; /* Fill the grid column */
-            height: 400px; /* Fixed height - CHANGED from 450px */
+            height: 320px; /* Fixed height - CHANGED from 360px */
             background: #232323;
             border-radius: 20px;
             overflow: hidden;
@@ -262,7 +262,7 @@
             transform: translateY(-50%);
             z-index: 10000;
             width: 100%;
-            height: 220px;
+            height: 180px; /* CHANGED from 220px */
             transition: 0.5s;
         }
 
@@ -293,7 +293,7 @@
         }
 
         #driver-card-grid .card:hover .contentBx {
-            height: 210px;
+            height: 180px; /* CHANGED from 210px */
         }
 
         #driver-card-grid .card .contentBx h2 {
@@ -303,7 +303,7 @@
             color: #fff;
             margin: 0;
             font-family: 'Oswald', sans-serif; /* OSWALD */
-            font-size: 1.8rem; /* Driver Name size */
+            font-size: 1.5rem; /* Driver Name size - CHANGED from 1.8rem */
             text-transform: uppercase;
         }
 
@@ -1193,9 +1193,82 @@
         ];
 
         // Original data, DO NOT MODIFY
-        const originalDriverStandings = Object.freeze([
-            { pos: 1, driver: "Simman", team: "Ferrari", points: 91 }, { pos: 2, driver: "Wi7ard", team: "Williams", points: 70 }, { pos: 3, driver: "TheGodfather", team: "Alpine", points: 40 }, { pos: 4, driver: "ApexEntropy", team: "Alpine", points: 27 }, { pos: 5, driver: "Overlord", team: "McLaren", points: 22 }, { pos: 6, driver: "Kentucky", team: "Haas", points: 22 }, { pos: 7, driver: "Oxygen", team: "Kick Sauber", points: 18 }, { pos: 8, driver: "Vibin", team: "Aston Martin", points: 18 }, { pos: 9, driver: "Apurrv", team: "Aston Martin", points: 17 }, { pos: 10, driver: "Mahesh", team: "Williams", points: 16 }, { pos: 11, driver: "Harish", team: "Haas", points: 15 }, { pos: 12, driver: "Clone", team: "Racing Bulls", points: 8 }, { pos: 13, driver: "Memb", team: "Mercedes", points: 8 }, { pos: 14, driver: "Bopedope", team: "McLaren", points: 6 }, { pos: 15, driver: "Majunu", team: "Ferrari", points: 4 }, { pos: 16, driver: "Denji", team: "Red Bull Racing", points: 2 }, { pos: 17, driver: "Doc YT", team: "Racing Bulls", points: 1 }, { pos: 18, driver: "Maayaone", team: "Mercedes", points: 0 }, { pos: 19, driver: "HarryBeckham", team: "Red Bull Racing", points: 0 }, { pos: 20, driver: "Bala", team: "Kick Sauber", points: 0 }
-        ]);
+        const driverData = [
+            // No 'pos' needed, it will be auto-assigned
+            { driver: "Simman", team: "Ferrari", points: 91 },
+            { driver: "Wi7ard", team: "Williams", points: 70 },
+            { driver: "TheGodfather", team: "Alpine", points: 40 },
+            { driver: "ApexEntropy", team: "Alpine", points: 27 },
+            { driver: "Overlord", team: "McLaren", points: 22 },
+            { driver: "Kentucky", team: "Haas", points: 22 },
+            { driver: "Oxygen", team: "Kick Sauber", points: 18 },
+            { driver: "Vibin", team: "Aston Martin", points: 18 },
+            { driver: "Apurrv", team: "Aston Martin", points: 17 },
+            { driver: "Mahesh", team: "Williams", points: 16 },
+            { driver: "Harish", team: "Haas", points: 15 },
+            { driver: "Clone", team: "Racing Bulls", points: 8 },
+            { driver: "Memb", team: "Mercedes", points: 8 },
+            { driver: "Bopedope", team: "McLaren", points: 6 },
+            { driver: "Majunu", team: "Ferrari", points: 4 },
+            { driver: "Denji", team: "Red Bull Racing", points: 2 },
+            { driver: "Doc YT", team: "Racing Bulls", points: 1 },
+            { driver: "Maayaone", team: "Mercedes", points: 0 },
+            { driver: "HarryBeckham", team: "Red Bull Racing", points: 0 },
+            { driver: "Bala", team: "Kick Sauber", points: 0 }
+        ];
+
+        // REMOVED originalConstructorStandings
+        
+        // NEW: Mutable arrays for processed data
+        let currentDriverStandings = [];
+        let currentConstructorStandings = [];
+        
+        // --- NEW: Function to calculate and sort all standings ---
+        function processStandings() {
+            // 1. Process Driver Standings
+            // Sort drivers by points, descending
+            currentDriverStandings = [...driverData].sort((a, b) => b.points - a.points);
+            // Assign positions
+            currentDriverStandings.forEach((driver, index) => {
+                driver.pos = index + 1;
+            });
+
+            // 2. Process Constructor Standings
+            const constructorMap = new Map();
+            
+            // Sum points and collect drivers for each team
+            currentDriverStandings.forEach(driver => {
+                if (!constructorMap.has(driver.team)) {
+                    constructorMap.set(driver.team, {
+                        team: driver.team,
+                        points: 0,
+                        drivers: []
+                    });
+                }
+                
+                const teamData = constructorMap.get(driver.team);
+                teamData.points += driver.points;
+                teamData.drivers.push({ name: driver.driver, points: driver.points });
+            });
+
+            // Convert map to array
+            currentConstructorStandings = Array.from(constructorMap.values());
+            
+            // Sort constructors by points, descending
+            currentConstructorStandings.sort((a, b) => b.points - a.points);
+            
+            // Assign positions
+            currentConstructorStandings.forEach((team, index) => {
+                team.pos = index + 1;
+                // Ensure there are always two driver entries for the card
+                team.drivers = team.drivers.slice(0, 2);
+                while (team.drivers.length < 2) {
+                    team.drivers.push({ name: "N/A", points: 0 });
+                }
+            });
+        }
+        // --- END NEW Function ---
+
 
         const originalConstructorStandings = Object.freeze([
             { pos: 1, team: "Ferrari", points: 95 }, { pos: 2, team: "Williams", points: 86 }, { pos: 3, team: "Alpine", points: 53 }, { pos: 4, team: "Haas", points: 38 }, { pos: 5, team: "Aston Martin", points: 35 }, { pos: 6, team: "Kick Sauber", points: 33 }, { pos: 7, team: "McLaren", points: 28 }, { pos: 8, team: "Red Bull Racing", points: 23 }, { pos: 9, team: "Racing Bulls", points: 9 }, { pos: 10, team: "Mercedes", points: 8 }
@@ -1312,7 +1385,7 @@
             if (!grid) return;
             grid.innerHTML = ''; // Clear existing content
 
-            originalDriverStandings.forEach((driver) => {
+            currentDriverStandings.forEach((driver) => { // Use new sorted array
                 const teamColor = teamColorMap[driver.team] || teamColorMap['default'];
                 const logoUrl = teamLogoMap[driver.team] || `https://placehold.co/200x100/1f2937/6b7280?text=Logo`;
                 const driverName = driver.driver;
@@ -1346,26 +1419,18 @@
             const listContainer = document.getElementById('constructors-list-container');
             if (!listContainer) return;
             
-            // Build the driver map from the original, unsorted driver list
-            const teamDriverMap = {};
-            originalDriverStandings.forEach(driver => {
-                if (!teamDriverMap[driver.team]) {
-                    teamDriverMap[driver.team] = [];
-                }
-                // Store driver name and points
-                teamDriverMap[driver.team].push({ name: driver.driver, points: driver.points });
-            });
+            // Build the driver map (REMOVED, data is now processed)
             
             // Find the paragraph element
             const paragraphElement = listContainer.querySelector('p');
             let carouselHTML = '<div class="carousel">'; // Start carousel wrapper
             
-            originalConstructorStandings.forEach((team) => {
+            currentConstructorStandings.forEach((team) => { // Use new sorted array
                 const carImageUrl = teamImageMap[team.team] || defaultCarImage;
-                const drivers = teamDriverMap[team.team] || [{name: "N/A", points: 0}, {name: "N/A", points: 0}];
-                // Ensure there are always two drivers, even if one is N/A
-                const driver1 = drivers[0] || {name: "N/A", points: 0};
-                const driver2 = drivers[1] || {name: "N/A", points: 0};
+                // Get drivers from the new array structure
+                const driver1 = team.drivers[0];
+                const driver2 = team.drivers[1];
+                const teamColor = teamColorMap[team.team] || teamColorMap['default'];
                 
                 carouselHTML += `
                 <div class="carousel-item">
@@ -1739,6 +1804,7 @@
             }
             // --- END Video Scroll Scrub Logic ---
 
+            processStandings(); // <--- NEW: Process all data first
             populateCalendar();
             populateDriverCards(); // New function for driver cards (Nike style)
             populateConstructorList(); // New function for constructor cards (Carousel Item style)
@@ -1805,6 +1871,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </body>
 </html>
+
+
 
 
 
