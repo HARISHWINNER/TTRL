@@ -6,14 +6,20 @@
     <title>TTRL Turbo Tribe Racing League</title>
     <!-- Tailwind script removed from here -->
 
-    <!-- Google Fonts: Oswald (headings), Inter (body), Poppins (cards), Exo (cards) -->
+    <!-- Google Fonts: Oswald (headings) and Inter (body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Exo:wght@800&family=Inter:wght@400;500;600;700&family=Montserrat:wght@700&family=Oswald:wght@500;700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Work+Sans:wght@300;400;700&family=Open+Sans:ital,wght@1,300&display=swap" rel="stylesheet">
+    <!-- Unified font import -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
 
 
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- three.js and GSAP (for loading screen) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+
 
     <style>
         /* Base body styles */
@@ -31,6 +37,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: center; /* Ensure video is centered */
             z-index: -1; /* Behind all content */
             opacity: 0.25; /* Dim the video so content is readable */
         }
@@ -194,9 +201,9 @@
         }
 
 
-         /* --- NEW DRIVER CARD STYLES (Nike) --- */
+        /* --- NEW DRIVER CARD STYLES (Nike Style) --- */
          #driver-card-grid {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif; /* Use Inter for base card font */
             position: relative;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Responsive grid */
@@ -278,7 +285,9 @@
             letter-spacing: 1px;
             color: #fff;
             margin: 0;
-            font-size: 1.5rem; /* Driver Name size */
+            font-family: 'Oswald', sans-serif; /* OSWALD */
+            font-size: 1.8rem; /* Driver Name size */
+            text-transform: uppercase;
         }
 
         /* Using .details for Pos/Points */
@@ -316,6 +325,7 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             margin-right: 10px;
+            font-family: 'Inter', sans-serif; /* INTER */
         }
 
         #driver-card-grid .card .contentBx .details span {
@@ -330,6 +340,7 @@
             transition: 0.5s;
             border-radius: 4px;
             cursor: default; /* Not clickable */
+            font-family: 'Inter', sans-serif; /* INTER */
         }
 
         #driver-card-grid .card .contentBx .details span:hover {
@@ -339,117 +350,199 @@
         /* --- END DRIVER CARD STYLES --- */
 
 
-        /* --- NEW CONSTRUCTOR CARD STYLES (Carousel Item) --- */
-         #constructors-list-container {
+        /* --- NEW CONSTRUCTOR CARD STYLES (Carousel) --- */
+        #constructors-list-container {
             position: relative;
             z-index: 1;
-            display: grid; /* Use grid instead of absolute positioning */
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
-            gap: 2rem;
-            justify-items: center; /* Center items in grid cells */
             overflow: visible; /* Allow box shadow */
             padding-bottom: 2rem; /* Space for shadow */
-        }
-
-        .constructor-item {
-            --width: clamp(250px, 80vw, 300px); /* Responsive width */
-            --height: clamp(350px, 100vw, 400px); /* Responsive height */
-            overflow: hidden;
-            position: relative;
-            width: var(--width);
-            height: var(--height);
-            border-radius: 10px;
-            box-shadow: 0 10px 50px 10px rgba(0, 0, 0, .5);
-            background: black;
-            transition: transform 0.3s ease; /* Add hover effect */
+            /* Removed grid styles, carousel.js handles layout */
         }
         
-        .constructor-item:hover {
-            transform: scale(1.03); /* Slight scale on hover */
+        /* Container for the carousel JS to hook into */
+        #constructors-list-container .carousel {
+            position: relative;
+            z-index: 1;
+            height: 500px; /* Give carousel a fixed height */
+            overflow: hidden;
+            pointer-events: none; /* JS will re-enable on items */
         }
 
-        .constructor-box {
+        #constructors-list-container .carousel-item {
+            --items: 10;
+            --width: clamp(250px, 30vw, 300px); /* Responsive width */
+            --height: clamp(350px, 40vw, 400px); /* Responsive height */
+            --x: calc(var(--active) * 800%);
+            --y: calc(var(--active) * 200%);
+            --rot: calc(var(--active) * 120deg);
+            --opacity: calc(var(--zIndex) / var(--items) * 3 - 2);
+            overflow: hidden;
+            position: absolute;
+            z-index: var(--zIndex);
+            width: var(--width);
+            height: var(--height);
+            margin: calc(var(--height) * -0.5) 0 0 calc(var(--width) * -0.5);
+            border-radius: 10px;
+            top: 50%;
+            left: 50%;
+            user-select: none;
+            transform-origin: 0% 100%;
+            box-shadow: 0 10px 50px 10px rgba(0, 0, 0, .5);
+            background: black;
+            pointer-events: all;
+            transform: translate(var(--x), var(--y)) rotate(var(--rot)) ;
+            transition: transform .8s cubic-bezier(0, 0.02, 0, 1);
+        }
+
+        #constructors-list-container .carousel-box {
             position: absolute;
             z-index: 1;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            font-family: 'Oswald', sans-serif; /* Use Oswald */
+            transition: opacity .8s cubic-bezier(0, 0.02, 0, 1);
+            opacity: var(--opacity);
+            /* font-family: 'Orelo-sw-db', serif; REMOVED */
         }
 
-        .constructor-box:before {
+        #constructors-list-container .carousel-box:before {
             content: '';
             position: absolute;
-            z-index: 2; /* Above image */
+            z-index: 1;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, .6));
+            background: linear-gradient(to bottom, rgba(0, 0, 0, .3), rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, .5));
         }
 
-        .constructor-title {
+        #constructors-list-container .title {
             position: absolute;
-            z-index: 3; /* Above gradient */
+            z-index: 1;
             color: #fff;
             bottom: 20px;
             left: 20px;
-            font-size: clamp(24px, 4vw, 34px); /* Responsive title */
-            text-shadow: 0 4px 4px rgba(0, 0, 0, .3);
-            font-family: 'Poppins', sans-serif; /* Use Poppins for title */
-            font-weight: 600;
+            transition: opacity .8s cubic-bezier(0, 0.02, 0, 1);
+            font-size: clamp(20px, 3vw, 30px);
+            text-shadow: 0 4px 4px rgba(0, 0, 0, .1);
+            font-family: 'Oswald', sans-serif; /* OSWALD */
+            text-transform: uppercase;
         }
 
-        .constructor-num {
+        #constructors-list-container .num {
             position: absolute;
-            z-index: 3; /* Above gradient */
-            color: rgba(255, 255, 255, 0.8); /* Slightly transparent */
+            z-index: 1;
+            color: #fff;
             top: 10px;
             left: 20px;
-            font-size: clamp(40px, 12vw, 80px); /* Responsive number */
-            font-weight: 700; /* Bold number */
+            transition: opacity .8s cubic-bezier(0, 0.02, 0, 1);
+            font-size: clamp(40px, 10vw, 80px); /* Larger num */
+            font-family: 'Oswald', sans-serif; /* OSWALD */
+            font-weight: 700;
         }
-
-        .constructor-item img {
+        
+        /* NEW: Driver points details */
+        #constructors-list-container .drivers {
             position: absolute;
-            top: 0;
-            left: 0;
+            z-index: 2;
+            color: #fff;
+            bottom: 20px;
+            right: 20px;
+            transition: opacity .8s cubic-bezier(0, 0.02, 0, 1);
+            font-family: 'Inter', sans-serif; /* INTER */
+            font-size: 0.8rem;
+            text-align: right;
+            text-shadow: 0 2px 2px rgba(0, 0, 0, .3);
+        }
+        #constructors-list-container .drivers .team-points {
+            font-family: 'Oswald', sans-serif; /* OSWALD */
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 5px;
+        }
+         #constructors-list-container .drivers span {
+            display: block; /* Each driver on new line */
+         }
+        /* END: Driver points details */
+
+
+        #constructors-list-container .carousel-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            z-index: 1; /* Behind gradient */
+            pointer-events: none;
+        }
+
+        /* Carousel Cursors */
+        .cursor {
+            position: fixed;
+            z-index: 9999; /* High z-index */
+            top: 0;
+            left: 0;
+            --size: 40px;
+            width: var(--size);
+            height: var(--size);
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, .2);
+            margin: calc(var(--size) * -0.5) 0 0 calc(var(--size) * -0.5);
+            transition: transform .85s cubic-bezier(0, 0.02, 0, 1);
+            display: none;
+            pointer-events: none;
+        }
+
+        .cursor2 {
+            --size: 2px;
+            transition-duration: .7s;
+        }
+        
+        /* Show cursor only on desktop */
+        @media (pointer: fine) {
+            .cursor {
+                display: block;
+            }
         }
         /* --- END CONSTRUCTOR CARD STYLES --- */
 
 
-        /* --- Loading Screen Styles --- */
+        /* --- Loading Screen Styles (three.js) --- */
         #loading-screen {
-            position: fixed; inset: 0; background-color: #030712;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            position: fixed; inset: 0; 
+            background-color: #202020; /* Match scene bg */
+            display: flex; /* Keep for centering if needed */
+            align-items: center; 
+            justify-content: center;
             z-index: 100; opacity: 1;
             transition: opacity 0.5s ease-out 3.5s, visibility 0.5s ease-out 3.5s;
             visibility: visible;
         }
-        #loading-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-        .lights-container { display: flex; gap: 1.5rem; margin-bottom: 2rem; }
-        .light {
-            width: 50px; height: 50px; border-radius: 50%; background-color: #4b0000;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5); opacity: 0;
-            animation: lightUp 3.5s forwards;
+        #loading-screen.hidden { 
+            opacity: 0; 
+            visibility: hidden; 
+            pointer-events: none; 
         }
-        .light:nth-child(1) { animation-delay: 0.2s; }
-        .light:nth-child(2) { animation-delay: 0.7s; }
-        .light:nth-child(3) { animation-delay: 1.2s; }
-        .light:nth-child(4) { animation-delay: 1.7s; }
-        .light:nth-child(5) { animation-delay: 2.2s; }
-        @keyframes lightUp {
-            0% { opacity: 0; background-color: #4b0000; }
-            10% { opacity: 1; background-color: #4b0000; }
-            20% { background-color: #ff0000; box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 0 20px #ff0000; }
-            85% { background-color: #ff0000; box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 0 20px #ff0000; opacity: 1; }
-            100% { background-color: #1a1a1a; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); opacity: 0.5; }
+        /* Canvas will be injected here */
+        #loading-screen canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
         }
+        /* Footer for loader */
+        #loading-footer {
+            color: #4b5563;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            padding: 10px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 101; /* Above canvas */
+            text-align: center;
+        }
+        /* --- END Loading Screen Styles --- */
+
 
         /* --- NEW OVERLAY NAVIGATION STYLES --- */
         .overlay-navigation {
@@ -500,7 +593,7 @@
             top: 46%;
             color: #fff;
             text-transform: uppercase;
-            font-family: 'Work sans', sans-serif;
+            font-family: 'Oswald', sans-serif; /* OSWALD */
             font-weight: 300;
             letter-spacing: 4px;
             text-decoration: none;
@@ -538,7 +631,7 @@
             right: 0;
             bottom: -50px;
             text-transform: none;
-            font-family: 'Open sans', serif;
+            font-family: 'Inter', sans-serif; /* INTER */
             font-weight: 300;
             font-style: italic;
             letter-spacing: 0;
@@ -710,6 +803,48 @@
                 width: 15px;
             }
         }
+        
+        /* Layout/Logo styles from carousel */
+        .layout {
+            position: fixed; /* Changed to fixed */
+            z-index: 10; /* Above video, below nav */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .layout:before {
+            content: '';
+            position: absolute;
+            z-index: 1;
+            top: 0;
+            left: 90px;
+            width: 10px;
+            height: 100%;
+            border: 1px solid #fff;
+            border-top: none;
+            border-bottom: none;
+            opacity: .15;
+        }
+
+        .layout .box {
+            position: absolute;
+            bottom: 0;
+            left: 30px;
+            color: #fff;
+            transform-origin: 0% 10%;
+            transform: rotate(-90deg);
+            font-size: 9px;
+            line-height: 1.4;
+            text-transform: uppercase;
+            opacity: .4;
+            font-family: 'Inter', sans-serif; /* INTER */
+        }
+        
+        /* Removed .logo and .social */
+
 
     </style>
 </head>
@@ -718,9 +853,18 @@
     <!-- NEW Video Background -->
     <video id="scroll-video" muted playsinline preload="auto" loop>
         <!-- Use the RAW video link -->
-        <source src="https://raw.githubusercontent.com/S-HARISH44/TTRL/2e08d9d6e75d5621deee1b522fb5a6dc91bb4689/RESOURCES/sample_frame.mp4" type="video/mp4">
+        <source src="https://raw.githubusercontent.com/S-HARISH44/TTRL/d0f2d018e946241ea417ae29d5280b59555d8b0b/RESOURCES/final_bg_video.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
+    
+    <!-- Carousel layout elements -->
+    <div class="layout">
+        <div class="box">TTRL Turbo Tribe<br />Racing League<br />Est. 2024</div>
+    </div>
+    
+    <!-- Cursors for Carousel -->
+    <div class="cursor"></div>
+    <div class="cursor cursor2"></div>
 
 
     <!-- NEW Overlay Navigation -->
@@ -736,18 +880,12 @@
         </nav>
     </div>
 
-    <!-- Loading Screen -->
+    <!-- Loading Screen (three.js) -->
     <div id="loading-screen">
-        <div class="lights-container">
-            <div class="light"></div>
-            <div class="light"></div>
-            <div class="light"></div>
-            <div class="light"></div>
-            <div class="light"></div>
-        </div>
-        <h1 class="text-4xl font-bold text-white">
-             <span class="text-rose-600">TTRL</span> LOADING...
-        </h1>
+        <!-- Canvas will be injected here -->
+        <footer id="loading-footer">
+            TTRL Loading...
+        </footer>
     </div>
 
     <!-- Header / Navigation -->
@@ -880,8 +1018,8 @@
 
                     <!-- NEW Constructor Standings Card List (Carousel Item Style) -->
                     <div id="constructors-list-container" class="hidden">
-                         <!-- Constructor cards will be injected here -->
-                         <p class="text-center text-sm text-gray-200 mt-4" style="grid-column: 1 / -1;">Points after the Spain GP</p>
+                         <!-- Carousel will be injected here -->
+                         <p class="text-center text-sm text-gray-200 mt-4" style="grid-column: 1 / -1;">Points after the Spain GP. Click and drag cards to explore.</p>
                     </div>
                 </div>
             </div>
@@ -1007,7 +1145,6 @@
     </div>
 
     <!-- p5.js Script (REMOVED) -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script> -->
     <!-- jQuery Script (for new nav) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
@@ -1185,40 +1322,54 @@
             const listContainer = document.getElementById('constructors-list-container');
             if (!listContainer) return;
             
-            // Find the paragraph element
-            const paragraphElement = listContainer.querySelector('p');
-            let currentHTML = ''; // Build new card HTML here
-
-            // Build the driver map (needed for the OLD Nike style, but not for the new Carousel style)
-            // We can keep this map in case we need driver names later.
+            // Build the driver map from the original, unsorted driver list
             const teamDriverMap = {};
             originalDriverStandings.forEach(driver => {
                 if (!teamDriverMap[driver.team]) {
                     teamDriverMap[driver.team] = [];
                 }
-                teamDriverMap[driver.team].push(driver.driver);
+                // Store driver name and points
+                teamDriverMap[driver.team].push({ name: driver.driver, points: driver.points });
             });
-
+            
+            // Find the paragraph element
+            const paragraphElement = listContainer.querySelector('p');
+            let carouselHTML = '<div class="carousel">'; // Start carousel wrapper
+            
             originalConstructorStandings.forEach((team) => {
                 const carImageUrl = teamImageMap[team.team] || defaultCarImage;
+                const drivers = teamDriverMap[team.team] || [{name: "N/A", points: 0}, {name: "N/A", points: 0}];
+                // Ensure there are always two drivers, even if one is N/A
+                const driver1 = drivers[0] || {name: "N/A", points: 0};
+                const driver2 = drivers[1] || {name: "N/A", points: 0};
                 
-                currentHTML += `
-                <div class="constructor-item"> 
-                    <div class="constructor-box">
-                        <div class="constructor-title">${team.team}</div>
-                        <div class="constructor-num">${String(team.pos).padStart(2, '0')}</div>
+                carouselHTML += `
+                <div class="carousel-item">
+                    <div class="carousel-box">
+                        <div class="title">${team.team}</div>
+                        <div class="num">${String(team.pos).padStart(2, '0')}</div>
                         <img src="${carImageUrl}" alt="${team.team} Car" onerror="this.src='${defaultCarImage}';" />
+                        <div class="drivers">
+                             <span class="team-points">${team.points} PTS</span>
+                             <span>${driver1.name}: ${driver1.points}</span>
+                             <span>${driver2.name}: ${driver2.points}</span>
+                        </div>
                     </div>
                 </div>
                 `;
             });
             
+            carouselHTML += '</div>'; // End carousel wrapper
+            
              // Replace container content, keeping the paragraph if it exists
              if (paragraphElement) {
-                 listContainer.innerHTML = currentHTML + paragraphElement.outerHTML;
+                 listContainer.innerHTML = carouselHTML + paragraphElement.outerHTML;
              } else {
-                 listContainer.innerHTML = currentHTML; 
+                 listContainer.innerHTML = carouselHTML; 
              }
+             
+             // --- After populating, initialize the carousel script ---
+             initializeCarousel();
         }
 
 
@@ -1276,16 +1427,230 @@
             closeBtn.addEventListener('click', closeModal); modalBackdrop.addEventListener('click', closeModal);
             window.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !modal.classList.contains('hidden')) { closeModal(); } });
         }
+        
+        // --- NEW Carousel JS ---
+        function initializeCarousel() {
+            const carouselElement = document.querySelector('#constructors-list-container .carousel');
+            if (!carouselElement) {
+                console.error("Carousel element not found for initialization.");
+                return;
+            }
+            
+            let progress = 50;
+            let startX = 0;
+            let active = 0;
+            let isDown = false;
+
+            const speedWheel = 0.02;
+            const speedDrag = -0.1;
+
+            const $items = carouselElement.querySelectorAll('.carousel-item');
+            const $cursors = document.querySelectorAll('.cursor');
+            
+            if ($items.length === 0) return; // No items to init
+
+            const getZindex = (array, index) => (array.map((_, i) => (index === i) ? array.length : array.length - Math.abs(index - i)));
+
+            const displayItems = (item, index, active) => {
+                const zIndex = getZindex([...$items], active)[index];
+                item.style.setProperty('--zIndex', zIndex);
+                item.style.setProperty('--active', (index - active) / $items.length);
+            }
+
+            const animate = () => {
+                progress = Math.max(0, Math.min(progress, 100));
+                active = Math.floor(progress / 100 * ($items.length - 1));
+                
+                $items.forEach((item, index) => displayItems(item, index, active));
+            }
+            animate();
+
+            $items.forEach((item, i) => {
+                item.addEventListener('click', () => {
+                    progress = (i / ($items.length - 1)) * 100; // Corrected progress logic
+                    animate();
+                });
+            });
+
+            const handleWheel = e => {
+                e.preventDefault(); // Prevent page scroll while over carousel
+                const wheelProgress = e.deltaY * speedWheel;
+                progress = progress + wheelProgress;
+                animate();
+            }
+
+            const handleMouseMove = (e) => {
+                if (e.type === 'mousemove') {
+                    $cursors.forEach(($cursor) => {
+                        $cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+                    });
+                }
+                if (!isDown) return;
+                const x = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+                const mouseProgress = (x - startX) * speedDrag;
+                progress = progress + mouseProgress;
+                startX = x;
+                animate();
+            }
+
+            const handleMouseDown = e => {
+                isDown = true;
+                startX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+            }
+
+            const handleMouseUp = () => {
+                isDown = false;
+            }
+
+            // Attach listeners to the carousel element
+            carouselElement.addEventListener('mousewheel', handleWheel, { passive: false });
+            carouselElement.addEventListener('mousedown', handleMouseDown);
+            carouselElement.addEventListener('mousemove', handleMouseMove);
+            carouselElement.addEventListener('mouseup', handleMouseUp);
+            carouselElement.addEventListener('mouseleave', handleMouseUp); // Stop dragging if mouse leaves
+            carouselElement.addEventListener('touchstart', handleMouseDown, { passive: true });
+            carouselElement.addEventListener('touchmove', handleMouseMove, { passive: true });
+            carouselElement.addEventListener('touchend', handleMouseUp);
+            
+            // Also add mouse move to document for cursor
+            document.addEventListener('mousemove', (e) => {
+                 if (e.type === 'mousemove') {
+                    $cursors.forEach(($cursor) => {
+                        $cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+                    });
+                }
+            });
+        }
+        // --- END Carousel JS ---
+        
+        
+        // --- NEW Three.js Loading Screen ---
+        function initLoadingAnimation() {
+            let scene, camera, renderer, shape, tl, animationFrameId;
+            const container = document.getElementById('loading-screen');
+            if (!container) return;
+
+            // 1. Scene
+            scene = new THREE.Scene();
+
+            // 2. Camera
+            camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000 );
+            camera.position.set(500, 500, 500);
+            camera.lookAt(scene.position);
+            camera.updateProjectionMatrix();
+
+            // 3. Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            renderer.setClearColor( 0x202020, 1 );
+            renderer.shadowMap.enabled = true; // Updated syntax
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            container.appendChild( renderer.domElement );
+
+            // 4. Lights
+            const shadowlight = new THREE.DirectionalLight( 0xffffff, 1.8 );
+            shadowlight.position.set( 0, 50, 0 );
+            shadowlight.castShadow = true;
+            shadowlight.shadow.darkness = 0.1; // Note: darkness is deprecated, use opacity on material
+            scene.add(shadowlight);
+
+            const light = new THREE.DirectionalLight( 0xffffff, 1.8 );
+            light.position.set( 60, 100, 20 );
+            scene.add(light);
+          
+            const backLight = new THREE.DirectionalLight( 0xffffff, 1 );
+            backLight.position.set( -40, 100, 20 );
+            scene.add(backLight);
+
+            // 5. Floor
+            const floorGeometry = new THREE.PlaneGeometry( 500, 500, 1, 1 );
+            const floorMaterial = new THREE.MeshLambertMaterial( { color: 0x202020, side: THREE.DoubleSide } ); // Use MeshLambertMaterial for shadows
+            const floor = new THREE.Mesh( floorGeometry, floorMaterial );
+            floor.position.y = -150;
+            floor.rotation.x = -Math.PI / 2; // Correct rotation
+            floor.receiveShadow = true;
+            scene.add(floor);
+
+            // 6. Shape
+            const geometry = new THREE.BoxGeometry( 50, 50, 50 );
+            const material = new THREE.MeshLambertMaterial({color : 0xF9F8ED, flatShading: true}); // Updated syntax
+            shape = new THREE.Mesh(geometry, material);
+            shape.castShadow = true;
+            shape.receiveShadow = false;
+            scene.add(shape);
+
+            // 7. Animation (GSAP 3)
+            tl = gsap.timeline({ repeat: -1 ,repeatDelay:0.5 });
+            tl.to(shape.scale, {duration: 0.5, x: 2, ease: "expo.out"});
+            tl.to(shape.scale, {duration: 0.5, z: 2, ease: "expo.out"});
+            tl.to(shape.scale, {duration: 1, y: 2, ease: "elastic.out"});
+            tl.to(shape.scale, {duration: 0.7, z: 1, x:1, y:1, ease: "expo.out"});
+            tl.to(shape.rotation, {duration: 0.7, y:-Math.PI, ease: "expo.out"}, "=-0.7");
+
+            // 8. Render loop
+            function render() {
+                animationFrameId = requestAnimationFrame(render);
+                renderer.render(scene, camera);
+            }
+            render();
+
+            // 9. Resize handler
+            function onWindowResize() {
+                camera.left = window.innerWidth / - 2;
+                camera.right = window.innerWidth / 2;
+                camera.top = window.innerHeight / 2;
+                camera.bottom = window.innerHeight / - 2;
+                camera.updateProjectionMatrix();
+                renderer.setSize( window.innerWidth, window.innerHeight );
+            }
+            window.addEventListener( 'resize', onWindowResize, false );
+            
+            // 10. Cleanup function
+            return function cleanup() {
+                window.removeEventListener('resize', onWindowResize);
+                cancelAnimationFrame(animationFrameId);
+                tl.kill(); // Stop GSAP animation
+                scene.remove(shape);
+                geometry.dispose();
+                material.dispose();
+                scene.remove(floor);
+                floorGeometry.dispose();
+                floorMaterial.dispose();
+                // Dispose lights if needed
+                renderer.dispose();
+                if (container.contains(renderer.domElement)) {
+                    container.removeChild(renderer.domElement);
+                }
+                scene = null;
+                camera = null;
+                renderer = null;
+            }
+        }
+        // --- END Three.js Loading Screen ---
 
 
         // --- PAGE INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
              // --- Loading Screen Logic ---
             const loadingScreen = document.getElementById('loading-screen');
+            let cleanupLoadingAnimation = null;
+            
             if (loadingScreen) {
+                // Initialize the three.js animation
+                cleanupLoadingAnimation = initLoadingAnimation();
+                
                 const animationDuration = 3500; const fadeDuration = 500;
-                loadingScreen.style.transition = `opacity ${fadeDuration}ms ease-out ${animationDuration}ms, visibility ${fadeDuration}ms ease-out ${animationDuration}ms`;
-                setTimeout(() => { loadingScreen.classList.add('hidden'); }, animationDuration);
+                // Set fade-out transition
+                loadingScreen.style.transition = `opacity ${fadeDuration}ms ease-out, visibility ${fadeDuration}ms ease-out`;
+                
+                // Hide the screen after the full animation + fade duration
+                setTimeout(() => { 
+                    loadingScreen.classList.add('hidden');
+                    // Clean up the three.js scene after it's hidden
+                    if (cleanupLoadingAnimation) {
+                        cleanupLoadingAnimation();
+                    }
+                }, animationDuration + fadeDuration);
             }
              // --- End Loading Screen Logic ---
 
@@ -1319,6 +1684,9 @@
                     window.addEventListener('scroll', () => {
                         // Calculate scroll progress (0 to 1)
                         const totalScrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+                        // Avoid division by zero if content is shorter than viewport
+                        if (totalScrollableHeight <= 0) return; 
+                        
                         const scrollProgress = window.scrollY / totalScrollableHeight;
                         
                         // Calculate target video time
@@ -1354,9 +1722,6 @@
             setupCalendarModal();
 
             // --- p5.js Initialization (REMOVED) ---
-            // new p5(createP5Sketch("#standings"));
-            // new p5(createP5Sketch("#contact"));
-            // --- End p5.js Initialization ---
 
             // --- NEW Overlay Navigation Script ---
             $('.open-overlay').click(function() {
