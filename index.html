@@ -330,6 +330,32 @@
             text-transform: uppercase;
         }
 
+        /* --- NEW: Always visible points --- */
+        #driver-card-grid .card .contentBx .points-display {
+            position: relative;
+            display: inline-block; /* Allows margin:auto centering */
+            padding: 2px 8px;
+            margin-top: 8px; /* Space from name */
+            font-family: 'Inter', sans-serif; /* INTER */
+            font-size: 14px;
+            color: #111;
+            background: #fff;
+            border-radius: 4px;
+            font-weight: 500; /* Bolder */
+            transition: 0.5s;
+            /* Ensure it's visible */
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #driver-card-grid .card:hover .contentBx .points-display {
+            /* Move points up slightly on hover to make room for Pos */
+            transform: translateY(-2px);
+            transition-delay: 0.2s; /* Delay it slightly */
+        }
+        /* --- END NEW --- */
+
+
         /* Using .details for Pos/Points */
         #driver-card-grid .card .contentBx .details {
             display: flex;
@@ -342,6 +368,8 @@
             visibility: hidden; /* Hidden by default */
             padding-top: 0;
             padding-bottom: 0;
+            /* NEW: Add margin top to clear the points */
+            margin-top: 8px;
         }
 
         #driver-card-grid .card:hover .contentBx .details {
@@ -1538,15 +1566,18 @@
                     </div>
                     <div class="contentBx">
                         <h2>${driverName}</h2>
+                        
+                        <!-- NEW: Always visible points -->
+                        <div class="points-display">
+                            <span>${driver.points} PTS</span>
+                        </div>
+
                         <div class="details">
                              <div class="detail-item">
                                  <h3>Pos :</h3>
                                  <span>P${driver.pos}</span>
                              </div>
-                             <div class="detail-item">
-                                 <h3>Points :</h3>
-                                 <span>${driver.points} PTS</span>
-                             </div>
+                             <!-- REMOVED Points from here -->
                         </div>
                     </div>
                 </div>
@@ -1978,7 +2009,7 @@
                 modalEls.modalMap.src = race.mapUrl;
                 modalEls.modalMap.alt = `${race.track} Map`;
                 modalEls.modalMap.onerror = () => {
-                    modalEls.modalMap.src = `https://placehold.co/768x432/374151/e11d48?text=Map+Error`;
+                    modalEls.modalMap.src = `https::/placehold.co/768x432/374151/e11d48?text=Map+Error`;
                     modalEls.modalMap.alt = 'Track map loading error';
                 };
                 modalEls.modalDate.textContent = race.date;
