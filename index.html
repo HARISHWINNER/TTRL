@@ -16,8 +16,8 @@
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <!-- three.js (for loading screen) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- three.js (for loading screen) - DEFERRED for non-blocking load -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
     
     <!-- GSAP (for loading screen & scrollbar) - Will be imported as module -->
 
@@ -249,8 +249,9 @@
         #driver-card-grid .card {
             position: relative;
             width: 100%; /* Fill the grid column */
-            height: 320px; /* CHANGED: Fixed height */
-            background: #232323;
+            height: 400px; /* CHANGED: Increased height again */
+            /* MODIFIED: Adjusted gradient to show more color */
+            background: linear-gradient(145deg, var(--color, #e11d48) 20%, #232323 90%);
             border-radius: 20px;
             overflow: hidden;
             color: #fff; /* Default text color */
@@ -263,13 +264,16 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: var(--color, #9bdc28); /* Use team color */
+            /* MODIFIED: Changed to a subtle overlay/sheen */
+            background: linear-gradient(145deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%);
             clip-path: circle(100px at 80% 20%); /* Smaller circle */
             transition: 0.5s ease-in-out;
+            opacity: 0; /* MODIFIED: Start hidden */
         }
 
         #driver-card-grid .card:hover:before {
             clip-path: circle(300px at 80% -20%);
+            opacity: 1; /* MODIFIED: Show sheen on hover */
         }
 
         /* Removed background text (:after) for drivers */
@@ -280,7 +284,7 @@
             transform: translateY(-50%);
             z-index: 10000;
             width: 100%;
-            height: 160px; /* CHANGED: Half of 320px */
+            height: 200px; /* CHANGED: Half of 400px */
             transition: 0.5s;
         }
 
@@ -311,7 +315,7 @@
         }
 
         #driver-card-grid .card:hover .contentBx {
-            height: 160px; /* CHANGED: Half of 320px */
+            height: 200px; /* CHANGED: Half of 400px */
         }
 
         #driver-card-grid .card .contentBx h2 {
@@ -503,10 +507,17 @@
 
 
         #constructors-list-container .carousel-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            width: 80%; /* CHANGED: Scaled down from 100% */
+            height: 80%; /* CHANGED: Scaled down from 100% */
+            object-fit: contain; /* CHANGED: from 'cover' to 'contain' to prevent stretching */
             pointer-events: none;
+            
+            /* ADDED: Centering the smaller image */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0; /* ADDED: Ensure it's behind text/gradient */
         }
 
         /* Carousel Cursors */
@@ -884,62 +895,11 @@
         }
         /* --- End Compact Timer --- */
 
-        /* --- NEW Curved Scrollbar --- */
-        .scroller__bar {
-            position: fixed;
-            top: 1rem;
-            bottom: 1rem;
-            right: 1rem;
-            pointer-events: none;
-            width: calc(var(--radius) * 2px);
-            overflow: visible !important;
-            z-index: 9998; /* Below nav, above content */
-            --radius: 32;
-            --stroke-width: 5;
-            --inset: 6;
-            --thumb-size: 70;
-            --color: #e11d48; /* TTRL Red */
-            --bar-alpha: 0.9;
-            --track-alpha: 0.2;
-            --track-length: 1000; /* Default, will be updated by JS */
-        }
-        .scroller__bar path {
-            stroke-width: calc(var(--stroke-width) * 1px);
-        }
-
-        .bar__thumb {
-            stroke: color-mix(
-                in hsl,
-                var(--color, #fff),
-                #0000 calc((1 - var(--bar-alpha, 0.5)) * 100%)
-            );
-            stroke-dasharray: var(--thumb-size) var(--track-length);
-            stroke-dashoffset: 0; /* JS will control this */
-        }
-
-        .bar__track {
-            stroke: color-mix(
-                in hsl,
-                var(--color, #fff),
-                #0000 calc((1 - var(--track-alpha, 0.2)) * 100%)
-            );
-        }
+        /* --- NEW Curved Scrollbar (REMOVED) --- */
         
-        /* Link animation timeline to the page's scroll */
-        @supports (animation-timeline: scroll()) {
-            .bar__thumb {
-                /* We'll use JS to control this for the video sync */
-                /* animation: scroll-progress auto linear; */
-                /* animation-timeline: --page; */
-            }
-        }
-        
-        /* Keyframes will be injected by JS */
-        /* --- END Curved Scrollbar --- */
-
     </style>
     
-    <!-- ADDED STYLE TAG FOR SCROLLER KEYFRAMES -->
+    <!-- (REMOVED) STYLE TAG FOR SCROLLER KEYFRAMES -->
     <style id="curved-scroller-styles"></style>
 
 </head>
@@ -949,7 +909,7 @@
     <div id="video-fallback-bg"></div> <!-- Fallback bg -->
     <video id="scroll-video" muted playsinline preload="auto" loop>
         <!-- Use the RAW video link -->
-        <source src="https://raw.githubusercontent.com/S-HARISH44/TTRL/2e08d9d6e75d5621deee1b522fb5a6dc91bb4689/RESOURCES/sample_frame.mp4?raw=true" type="video/mp4">
+        <source src="https://github.com/S-HARISH44/TTRL/blob/8a9c0a93476e7cfc23669fb97ba9975d2e6538c8/RESOURCES/final%2060%20fps%20from%20ae.mp4?raw=true" type="video/mp4">
         Your browser does not support the video tag.
     </video>
     
@@ -962,15 +922,7 @@
     <div class="cursor"></div>
     <div class="cursor cursor2"></div>
     
-    <!-- NEW Curved Scrollbar SVG -->
-    <svg
-      class="scroller__bar bar"
-      viewBox="0 0 56 56"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path class="bar__thumb" fill="none" stroke-linecap="round" />
-      <path class="bar__track" fill="none" stroke-linecap="round" />
-    </svg>
+    <!-- (REMOVED) Curved Scrollbar SVG -->
 
 
     <!-- NEW Overlay Navigation -->
@@ -1258,84 +1210,145 @@
         </div>
     </div>
 
+    <!-- 
+      OPTIMIZATION: Data is separated from logic.
+      All large data arrays are placed in this script block.
+      They are attached to the 'window' object to make them
+      accessible to the module script below, without polluting
+      the main application logic.
+    -->
+    <script>
+        window.TTRL_DATA = {
+            // League Calendar Data
+            leagueCalendar: [
+                { round: 0, gp: "Pre-Season Testing", date: "12/09/25", track: "Suzuka International Racing Course", mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Suzuka-International-Racing-Course--768x432.png", insight: "A crucial time for teams to gather data, test new parts, and understand the car before the championship begins at Bahrain.", stats: null },
+                { round: 1, gp: "Bahrain Grand Prix", date: "19/09/25", track: "Bahrain International Circuit", mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Bahrain-circuit-768x432.png", insight: "A 'stop and go' track known for heavy braking zones and good overtaking opportunities, especially into Turns 1 and 4. Tire degradation is a major factor.", stats: { laps: 29, length: "5.412 km" } },
+                { round: 2, gp: "Australian Grand Prix", date: "26/09/25", track: "Albert Park Circuit", mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Albert-Park-Circuit-768x432.png", insight: "A fast, flowing street circuit with multiple DRS zones. It's a high-speed track that feels like a permanent circuit. Key overtaking spots are Turns 1, 3, and 9.", stats: { laps: 29, length: "5.278 km" } },
+                { round: 3, gp: "Emilia Romagna Grand Prix", date: "03/10/25", track: "Autodromo Enzo e Dino Ferrari (Imola)", mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Autodromo-Enzo-e-Dino-Ferrari-768x432.png", insight: "An old-school, narrow track with punishing gravel traps. It's fast, unforgiving, and very technical. Overtaking is notoriously difficult, so qualifying and strategy are critical.", stats: { laps: 32, length: "4.909 km" } },
+                { round: 4, gp: "Spanish Grand Prix", date: "10/10/25", track: "Circuit de Barcelona-Catalunya", mapUrl: "https://www.sportmonks.com/wp-content/uploads/2024/02/Circuit-de-Barcelona-768x432.png", insight: "A well-known test track with a great mix of high and low-speed corners. The long, sweeping Turn 3 is a true test of car balance. Tire management is crucial here.", stats: { laps: 33, length: "4.657 km" } },
+                { round: "break", gp: "Season Break", date: "", track: "Time for teams to regroup and upgrade.", mapUrl: "https://placehold.co/768x432/1f2937/e11d48?text=SEASON+BREAK", insight: "A mid-season break for teams to analyze performance, develop upgrades, and for drivers to recharge.", stats: null },
+                { round: 5, gp: "Great Britain Grand Prix", date: "24/10/25", track: "Silverstone Circuit", mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Silverstone-Circuit--768x432.png", insight: "An iconic, high-speed circuit featuring legendary corners like Maggotts, Becketts, and Chapel. Requires high downforce and strong aerodynamic efficiency.", stats: { laps: 26, length: "5.891 km" } },
+                { round: 6, gp: "Las Vegas Grand Prix", date: "31/10/25", track: "Las Vegas Strip Circuit", mapUrl: "https://www.sportmonks.com/wp-content/uploads/2024/02/Las-Vegas-GP-768x432.png", insight: "A fast street circuit with long straights, especially down the famous Strip. Expect high top speeds, heavy braking, and many overtaking opportunities.", stats: { laps: 25, length: "6.201 km" } },
+                { round: 7, gp: "Belgian Grand Prix", date: "07/11/25", track: "Circuit de Spa-Francorchamps", mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Circuit-de-Spa-Francorchamps-768x432.png", insight: "A driver favorite, known for its length, elevation changes, and the iconic Eau Rouge/Raidillon sequence. It's a high-speed, low-downforce track.", stats: { laps: 22, length: "7.004 km" } },
+                { round: 8, gp: "Austrian Grand Prix", date: "14/11/25", track: "Red Bull Ring", mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Red-Bull-Ring-768x432.png", insight: "A short, 'power' circuit with long straights and heavy uphill braking zones. The lap is very quick. It offers great overtaking opportunities into Turns 1, 3, and 4.", stats: { laps: 36, length: "4.318 km" } },
+                { round: 9, gp: "São Paulo Grand Prix", date: "21/11/25", track: "Autódromo José Carlos Pace (Interlagos)", mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Auto%CC%81dromo-Jose%CC%81-Carlos-Pace--768x432.png", insight: "A classic anti-clockwise track with significant elevation changes. The long uphill run to Turn 1 is a major DRS zone. The 'Senna S' is an iconic opening sequence.", stats: { laps: 36, length: "4.309 km" } },
+                { round: 10, gp: "Abu Dhabi Grand Prix", date: "28/11/25", track: "Yas Marina Circuit", mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Yas-Marina-Circuit--768x432.png", insight: "A modern circuit with a mix of high-speed straights and a technical final sector. Overtaking was improved with recent layout changes.", stats: { laps: 29, length: "5.281 km" } }
+            ],
 
+            // Original driver data
+            driverData: [
+                { driver: "Simman", team: "Ferrari", points: 109 },
+                { driver: "Wi7ard", team: "Williams", points: 96 },
+                { driver: "TheGodfather", team: "Alpine", points: 40 },
+                { driver: "Overlord", team: "McLaren", points: 34 },
+                { driver: "Kentucky", team: "Haas", points: 26 },
+                { driver: "Oxygen", team: "Kick Sauber", points: 18 },
+                { driver: "ApexEntropy", team: "Alpine", points: 33 },
+                { driver: "Vibin", team: "Aston Martin", points: 33 },
+                { driver: "Mahesh", team: "Williams", points: 17 },
+                { driver: "Clone", team: "Racing Bulls", points: 8 },
+                { driver: "Bopedope", team: "McLaren", points: 6 },
+                { driver: "Apurrv", team: "Aston Martin", points: 17 },
+                { driver: "Majunu", team: "Ferrari", points: 4 },
+                { driver: "Denji", team: "Red Bull Racing", points: 4 },
+                { driver: "Harish", team: "Haas", points: 25 },
+                { driver: "Memb", team: "Mercedes", points: 16 },
+                { driver: "Doc YT", team: "Racing Bulls", points: 1 },
+                { driver: "Maayaone", team: "Mercedes", points: 0 },
+                { driver: "Bala", team: "Kick Sauber", points: 0 },
+                { driver: "HarryBeckham", team: "Red Bull Racing", points: 0 }
+            ],
+
+            // Team Color & Logo Maps
+            teamColorMap: {
+                "Ferrari": "hsl(357, 100%, 49%)",
+                "Williams": "hsl(217, 100%, 49%)",
+                "Alpine": "hsl(205, 100%, 50%)",
+                "Haas": "hsl(220, 3%, 73%)",
+                "McLaren": "hsl(32, 100%, 50%)",
+                "Kick Sauber": "hsl(120, 73%, 58%)",
+                "Aston Martin": "hsl(172, 100%, 22%)",
+                "Racing Bulls": "hsl(211, 100%, 64%)",
+                "Mercedes": "hsl(174, 100%, 41%)",
+                "Red Bull Racing": "hsl(240, 100%, 48%)",
+                "default": "hsl(347, 83%, 54%)"
+            },
+            
+            teamLogoMap: {
+                "Ferrari": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/ferrari.png",
+                "Williams": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/williams.png",
+                "Alpine": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/alpine.png",
+                "Haas": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/haas.png",
+                "McLaren": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/mclaren.png",
+                "Kick Sauber": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/kick_sauber.png",
+                "Aston Martin": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/martin.png",
+                "Racing Bulls": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/vcarb.png",
+                "Mercedes": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/mercedes.png",
+                "Red Bull Racing": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/redbull.png"
+            },
+            
+            teamImageMap: {
+                "Ferrari": "https://raw.githubusercontent.com/HARISHWINNER/TTRL/0209d9644059efa457ae2add943edb21beba6349/RESOURCES/Constructor/ferrari.png",
+                "Williams": "https://raw.githubusercontent.com/HARISHWINNER/TTRL/0209d9644059efa457ae2add943edb21beba6349/RESOURCES/Constructor/williams.png",
+                "Alpine": "https://github.com/S-HARISH44/TTRL/blob/8a9c0a93476e7cfc23669fb97ba9975d2e6538c8/RESOURCES/Constructor/alpine.png?raw=true",
+                "Haas": "https://raw.githubusercontent.com/HARISHWINNER/TTRL/0209d9644059efa457ae2add943edb21beba6349/RESOURCES/Constructor/haas.png",
+                "Aston Martin": "https://github.com/S-HARISH44/TTRL/blob/8a9c0a93476e7cfc23669fb97ba9975d2e6538c8/RESOURCES/Constructor/aston.png?raw=true",
+                "Kick Sauber": "https://raw.githubusercontent.com/HARISHWINNER/TTRL/0209d9644059efa457ae2add943edb21beba6349/RESOURCES/Constructor/stake.png",
+                "McLaren": "https://raw.githubusercontent.com/HARISHWINNER/TTRL/0209d9644059efa457ae2add943edb21beba6349/RESOURCES/Constructor/mclaren.png",
+                "Red Bull Racing": "https://raw.githubusercontent.com/HARISHWINNER/TTRL/0209d9644059efa457ae2add943edb21beba6349/RESOURCES/Constructor/redbull.png",
+                "Racing Bulls": "https://raw.githubusercontent.com/HARISHWINNER/TTRL/0209d9644059efa457ae2add943edb21beba6349/RESOURCES/Constructor/racing_bulls.png",
+                "Mercedes": "https://raw.githubusercontent.com/HARISHWINNER/TTRL/0209d9644059efa457ae2add943edb21beba6349/RESOURCES/Constructor/mecedes.png" // Typo in URL maintained
+            },
+            
+            defaultCarImage: "https://placehold.co/300x400/1f2937/6b7280?text=Car+Image"
+        };
+    </script>
+
+
+    <!-- 
+      OPTIMIZATION: Main application logic.
+      This module script is deferred by default.
+      It imports libraries and our local data,
+      groups functions by role, and runs a single
+      'main' function on DOMContentLoaded.
+    -->
     <script type="module">
-        // NEW: Import GSAP and ScrollTrigger as modules
+        // --- IMPORTS ---
         import gsap from 'https://cdn.skypack.dev/gsap@3.12.0';
         import { ScrollTrigger } from 'https://cdn.skypack.dev/gsap@3.12.0/ScrollTrigger';
         
         // Register the ScrollTrigger plugin
         gsap.registerPlugin(ScrollTrigger);
 
+        // Import data from the global scope
+        const {
+            leagueCalendar,
+            driverData,
+            teamColorMap,
+            teamLogoMap,
+            teamImageMap,
+            defaultCarImage
+        } = window.TTRL_DATA;
 
-        // --- DATA ---
 
-        // League Calendar Data
-        const leagueCalendar = [
-            { round: 0, gp: "Pre-Season Testing", date: "12/09/25", track: "Suzuka International Racing Course", mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Suzuka-International-Racing-Course--768x432.png", insight: "A crucial time for teams to gather data, test new parts, and understand the car before the championship begins at Bahrain.", stats: null },
-            { round: 1, gp: "Bahrain Grand Prix", date: "19/09/25", track: "Bahrain International Circuit", mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Bahrain-circuit-768x432.png", insight: "A 'stop and go' track known for heavy braking zones and good overtaking opportunities, especially into Turns 1 and 4. Tire degradation is a major factor.", stats: { laps: 29, length: "5.412 km" } },
-            { round: 2, gp: "Australian Grand Prix", date: "26/09/25", track: "Albert Park Circuit", mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Albert-Park-Circuit-768x432.png", insight: "A fast, flowing street circuit with multiple DRS zones. It's a high-speed track that feels like a permanent circuit. Key overtaking spots are Turns 1, 3, and 9.", stats: { laps: 29, length: "5.278 km" } },
-            { round: 3, gp: "Emilia Romagna Grand Prix", date: "03/10/25", track: "Autodromo Enzo e Dino Ferrari (Imola)", mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Autodromo-Enzo-e-Dino-Ferrari-768x432.png", insight: "An old-school, narrow track with punishing gravel traps. It's fast, unforgiving, and very technical. Overtaking is notoriously difficult, so qualifying and strategy are critical.", stats: { laps: 32, length: "4.909 km" } },
-            { round: 4, gp: "Spanish Grand Prix", date: "10/10/25", track: "Circuit de Barcelona-Catalunya", mapUrl: "https://www.sportmonks.com/wp-content/uploads/2024/02/Circuit-de-Barcelona-768x432.png", insight: "A well-known test track with a great mix of high and low-speed corners. The long, sweeping Turn 3 is a true test of car balance. Tire management is crucial here.", stats: { laps: 33, length: "4.657 km" } },
-            { round: "break", gp: "Season Break", date: "", track: "Time for teams to regroup and upgrade.", mapUrl: "https://placehold.co/768x432/1f2937/e11d48?text=SEASON+BREAK", insight: "A mid-season break for teams to analyze performance, develop upgrades, and for drivers to recharge.", stats: null },
-            { round: 5, gp: "Great Britain Grand Prix", date: "24/10/25", track: "Silverstone Circuit", mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Silverstone-Circuit--768x432.png", insight: "An iconic, high-speed circuit featuring legendary corners like Maggotts, Becketts, and Chapel. Requires high downforce and strong aerodynamic efficiency.", stats: { laps: 26, length: "5.891 km" } },
-            { round: 6, gp: "Las Vegas Grand Prix", date: "31/10/25", track: "Las Vegas Strip Circuit", mapUrl: "https://www.sportmonks.com/wp-content/uploads/2024/02/Las-Vegas-GP-768x432.png", insight: "A fast street circuit with long straights, especially down the famous Strip. Expect high top speeds, heavy braking, and many overtaking opportunities.", stats: { laps: 25, length: "6.201 km" } },
-            { round: 7, gp: "Belgian Grand Prix", date: "07/11/25", track: "Circuit de Spa-Francorchamps", mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Circuit-de-Spa-Francorchamps-768x432.png", insight: "A driver favorite, known for its length, elevation changes, and the iconic Eau Rouge/Raidillon sequence. It's a high-speed, low-downforce track.", stats: { laps: 22, length: "7.004 km" } },
-            { round: 8, gp: "Austrian Grand Prix", date: "14/11/25", track: "Red Bull Ring", mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Red-Bull-Ring-768x432.png", insight: "A short, 'power' circuit with long straights and heavy uphill braking zones. The lap is very quick. It offers great overtaking opportunities into Turns 1, 3, and 4.", stats: { laps: 36, length: "4.318 km" } },
-            { round: 9, gp: "São Paulo Grand Prix", date: "21/11/25", track: "Autódromo José Carlos Pace (Interlagos)", mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Auto%CC%81dromo-Jose%CC%81-Carlos-Pace--768x432.png", insight: "A classic anti-clockwise track with significant elevation changes. The long uphill run to Turn 1 is a major DRS zone. The 'Senna S' is an iconic opening sequence.", stats: { laps: 36, length: "4.309 km" } },
-            { round: 10, gp: "Abu Dhabi Grand Prix", date: "28/11/25", track: "Yas Marina Circuit", mapUrl: "https://www.sportmonks.com/wp-content/uploads/2022/07/Yas-Marina-Circuit--768x432.png", insight: "A modern circuit with a mix of high-speed straights and a technical final sector. Overtaking was improved with recent layout changes.", stats: { laps: 29, length: "5.281 km" } }
-        ];
+        // --- DATA & STATE ---
 
-        // Original data, DO NOT MODIFY
-        const driverData = [
-            // No 'pos' needed, it will be auto-assigned
-            { driver: "Simman", team: "Ferrari", points: 109 },
-            { driver: "Wi7ard", team: "Williams", points: 96 },
-            { driver: "TheGodfather", team: "Alpine", points: 40 },
-            { driver: "Overlord", team: "McLaren", points: 34 },
-            { driver: "Kentucky", team: "Haas", points: 26 },
-            { driver: "Oxygen", team: "Kick Sauber", points: 18 },
-            { driver: "ApexEntropy", team: "Alpine", points: 33 },
-            { driver: "Vibin", team: "Aston Martin", points: 33 },
-            { driver: "Mahesh", team: "Williams", points: 17 },
-            { driver: "Clone", team: "Racing Bulls", points: 8 },
-            { driver: "Bopedope", team: "McLaren", points: 6 },
-            { driver: "Apurrv", team: "Aston Martin", points: 17 },
-            { driver: "Majunu", team: "Ferrari", points: 4 },
-            { driver: "Denji", team: "Red Bull Racing", points: 4 },
-            { driver: "Harish", team: "Haas", points: 25 },
-            { driver: "Memb", team: "Mercedes", points: 16 },
-            { driver: "Doc YT", team: "Racing Bulls", points: 1 },
-            { driver: "Maayaone", team: "Mercedes", points: 0 },
-            { driver: "Bala", team: "Kick Sauber", points: 0 },
-            { driver: "HarryBeckham", team: "Red Bull Racing", points: 0 }
-            // Removed Reserve Drivers
-        ];
-        
-        // NEW: Mutable arrays for processed data
         let currentDriverStandings = [];
         let currentConstructorStandings = [];
         
-        // --- NEW: Function to calculate and sort all standings ---
+        /**
+         * Processes raw driver data into sorted driver and constructor standings.
+         */
         function processStandings() {
             // 1. Process Driver Standings
-            // Sort drivers by points, descending
-            currentDriverStandings = [...driverData].sort((a, b) => {
-                // Main drivers sorted by points
-                return b.points - a.points;
-            });
-            
-            // Assign positions
-            currentDriverStandings.forEach((driver, index) => {
-                driver.pos = index + 1;
-            });
+            currentDriverStandings = [...driverData]
+                .sort((a, b) => b.points - a.points)
+                .map((driver, index) => ({ ...driver, pos: index + 1 }));
 
             // 2. Process Constructor Standings
             const constructorMap = new Map();
             
-            // Sum points and collect drivers for each team
             currentDriverStandings.forEach(driver => {
-                // Ignore Reserve drivers for constructor standings (if any were left)
                 if (driver.team === 'Reserve') return;
 
                 if (!constructorMap.has(driver.team)) {
@@ -1348,92 +1361,67 @@
                 
                 const teamData = constructorMap.get(driver.team);
                 teamData.points += driver.points;
-                // Store driver name and points for the card
                 teamData.drivers.push({ name: driver.driver, points: driver.points });
             });
 
-            // Convert map to array
-            currentConstructorStandings = Array.from(constructorMap.values());
-            
-            // Sort constructors by points, descending
-            currentConstructorStandings.sort((a, b) => b.points - a.points);
-            
-            // Assign positions and ensure driver data is sorted by points for display
-            currentConstructorStandings.forEach((team, index) => {
-                team.pos = index + 1;
-                // Sort drivers within the team by points for display
-                team.drivers.sort((a, b) => b.points - a.points);
-                
-                // Ensure there are always two driver entries for the card
-                while (team.drivers.length < 2) {
-                    team.drivers.push({ name: "N/A", points: 0 });
-                }
-            });
+            // Convert map to array and sort
+            currentConstructorStandings = Array.from(constructorMap.values())
+                .sort((a, b) => b.points - a.points)
+                .map((team, index) => {
+                    // Sort drivers within the team
+                    team.drivers.sort((a, b) => b.points - a.points);
+                    // Ensure two driver entries
+                    while (team.drivers.length < 2) {
+                        team.drivers.push({ name: "N/A", points: 0 });
+                    }
+                    return { ...team, pos: index + 1 };
+                });
         }
-        // --- END NEW Function ---
-
-
-         // --- Team Color & Logo Maps ---
-        // Used for --color on driver/constructor cards
-        const teamColorMap = {
-            "Ferrari": "hsl(357, 100%, 49%)", // #DC0000
-            "Williams": "hsl(217, 100%, 49%)", // #0082FA
-            "Alpine": "hsl(205, 100%, 50%)", // #0090FF
-            "Haas": "hsl(220, 3%, 73%)", // #B6B6B8
-            "McLaren": "hsl(32, 100%, 50%)", // #FF8700
-            "Kick Sauber": "hsl(120, 73%, 58%)", // #52E252
-            "Aston Martin": "hsl(172, 100%, 22%)", // #006F62
-            "Racing Bulls": "hsl(211, 100%, 64%)", // #469BFF
-            "Mercedes": "hsl(174, 100%, 41%)", // #00D2BE
-            "Red Bull Racing": "hsl(240, 100%, 48%)", // #0600EF
-            // "Reserve": "hsl(0, 0%, 50%)", // #808080 // Removed
-            "default": "hsl(347, 83%, 54%)" // #e11d48
-        };
         
-        // Used for team logos on driver cards (Nike Style)
-        const teamLogoMap = {
-            "Ferrari": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/ferrari.png",
-            "Williams": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/williams.png",
-            "Alpine": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/alpine.png",
-            "Haas": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/haas.png",
-            "McLaren": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/mclaren.png",
-            "Kick Sauber": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/kick_sauber.png",
-            "Aston Martin": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/martin.png",
-            "Racing Bulls": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/vcarb.png",
-            "Mercedes": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/mercedes.png",
-            "Red Bull Racing": "https://raw.githubusercontent.com/S-HARISH44/TTRL-RESOURCES/d4faca0970a4d20419af0e364a9e1aebb9af0fe0/LOGOS/redbull.png"
-            // "Reserve": "https://placehold.co/200x100/808080/FFFFFF?text=RESERVE" // Removed
-        };
         
-         // Used for car images on constructor cards (Carousel Style)
-        const teamImageMap = {
-            "Ferrari": "https://raw.githubusercontent.com/HARISHWINNER/TTRL/0209d9644059efa457ae2add943edb21beba6349/RESOURCES/Constructor/ferrari.png",
-            "Williams": "https://raw.githubusercontent.com/HARISHWINNER/TTRL/0209d9644059efa457ae2add943edb21beba6349/RESOURCES/Constructor/williams.png",
-            "Alpine": "https://raw.githubusercontent.com/HARISHWINNER/TTRL/0209d9644059efa457ae2add943edb21beba6349/RESOURCES/Constructor/alpine.png",
-            "Haas": "https://raw.githubusercontent.com/HARISHWINNER/TTRL/0209d9644059efa457ae2add943edb21beba6349/RESOURCES/Constructor/haas.png",
-            "Aston Martin": "https://raw.githubusercontent.com/HARISHWINNER/TTRL/0209d9644059efa457ae2add943edb21beba6349/RESOURCES/Constructor/aston.png",
-            "Kick Sauber": "https://raw.githubusercontent.com/HARISHWINNER/TTRL/0209d9644059efa457ae2add943edb21beba6349/RESOURCES/Constructor/stake.png",
-            "McLaren": "https://raw.githubusercontent.com/HARISHWINNER/TTRL/0209d9644059efa457ae2add943edb21beba6349/RESOURCES/Constructor/mclaren.png",
-            "Red Bull Racing": "https://raw.githubusercontent.com/HARISHWINNER/TTRL/0209d9644059efa457ae2add943edb21beba6349/RESOURCES/Constructor/redbull.png",
-            "Racing Bulls": "https://raw.githubusercontent.com/HARISHWINNER/TTRL/0209d9644059efa457ae2add943edb21beba6349/RESOURCES/Constructor/racing_bulls.png",
-            "Mercedes": "https://raw.githubusercontent.com/HARISHWINNER/TTRL/0209d9644059efa457ae2add943edb21beba6349/RESOURCES/Constructor/mecedes.png" // Typo in URL maintained
-        };
-        const defaultCarImage = "https://placehold.co/300x400/1f2937/6b7280?text=Car+Image";
+        // --- UI INITIALIZATION & POPULATION ---
+
+        /**
+         * Populates the countdown timer and finds the next race.
+         */
+        function initCountdown(gpEl, trackEl, countdownEl) {
+            const RACE_TIME_UTC = { hours: 17, minutes: 0, seconds: 0 }; 
+            const now = new Date(); 
+            let nextRace = null;
+
+            for (const race of leagueCalendar) {
+                if (race.round === 0 || race.round === "break") continue;
+                const [day, month, year] = race.date.split('/').map(Number);
+                const raceDate = new Date(Date.UTC(2000 + year, month - 1, day, RACE_TIME_UTC.hours, RACE_TIME_UTC.minutes, RACE_TIME_UTC.seconds));
+                if (raceDate > now) { 
+                    nextRace = race; 
+                    nextRace.utcDate = raceDate; 
+                    break; 
+                }
+            }
+
+            if (nextRace) { 
+                gpEl.textContent = nextRace.gp; 
+                trackEl.textContent = nextRace.track; 
+                startCountdownTimer(nextRace.utcDate.getTime(), countdownEl); 
+            } else { 
+                gpEl.textContent = "SEASON 1 COMPLETE"; 
+                trackEl.textContent = "The championship has concluded!"; 
+                countdownEl.innerHTML = '<h2 class="col-span-4 text-4xl font-bold text-gray-400 text-center py-10">SEE YOU NEXT SEASON</h2>'; 
+            }
+        }
         
-        // --- END Team Color & Logo Maps ---
-
-        // --- CORE FUNCTIONS (Moved before DOMContentLoaded) ---
-
-        // Countdown Timer Function
-        function startCountdown(targetDate) {
-            const daysEl = document.getElementById('days'); 
-            const hoursEl = document.getElementById('hours'); 
-            const minutesEl = document.getElementById('minutes'); 
-            const secondsEl = document.getElementById('seconds'); 
-            const countdownEl = document.getElementById('countdown');
+        /**
+         * The core timer logic.
+         */
+        function startCountdownTimer(targetDate, countdownEl) {
+            const daysEl = countdownEl.querySelector('#days'); 
+            const hoursEl = countdownEl.querySelector('#hours'); 
+            const minutesEl = countdownEl.querySelector('#minutes'); 
+            const secondsEl = countdownEl.querySelector('#seconds');
             
-            if (!daysEl || !hoursEl || !minutesEl || !secondsEl || !countdownEl) { 
-                console.error("Countdown elements not found!"); 
+            if (!daysEl || !hoursEl || !minutesEl || !secondsEl) { 
+                console.error("Countdown timer elements not found!"); 
                 return; 
             }
             
@@ -1447,29 +1435,26 @@
                     return; 
                 }
                 
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24)); 
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); 
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)); 
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                
-                daysEl.textContent = String(days).padStart(2, '0'); 
-                hoursEl.textContent = String(hours).padStart(2, '0'); 
-                minutesEl.textContent = String(minutes).padStart(2, '0'); 
-                secondsEl.textContent = String(seconds).padStart(2, '0');
+                daysEl.textContent = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0'); 
+                hoursEl.textContent = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0'); 
+                minutesEl.textContent = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0'); 
+                secondsEl.textContent = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
             }, 1000);
         }
 
-        // Populate Calendar Grid
-        function populateCalendar() {
-            const grid = document.getElementById('calendar-grid'); if (!grid) return; grid.innerHTML = '';
+        /**
+         * Populates the calendar grid with race cards.
+         */
+        function populateCalendar(gridEl) {
+            if (!gridEl) return; 
+            gridEl.innerHTML = '';
             
-            // Define colors for calendar cards
             const testingColor = "#0082FA"; // Williams Blue
             const raceColor = "#e11d48"; // TTRL Red
             
             leagueCalendar.forEach(race => {
                 if (race.round === "break") { 
-                    grid.innerHTML += `
+                    gridEl.innerHTML += `
                         <div class="lg:col-span-3 md:col-span-2 col-span-1 rounded-lg shadow-xl overflow-hidden flex items-center justify-center min-h-[150px] opacity-80 border-2 border-dashed border-gray-700 bg-gray-800/50">
                             <div class="p-6 text-center">
                                 <i class="fa-solid fa-pause-circle text-5xl text-gray-500 mb-3"></i>
@@ -1486,7 +1471,7 @@
                 const tagBg = isTesting ? 'bg-blue-600' : 'bg-rose-600';
                 const tagText = isTesting ? 'text-blue-400' : 'text-rose-500';
 
-                const card = `
+                gridEl.innerHTML += `
                     <div data-round="${race.round}" class="calendar-card rounded-lg shadow-xl cursor-pointer bg-gray-800/70 border border-gray-700" style="--active-color: ${activeColor};">
                         <div class="card-content p-6 relative">
                             <div class="absolute top-0 right-0 ${tagBg} text-white font-bold px-3 py-1 m-4 rounded-md text-sm" style="font-family: 'Inter', sans-serif; letter-spacing: normal; text-transform: none;">
@@ -1497,30 +1482,27 @@
                             <p class="card-track text-base text-gray-400" style="font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;">${race.track}</p>
                         </div>
                     </div>`;
-                grid.innerHTML += card;
             });
         }
 
-        // --- Standings Population and Sorting ---
+        /**
+         * Populates the driver standings grid with Nike-style cards.
+         */
+        function populateDriverCards(gridEl) {
+            if (!gridEl) return;
+            gridEl.innerHTML = ''; // Clear existing content
 
-        // NEW: Populate Driver Cards (Nike Style)
-        function populateDriverCards() {
-            const grid = document.getElementById('driver-card-grid');
-            if (!grid) return;
-            grid.innerHTML = ''; // Clear existing content
-
-            currentDriverStandings.forEach((driver) => { // Use new sorted array
+            currentDriverStandings.forEach((driver) => {
                 const teamColor = teamColorMap[driver.team] || teamColorMap['default'];
                 const logoUrl = teamLogoMap[driver.team] || `https://placehold.co/200x100/1f2937/6b7280?text=Logo`;
-                const driverName = driver.driver;
-
-                const cardHTML = `
+                
+                gridEl.innerHTML += `
                 <div class="card" style="--color: ${teamColor};">
                     <div class="imgBx">
-                        <img src="${logoUrl}" alt="${driver.team} Logo" onerror="this.src='https::placehold.co/200x100/1f2937/6b7280?text=Logo'; this.onerror=null;">
+                        <img src="${logoUrl}" alt="${driver.team} Logo" onerror="this.src='https://placehold.co/200x100/1f2937/6b7280?text=Logo'; this.onerror=null;">
                     </div>
                     <div class="contentBx">
-                        <h2>${driverName}</h2>
+                        <h2>${driver.driver}</h2>
                         <div class="details">
                              <div class="detail-item">
                                  <h3>Pos :</h3>
@@ -1532,24 +1514,21 @@
                              </div>
                         </div>
                     </div>
-                </div>
-                `;
-                grid.innerHTML += cardHTML;
+                </div>`;
             });
         }
 
-        // Populate the constructor list (NEW Carousel Item Style)
-        function populateConstructorList() {
-            const listContainer = document.getElementById('constructors-list-container');
-            if (!listContainer) return;
+        /**
+         * Populates the constructor standings with carousel-style cards.
+         */
+        function populateConstructorList(listContainerEl) {
+            if (!listContainerEl) return;
             
-            // Find the paragraph element
-            const paragraphElement = listContainer.querySelector('p');
+            const paragraphElement = listContainerEl.querySelector('p');
             let carouselHTML = '<div class="carousel">'; // Start carousel wrapper
             
-            currentConstructorStandings.forEach((team) => { // Use new sorted array
+            currentConstructorStandings.forEach((team) => {
                 const carImageUrl = teamImageMap[team.team] || defaultCarImage;
-                // Get drivers from the new array structure
                 const driver1 = team.drivers[0];
                 const driver2 = team.drivers[1];
                 
@@ -1565,32 +1544,24 @@
                              <span>${driver2.name}: ${driver2.points}</span>
                         </div>
                     </div>
-                </div>
-                `;
+                </div>`;
             });
-            
             carouselHTML += '</div>'; // End carousel wrapper
             
-             // Replace container content, keeping the paragraph if it exists
-             if (paragraphElement) {
-                 listContainer.innerHTML = carouselHTML + paragraphElement.outerHTML;
-             } else {
-                 listContainer.innerHTML = carouselHTML; 
-             }
+             // Replace container content, keeping the paragraph
+             listContainerEl.innerHTML = carouselHTML + (paragraphElement ? paragraphElement.outerHTML : ''); 
              
-             // --- After populating, initialize the carousel script ---
-             initializeCarousel();
+             // After populating, initialize the carousel script
+             initializeCarousel(listContainerEl.querySelector('.carousel'));
         }
 
+        
+        // --- EVENT HANDLERS & INTERACTIVITY ---
 
-        // Setup Standings Tabs
-        function setupTabs() {
-            const driversTab = document.getElementById('drivers-tab');
-            const constructorsTab = document.getElementById('constructors-tab');
-            const driversContainer = document.getElementById('drivers-table-container'); // This contains the driver grid
-            const constructorsContainer = document.getElementById('constructors-list-container'); // This contains the constructor cards
-            
-            // Check if elements exist
+        /**
+         * Sets up the click handlers for the Driver/Constructor tabs.
+         */
+        function setupTabs(driversTab, constructorsTab, driversContainer, constructorsContainer) {
             if (!driversTab || !constructorsTab || !driversContainer || !constructorsContainer) {
                 console.error("Tab elements not found. Skipping tab setup.");
                 return;
@@ -1599,65 +1570,103 @@
             driversTab.addEventListener('click', () => {
                 driversContainer.style.display = 'block';
                 constructorsContainer.style.display = 'none';
-                driversTab.classList.add('tab-active'); driversTab.classList.remove('tab-inactive');
-                constructorsTab.classList.add('tab-inactive'); constructorsTab.classList.remove('tab-active');
+                driversTab.classList.add('tab-active'); 
+                driversTab.classList.remove('tab-inactive');
+                constructorsTab.classList.add('tab-inactive'); 
+                constructorsTab.classList.remove('tab-active');
             });
 
             constructorsTab.addEventListener('click', () => {
                 driversContainer.style.display = 'none';
                 constructorsContainer.style.display = 'block';
-                constructorsTab.classList.add('tab-active'); constructorsTab.classList.remove('tab-inactive');
-                driversTab.classList.add('tab-inactive'); driversTab.classList.remove('tab-active');
+                constructorsTab.classList.add('tab-active'); 
+                constructorsTab.classList.remove('tab-inactive');
+                driversTab.classList.add('tab-inactive'); 
+                driversTab.classList.remove('tab-active');
             });
         }
 
-        // Setup Calendar Modal
-        function setupCalendarModal() {
-            const modal = document.getElementById('calendar-modal'); const modalBackdrop = document.getElementById('modal-backdrop'); const modalContent = modal.querySelector('.modal-content'); const closeBtn = document.getElementById('modal-close-btn'); const grid = document.getElementById('calendar-grid');
-            if (!modal || !grid || !closeBtn || !modalBackdrop) return;
-            const modalTitle = document.getElementById('modal-title'); const modalMap = document.getElementById('modal-map'); const modalDate = document.getElementById('modal-date'); const modalGp = document.getElementById('modal-gp'); const modalTrack = document.getElementById('modal-track'); const modalInsight = document.getElementById('modal-insight'); const modalLaps = document.getElementById('modal-laps'); const modalLength = document.getElementById('modal-length'); const modalStatsBlock = document.getElementById('modal-stats-block');
+        /**
+         * Sets up the modal for the calendar grid.
+         */
+        function setupCalendarModal(modalEl, gridEl, modalEls) {
+            if (!modalEl || !gridEl) return;
+
+            const { modalBackdrop, modalContent, closeBtn, modalTitle, modalMap, modalDate, modalGp, modalTrack, modalInsight, modalLaps, modalLength, modalStatsBlock } = modalEls;
+
             function openModal(race) {
                 if (!race) return;
-                modalTitle.textContent = `${race.gp} Insights`; modalMap.src = race.mapUrl; modalMap.alt = `${race.track} Map`;
-                modalMap.onerror = () => { modalMap.src = `https://placehold.co/768x432/374151/e11d48?text=Map+Error`; modalMap.alt = 'Track map loading error'; };
-                modalDate.textContent = race.date; modalGp.textContent = race.gp; modalTrack.textContent = race.track; modalInsight.textContent = race.insight;
-                if (race.stats) { modalLaps.textContent = race.stats.laps; modalLength.textContent = race.stats.length; modalStatsBlock.style.display = 'block'; } // Use style.display
-                else { modalStatsBlock.style.display = 'none'; } // Use style.display
-                modal.style.display = 'flex'; // Use style.display
-                setTimeout(() => { modal.style.opacity = '1'; modalContent.style.transform = 'scale(1)'; modalContent.style.opacity = '1'; }, 10);
+                modalTitle.textContent = `${race.gp} Insights`; 
+                modalMap.src = race.mapUrl; 
+                modalMap.alt = `${race.track} Map`;
+                modalMap.onerror = () => { 
+                    modalMap.src = `https://placehold.co/768x432/374151/e11d48?text=Map+Error`; 
+                    modalMap.alt = 'Track map loading error'; 
+                };
+                modalDate.textContent = race.date; 
+                modalGp.textContent = race.gp; 
+                modalTrack.textContent = race.track; 
+                modalInsight.textContent = race.insight;
+                
+                if (race.stats) { 
+                    modalLaps.textContent = race.stats.laps; 
+                    modalLength.textContent = race.stats.length; 
+                    modalStatsBlock.style.display = 'block'; 
+                } else { 
+                    modalStatsBlock.style.display = 'none'; 
+                } 
+                
+                modalEl.style.display = 'flex';
+                setTimeout(() => { 
+                    modalEl.style.opacity = '1'; 
+                    modalContent.style.transform = 'scale(1)'; 
+                    modalContent.style.opacity = '1'; 
+                }, 10);
             }
+            
             function closeModal() {
-                modalContent.style.transform = 'scale(0.95)'; modalContent.style.opacity = '0'; modal.style.opacity = '0';
-                setTimeout(() => { modal.style.display = 'none'; }, 300);
+                modalContent.style.transform = 'scale(0.95)'; 
+                modalContent.style.opacity = '0'; 
+                modalEl.style.opacity = '0';
+                setTimeout(() => { modalEl.style.display = 'none'; }, 300);
             }
-            grid.addEventListener('click', (e) => {
+            
+            gridEl.addEventListener('click', (e) => {
                 const card = e.target.closest('.calendar-card[data-round]');
-                if (card) { const roundValue = card.dataset.round; if (roundValue === "break") return; const round = Number(roundValue); const raceData = leagueCalendar.find(r => r.round === round); openModal(raceData); }
+                if (card) { 
+                    const roundValue = card.dataset.round; 
+                    if (roundValue === "break") return; 
+                    const round = Number(roundValue); 
+                    const raceData = leagueCalendar.find(r => r.round === round); 
+                    openModal(raceData); 
+                }
             });
-            closeBtn.addEventListener('click', closeModal); modalBackdrop.addEventListener('click', closeModal);
-            window.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.style.display !== 'none') { closeModal(); } });
+            
+            closeBtn.addEventListener('click', closeModal); 
+            modalBackdrop.addEventListener('click', closeModal);
+            window.addEventListener('keydown', (e) => { 
+                if (e.key === 'Escape' && modalEl.style.display !== 'none') { 
+                    closeModal(); 
+                } 
+            });
         }
-        
-        // --- NEW Carousel JS ---
-        function initializeCarousel() {
-            const carouselElement = document.querySelector('#constructors-list-container .carousel');
+
+        /**
+         * Initializes the constructor carousel logic.
+         */
+        function initializeCarousel(carouselElement) {
             if (!carouselElement) {
-                console.error("Carousel element not found for initialization.");
+                // console.error("Carousel element not found for initialization.");
                 return;
             }
             
-            let progress = 50;
-            let startX = 0;
-            let active = 0;
-            let isDown = false;
-
-            const speedWheel = 0.02;
-            const speedDrag = -0.1;
+            let progress = 50, startX = 0, active = 0, isDown = false;
+            const speedWheel = 0.02, speedDrag = -0.1;
 
             const $items = carouselElement.querySelectorAll('.carousel-item');
             const $cursors = document.querySelectorAll('.cursor');
             
-            if ($items.length === 0) return; // No items to init
+            if ($items.length === 0) return;
 
             const getZindex = (array, index) => (array.map((_, i) => (index === i) ? array.length : array.length - Math.abs(index - i)));
 
@@ -1670,22 +1679,20 @@
             const animate = () => {
                 progress = Math.max(0, Math.min(progress, 100));
                 active = Math.floor(progress / 100 * ($items.length - 1));
-                
                 $items.forEach((item, index) => displayItems(item, index, active));
             }
             animate();
 
             $items.forEach((item, i) => {
                 item.addEventListener('click', () => {
-                    progress = (i / ($items.length - 1)) * 100; // Corrected progress logic
+                    progress = (i / ($items.length - 1)) * 100;
                     animate();
                 });
             });
 
             const handleWheel = e => {
-                e.preventDefault(); // Prevent page scroll while over carousel
-                const wheelProgress = e.deltaY * speedWheel;
-                progress = progress + wheelProgress;
+                e.preventDefault();
+                progress += e.deltaY * speedWheel;
                 animate();
             }
 
@@ -1697,8 +1704,7 @@
                 }
                 if (!isDown) return;
                 const x = e.clientX || (e.touches && e.touches[0].clientX) || 0;
-                const mouseProgress = (x - startX) * speedDrag;
-                progress = progress + mouseProgress;
+                progress += (x - startX) * speedDrag;
                 startX = x;
                 animate();
             }
@@ -1708,21 +1714,17 @@
                 startX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
             }
 
-            const handleMouseUp = () => {
-                isDown = false;
-            }
+            const handleMouseUp = () => { isDown = false; }
 
-            // Attach listeners to the carousel element
             carouselElement.addEventListener('wheel', handleWheel, { passive: false });
             carouselElement.addEventListener('mousedown', handleMouseDown);
             carouselElement.addEventListener('mousemove', handleMouseMove);
             carouselElement.addEventListener('mouseup', handleMouseUp);
-            carouselElement.addEventListener('mouseleave', handleMouseUp); // Stop dragging if mouse leaves
+            carouselElement.addEventListener('mouseleave', handleMouseUp);
             carouselElement.addEventListener('touchstart', handleMouseDown, { passive: true });
             carouselElement.addEventListener('touchmove', handleMouseMove, { passive: true });
             carouselElement.addEventListener('touchend', handleMouseUp);
             
-            // Also add mouse move to document for cursor
             document.addEventListener('mousemove', (e) => {
                  if (e.type === 'mousemove') {
                     $cursors.forEach(($cursor) => {
@@ -1731,39 +1733,86 @@
                 }
             });
         }
-        // --- END Carousel JS ---
         
+        /**
+         * Sets up the full-screen overlay navigation.
+         */
+        function setupOverlayNavigation() {
+            const overlay = document.querySelector('.overlay-navigation');
+            const menuButtons = document.querySelectorAll('.open-overlay');
+            const navLinks = document.querySelectorAll('.overlay-navigation a');
+
+            if (!overlay || menuButtons.length === 0) return;
+
+            const closeMenu = (btn) => {
+                btn.classList.remove('active');
+                overlay.classList.add('overlay-slide-up');
+                setTimeout(() => {
+                    overlay.classList.remove('overlay-active', 'overlay-slide-up');
+                }, 800); // Match longest reverse animation
+            };
+
+            menuButtons.forEach(btn => {
+                btn.addEventListener('click', e => {
+                    e.preventDefault();
+                    if (overlay.classList.contains('overlay-active')) {
+                        closeMenu(btn);
+                    } else {
+                        // Opening
+                        btn.classList.add('active');
+                        overlay.classList.remove('overlay-slide-up');
+                        overlay.classList.add('overlay-active');
+                    }
+                });
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (overlay.classList.contains('overlay-active')) {
+                        // Find the active button to toggle it
+                        const activeButton = document.querySelector('.menu.open-overlay.active');
+                        if (activeButton) {
+                            closeMenu(activeButton);
+                        }
+                    }
+                });
+            });
+        }
+
         
-        // --- NEW Three.js Loading Screen ---
-        function initLoadingAnimation() {
+        // --- ANIMATIONS & EFFECTS ---
+
+        /**
+         * Initializes the three.js loading screen animation.
+         */
+        function initLoadingAnimation(container) {
+            if (!container || !window.THREE) {
+                // If THREE isn't loaded yet (due to defer), hide loader immediately
+                if (container) container.classList.add('hidden');
+                return () => {}; // Return empty cleanup function
+            }
+
             let scene, camera, renderer, shape, tl, animationFrameId;
-            const container = document.getElementById('loading-screen');
-            if (!container) return;
 
-            // 1. Scene
             scene = new THREE.Scene();
-
-            // 2. Camera
             camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000 );
             camera.position.set(500, 500, 500);
             camera.lookAt(scene.position);
             camera.updateProjectionMatrix();
 
-            // 3. Renderer
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize( window.innerWidth, window.innerHeight );
             renderer.setClearColor( 0x202020, 1 );
-            renderer.shadowMap.enabled = true; // Updated syntax
+            renderer.shadowMap.enabled = true;
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             container.appendChild( renderer.domElement );
 
-            // 4. Lights
             const shadowlight = new THREE.DirectionalLight( 0xffffff, 1.8 );
             shadowlight.position.set( 0, 50, 0 );
             shadowlight.castShadow = true;
-            shadowlight.shadow.darkness = 0.1; // Note: darkness is deprecated, use opacity on material
             scene.add(shadowlight);
-
+            
+            // **** THIS IS THE FIX ****
             const light = new THREE.DirectionalLight( 0xffffff, 1.8 );
             light.position.set( 60, 100, 20 );
             scene.add(light);
@@ -1771,33 +1820,27 @@
             const backLight = new THREE.DirectionalLight( 0xffffff, 1 );
             backLight.position.set( -40, 100, 20 );
             scene.add(backLight);
+            // **** END OF FIX ****
 
-            // 5. Floor (REMOVED)
-
-            // 6. Shape
             const geometry = new THREE.BoxGeometry( 50, 50, 50 );
-            const material = new THREE.MeshLambertMaterial({color : 0xF9F8ED, flatShading: true}); // Updated syntax
+            const material = new THREE.MeshLambertMaterial({color : 0xF9F8ED, flatShading: true});
             shape = new THREE.Mesh(geometry, material);
             shape.castShadow = true;
-            shape.receiveShadow = false;
             scene.add(shape);
 
-            // 7. Animation (GSAP 3)
-            tl = gsap.timeline({ repeat: -1 ,repeatDelay:0.5 }); // Use imported gsap
+            tl = gsap.timeline({ repeat: -1 ,repeatDelay:0.5 });
             tl.to(shape.scale, {duration: 0.5, x: 2, ease: "expo.out"});
             tl.to(shape.scale, {duration: 0.5, z: 2, ease: "expo.out"});
             tl.to(shape.scale, {duration: 1, y: 2, ease: "elastic.out"});
             tl.to(shape.scale, {duration: 0.7, z: 1, x:1, y:1, ease: "expo.out"});
             tl.to(shape.rotation, {duration: 0.7, y:-Math.PI, ease: "expo.out"}, "=-0.7");
 
-            // 8. Render loop
             function render() {
                 animationFrameId = requestAnimationFrame(render);
                 renderer.render(scene, camera);
             }
             render();
 
-            // 9. Resize handler
             function onWindowResize() {
                 camera.left = window.innerWidth / - 2;
                 camera.right = window.innerWidth / 2;
@@ -1808,257 +1851,175 @@
             }
             window.addEventListener( 'resize', onWindowResize, false );
             
-            // 10. Cleanup function
+            // Return cleanup function
             return function cleanup() {
                 window.removeEventListener('resize', onWindowResize);
                 cancelAnimationFrame(animationFrameId);
-                tl.kill(); // Stop GSAP animation
+                tl.kill();
                 scene.remove(shape);
                 geometry.dispose();
                 material.dispose();
-                // Dispose lights if needed
                 renderer.dispose();
                 if (container.contains(renderer.domElement)) {
                     container.removeChild(renderer.domElement);
                 }
-                scene = null;
-                camera = null;
-                renderer = null;
             }
         }
-        // --- END Three.js Loading Screen ---
         
-        
-        // --- NEW Curved Scrollbar JS ---
-        function initializeCurvedScrollbar() {
-            const scroller = document.querySelector('.scroller__bar');
-            if (!scroller) return;
-            
-            const thumb = scroller.querySelector('.bar__thumb');
-            const track = scroller.querySelector('.bar__track');
-            const styles = document.getElementById('curved-scroller-styles'); // We need an ID for the style tag
-            const video = document.getElementById('scroll-video'); // Get the video
-            
-            if (!thumb || !track || !styles || !video) {
-                console.error('Missing required elements for curved scrollbar.');
+        /**
+         * Initializes the curved scrollbar and links it to video time. (REMOVED)
+         */
+
+        /**
+         * Links page scroll to video playback time.
+         */
+        function initVideoScrubbing(video) {
+            if (!video) {
+                console.warn("Video element #scroll-video not found.");
                 return;
             }
 
-            const config = {
-                radius: 32,
-                stroke: 5,
-                inset: 6,
-                thumb: 70,
-            };
-
-            let endOffset = 0; // Store the final offset
-
-            const syncBar = () => {
-                const height = window.innerHeight - 2 * (16); // 1rem top/bottom padding
-                const mid = config.radius;
-                const innerRad = Math.max(0, config.radius - (config.inset + config.stroke * 0.5));
-                const padTop = config.inset + config.stroke * 0.5;
-                const padLeft = config.radius * 2 - padTop;
+            const setupVideoScrubbing = () => {
+                video.pause();
+                video.currentTime = 0;
                 
-                scroller.setAttribute('viewBox', `0 0 ${config.radius * 2} ${height}`);
-                
-                let d = `
-                    M${mid},${padTop}
-                    a${innerRad},${innerRad} 0 0 1 ${innerRad} ${innerRad}
-                    L${padLeft},${height - (config.inset + config.stroke * 0.5 + innerRad)}
-                    a${innerRad},${innerRad} 0 0 1 ${-innerRad} ${innerRad}
-                    L${mid},${height - (config.inset + config.stroke * 0.5)}
-                `;
-                
-                thumb.setAttribute('d', d);
-                track.setAttribute('d', d);
-                
-                const trackLength = Math.ceil(track.getTotalLength());
-                scroller.style.setProperty('--track-length', trackLength);
-                
-                const thumbSize = config.thumb;
-                const cornerLength = Math.ceil(innerRad * (Math.PI / 2)) + config.inset + config.stroke * 0.5;
-                
-                // Calculate the final offset
-                endOffset = -(trackLength - thumbSize);
-
-                // Update animation keyframes (not strictly needed if JS controls offset)
-                styles.innerHTML = `
-                    @keyframes scroll-progress {
-                        from { stroke-dashoffset: 0; }
-                        to { stroke-dashoffset: ${endOffset}px; }
+                // On scroll, update video time
+                window.addEventListener('scroll', () => {
+                    const totalScrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+                    if (totalScrollableHeight <= 0) return; 
+                    
+                    const scrollProgress = window.scrollY / totalScrollableHeight;
+                    
+                    if (video.duration && isFinite(video.duration)) {
+                        const targetTime = scrollProgress * video.duration;
+                        requestAnimationFrame(() => { video.currentTime = targetTime; });
                     }
-                `;
-            };
-
-            // Sync on load
-            syncBar();
-            // Sync on resize
-            window.addEventListener('resize', syncBar);
-            
-            // NEW: Sync with video scroll
-            // Check if video is ready, otherwise wait
-            if (video.readyState >= 2) { // HAVE_CURRENT_DATA
-                 syncBar();
-            } else {
-                video.addEventListener('loadedmetadata', syncBar);
-            }
-            
-            video.addEventListener('timeupdate', () => {
-                if (!video.duration || isNaN(video.duration)) return;
-                const scrollProgress = video.currentTime / video.duration;
-                if (isNaN(scrollProgress)) return;
-                
-                // Sync scrollbar to video
-                const targetOffset = scrollProgress * endOffset;
-                
-                requestAnimationFrame(() => {
-                    thumb.style.strokeDashoffset = targetOffset;
                 });
-            });
-        }
-        // --- END Curved Scrollbar JS ---
+            };
 
-
-        // --- PAGE INITIALIZATION ---
-        document.addEventListener('DOMContentLoaded', () => {
-             // --- Loading Screen Logic ---
-            const loadingScreen = document.getElementById('loading-screen');
-            let cleanupLoadingAnimation = null;
+            // --- THIS IS THE FIX ---
+            // Check if metadata is already loaded (readyState >= 1 means HAVE_METADATA)
+            if (video.readyState >= 1) {
+                setupVideoScrubbing();
+            } else {
+                // Otherwise, wait for it
+                video.addEventListener('loadedmetadata', setupVideoScrubbing);
+            }
+            // --- END OF FIX ---
             
-            if (loadingScreen) {
-                // Initialize the three.js animation
-                cleanupLoadingAnimation = initLoadingAnimation();
-                
-                const animationDuration = 3500; const fadeDuration = 500;
-                // Set fade-out transition
-                loadingScreen.style.transition = `opacity ${fadeDuration}ms ease-out, visibility ${fadeDuration}ms ease-out`;
-                
-                // Hide the screen after the full animation + fade duration
+            video.addEventListener('error', (e) => console.error("Error loading video:", e));
+            
+            // Explicitly tell the browser to load the video.
+            // This works with preload="auto" and helps ensure it starts.
+            video.load();
+        }
+
+        
+        // --- APP ENTRY POINT ---
+
+        /**
+         * Main function to initialize the application.
+         */
+        function main() {
+            // --- 1. Cache DOM Elements ---
+            const DOM = {
+                // Loading
+                loadingScreen: document.getElementById('loading-screen'),
+                // General
+                yearSpan: document.getElementById('current-year'),
+                // Countdown
+                nextRaceGp: document.getElementById('next-race-gp'),
+                nextRaceTrack: document.getElementById('next-race-track'),
+                countdown: document.getElementById('countdown'),
+                // Calendar
+                calendarGrid: document.getElementById('calendar-grid'),
+                // Standings
+                driversTab: document.getElementById('drivers-tab'),
+                constructorsTab: document.getElementById('constructors-tab'),
+                driversContainer: document.getElementById('drivers-table-container'),
+                constructorsContainer: document.getElementById('constructors-list-container'),
+                driverCardGrid: document.getElementById('driver-card-grid'),
+                // Modal
+                calendarModal: document.getElementById('calendar-modal'),
+                modalBackdrop: document.getElementById('modal-backdrop'),
+                modalContent: document.querySelector('#calendar-modal .modal-content'),
+                modalCloseBtn: document.getElementById('modal-close-btn'),
+                modalTitle: document.getElementById('modal-title'),
+                modalMap: document.getElementById('modal-map'),
+                modalDate: document.getElementById('modal-date'),
+                modalGp: document.getElementById('modal-gp'),
+                modalTrack: document.getElementById('modal-track'),
+                modalInsight: document.getElementById('modal-insight'),
+                modalLaps: document.getElementById('modal-laps'),
+                modalLength: document.getElementById('modal-length'),
+                modalStatsBlock: document.getElementById('modal-stats-block'),
+                // Video & Scroll
+                video: document.getElementById('scroll-video')
+                // (REMOVED) scroller, scrollerThumb, scrollerTrack, scrollerStyles
+            };
+
+            // --- 2. Initialize Loading Screen (Runs First) ---
+            const cleanupLoadingAnimation = initLoadingAnimation(DOM.loadingScreen);
+            const animationDuration = 3500, fadeDuration = 500;
+            if (DOM.loadingScreen) { // Add check in case it's missing
+                DOM.loadingScreen.style.transition = `opacity ${fadeDuration}ms ease-out, visibility ${fadeDuration}ms ease-out`;
                 setTimeout(() => { 
-                    loadingScreen.classList.add('hidden');
-                    // Clean up the three.js scene after it's hidden
-                    if (cleanupLoadingAnimation) {
-                        cleanupLoadingAnimation();
-                    }
+                    DOM.loadingScreen.classList.add('hidden');
+                    if (cleanupLoadingAnimation) cleanupLoadingAnimation();
                 }, animationDuration + fadeDuration);
             }
-             // --- End Loading Screen Logic ---
 
-            const yearSpan = document.getElementById('current-year');
-            if (yearSpan) { yearSpan.textContent = new Date().getFullYear(); }
-            else { console.warn("Could not find 'current-year' element."); }
+            // --- 3. Process Data ---
+            processStandings();
 
-            // --- DYNAMIC COUNTDOWN LOGIC ---
-            const RACE_TIME_UTC = { hours: 17, minutes: 0, seconds: 0 }; const now = new Date(); let nextRace = null;
-            for (const race of leagueCalendar) {
-                if (race.round === 0 || race.round === "break") continue;
-                const [day, month, year] = race.date.split('/').map(Number);
-                const raceDate = new Date(Date.UTC(2000 + year, month - 1, day, RACE_TIME_UTC.hours, RACE_TIME_UTC.minutes, RACE_TIME_UTC.seconds));
-                if (raceDate > now) { nextRace = race; nextRace.utcDate = raceDate; break; }
+            // --- 4. Populate UI ---
+            if (DOM.yearSpan) DOM.yearSpan.textContent = new Date().getFullYear();
+            if (DOM.nextRaceGp && DOM.nextRaceTrack && DOM.countdown) {
+                initCountdown(DOM.nextRaceGp, DOM.nextRaceTrack, DOM.countdown);
             }
-            const nextRaceTitleEl = document.getElementById("next-race-gp"); const nextRaceTrackEl = document.getElementById("next-race-track"); const countdownEl = document.getElementById('countdown');
-            if (nextRace) { nextRaceTitleEl.textContent = nextRace.gp; nextRaceTrackEl.textContent = nextRace.track; startCountdown(nextRace.utcDate.getTime()); }
-            else { nextRaceTitleEl.textContent = "SEASON 1 COMPLETE"; nextRaceTrackEl.textContent = "The championship has concluded!"; countdownEl.innerHTML = '<h2 class="col-span-4 text-4xl font-bold text-gray-400 text-center py-10">SEE YOU NEXT SEASON</h2>'; }
-            // --- END DYNAMIC COUNTDOWN LOGIC ---
+            populateCalendar(DOM.calendarGrid);
+            populateDriverCards(DOM.driverCardGrid);
+            populateConstructorList(DOM.constructorsContainer);
 
-            // --- NEW Video Scroll Scrub Logic ---
-            const video = document.getElementById('scroll-video');
-            if (video) {
-                // Wait for metadata to load
-                video.addEventListener('loadedmetadata', () => {
-                    // Set video to 'pause' at the first frame
-                    video.pause();
-                    video.currentTime = 0;
-                    initializeCurvedScrollbar(); // Initialize scrollbar AFTER video is loaded
+            // --- 5. Initialize Effects & Handlers ---
+            initVideoScrubbing(DOM.video);
+            // (REMOVED) initializeCurvedScrollbar(...) call
+            setupTabs(DOM.driversTab, DOM.constructorsTab, DOM.driversContainer, DOM.constructorsContainer);
+            setupOverlayNavigation();
+            
+            // Modal elements grouped for convenience
+            const modalEls = {
+                modalBackdrop: DOM.modalBackdrop,
+                modalContent: DOM.modalContent,
+                closeBtn: DOM.modalCloseBtn,
+                modalTitle: DOM.modalTitle, 
+                modalMap: DOM.modalMap, 
+                modalDate: DOM.modalDate, 
+                modalGp: DOM.modalGp, 
+                modalTrack: DOM.modalTrack, 
+                modalInsight: DOM.modalInsight, 
+                modalLaps: DOM.modalLaps, 
+                modalLength: DOM.modalLength, 
+                modalStatsBlock: DOM.modalStatsBlock
+            };
+            setupCalendarModal(DOM.calendarModal, DOM.calendarGrid, modalEls);
+        }
 
-                    // On scroll, update video time
-                    window.addEventListener('scroll', () => {
-                        // Calculate scroll progress (0 to 1)
-                        const totalScrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
-                        // Avoid division by zero if content is shorter than viewport
-                        if (totalScrollableHeight <= 0) return; 
-                        
-                        const scrollProgress = window.scrollY / totalScrollableHeight;
-                        
-                        // Calculate target video time
-                        // Ensure video.duration is a valid number
-                        if (video.duration && isFinite(video.duration)) {
-                            const targetTime = scrollProgress * video.duration;
-                            
-                            // Use requestAnimationFrame for smoother updates
-                            requestAnimationFrame(() => {
-                                video.currentTime = targetTime;
-                            });
-                        }
-                    });
-                });
-                
-                // Handle potential load errors
-                video.addEventListener('error', (e) => {
-                    console.error("Error loading video:", e);
-                });
-                
-                // Attempt to load the video
-                video.load();
+        // --- 6. Run App ---
+        document.addEventListener('DOMContentLoaded', main);
 
-            } else {
-                console.warn("Video element #scroll-video not found.");
-            }
-            // --- END Video Scroll Scrub Logic ---
-
-            processStandings(); // <--- NEW: Process all data first
-            populateCalendar();
-            populateDriverCards(); // New function for driver cards (Nike style)
-            populateConstructorList(); // New function for constructor cards (Carousel Item style)
-            setupTabs();
-            setupCalendarModal();
-            // initializeCurvedScrollbar(); // Initialize the custom scrollbar - MOVED
-
-            // --- NEW Overlay Navigation Script (Vanilla JS) ---
-            document.querySelectorAll('.open-overlay').forEach(btn => {
-                btn.addEventListener('click', e => {
-                    e.preventDefault();
-                    const overlay = document.querySelector('.overlay-navigation');
-                    
-                    if (overlay.classList.contains('overlay-active')) {
-                        // Closing
-                        btn.classList.remove('active');
-                        overlay.classList.add('overlay-slide-up');
-                        // Remove 'overlay-active' after the slide-up transition ends
-                        setTimeout(() => {
-                             overlay.classList.remove('overlay-active', 'overlay-slide-up');
-                        }, 800); // Match longest reverse animation
-                    } else {
-                        // Opening
-                        btn.classList.add('active');
-                        overlay.classList.remove('overlay-slide-up'); // Ensure this is removed
-                        overlay.classList.add('overlay-active');
-                    }
-                });
-            });
-
-            // Close menu when a link is clicked
-            document.querySelectorAll('.overlay-navigation a').forEach(link => {
-                link.addEventListener('click', () => {
-                    const overlay = document.querySelector('.overlay-navigation');
-                    const btn = document.querySelector('.menu.open-overlay');
-                    
-                    if (overlay.classList.contains('overlay-active')) {
-                        btn.classList.remove('active');
-                        overlay.classList.add('overlay-slide-up');
-                        setTimeout(() => {
-                             overlay.classList.remove('overlay-active', 'overlay-slide-up');
-                        }, 800);
-                    }
-                });
-            });
-            // --- End Overlay Navigation Script ---
-
-        });
     </script>
+    
     <!-- MOVED Tailwind Script to end of body -->
     <script src="https://cdn.tailwindcss.com"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
 
